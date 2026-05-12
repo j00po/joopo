@@ -1,0 +1,34 @@
+{
+  "name": "@joopo/diagnostics-prometheus",
+  "version": "2026.5.6",
+  "description": "Joopo diagnostics Prometheus exporter",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joopo/joopo"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@joopo/plugin-sdk": "workspace:*"
+  },
+  "joopo": {
+    "extensions": [
+      "./index.ts"
+    ],
+    "install": {
+      "clawhubSpec": "clawhub:@joopo/diagnostics-prometheus",
+      "npmSpec": "@joopo/diagnostics-prometheus",
+      "defaultChoice": "npm",
+      "minHostVersion": ">=2026.4.25"
+    },
+    "compat": {
+      "pluginApi": ">=2026.5.6"
+    },
+    "build": {
+      "joopoVersion": "2026.5.6"
+    },
+    "release": {
+      "publishToClawHub": true,
+      "publishToNpm": true
+    }
+  }
+}

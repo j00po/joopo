@@ -1,0 +1,10 @@
+{
+  "name": "@joopo/image-generation-core",
+  "version": "2026.5.6",
+  "private": true,
+  "description": "Joopo image generation runtime package",
+  "type": "module",
+  "devDependencies": {
+    "@joopo/plugin-sdk": "workspace:*"
+  }
+}

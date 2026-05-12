@@ -1,0 +1,58 @@
+{
+  "name": "@joopo/line",
+  "version": "2026.5.6",
+  "description": "Joopo LINE channel plugin",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joopo/joopo"
+  },
+  "type": "module",
+  "dependencies": {
+    "@line/bot-sdk": "^11.0.0"
+  },
+  "devDependencies": {
+    "@joopo/plugin-sdk": "workspace:*",
+    "joopo": "workspace:*"
+  },
+  "peerDependencies": {
+    "joopo": ">=2026.5.6"
+  },
+  "peerDependenciesMeta": {
+    "joopo": {
+      "optional": true
+    }
+  },
+  "joopo": {
+    "extensions": [
+      "./index.ts"
+    ],
+    "setupEntry": "./setup-entry.ts",
+    "channel": {
+      "id": "line",
+      "label": "LINE",
+      "selectionLabel": "LINE (Messaging API)",
+      "detailLabel": "LINE Bot",
+      "docsPath": "/channels/line",
+      "docsLabel": "line",
+      "blurb": "LINE Messaging API webhook bot.",
+      "systemImage": "message",
+      "order": 75,
+      "quickstartAllowFrom": true
+    },
+    "install": {
+      "npmSpec": "@joopo/line",
+      "defaultChoice": "npm",
+      "minHostVersion": ">=2026.4.10"
+    },
+    "compat": {
+      "pluginApi": ">=2026.5.6"
+    },
+    "build": {
+      "joopoVersion": "2026.5.6"
+    },
+    "release": {
+      "publishToClawHub": true,
+      "publishToNpm": true
+    }
+  }
+}

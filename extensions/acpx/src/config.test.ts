@@ -1,0 +1,157 @@
+import fs from "node:fs";
+import path from "node:path";
+import { describe, expect, it } from "vitest";
+import { resolveAcpxPluginConfig, resolveAcpxPluginRoot } from "./config.js";
+
+describe("embedded acpx plugin config", () => {
+  it("resolves workspace stateDir and cwd by default", () => {
+    const workspaceDir = path.resolve("/tmp/joopo-acpx");
+    const resolved = resolveAcpxPluginConfig({
+      rawConfig: undefined,
+      workspaceDir,
+    });
+
+    expect(resolved.cwd).toBe(workspaceDir);
+    expect(resolved.stateDir).toBe(path.join(workspaceDir, "state"));
+    expect(resolved.permissionMode).toBe("approve-reads");
+    expect(resolved.nonInteractivePermissions).toBe("fail");
+    expect(resolved.timeoutSeconds).toBe(120);
+    expect(resolved.agents).toEqual({});
+  });
+
+  it("keeps explicit timeoutSeconds config", () => {
+    const resolved = resolveAcpxPluginConfig({
+      rawConfig: {
+        timeoutSeconds: 300,
+      },
+      workspaceDir: "/tmp/joopo-acpx",
+    });
+
+    expect(resolved.timeoutSeconds).toBe(300);
+  });
+
+  it("keeps explicit probeAgent config", () => {
+    const resolved = resolveAcpxPluginConfig({
+      rawConfig: {
+        probeAgent: "claude",
+      },
+      workspaceDir: "/tmp/joopo-acpx",
+    });
+
+    expect(resolved.probeAgent).toBe("claude");
+  });
+
+  it("accepts agent command overrides", () => {
+    const resolved = resolveAcpxPluginConfig({
+      rawConfig: {
+        agents: {
+          claude: { command: "claude --acp" },
+          codex: { command: "codex custom-acp" },
+        },
+      },
+      workspaceDir: "/tmp/joopo-acpx",
+    });
+
+    expect(resolved.agents).toEqual({
+      claude: "claude --acp",
+      codex: "codex custom-acp",
+    });
+  });
+
+  it("leaves probeAgent undefined by default so the runtime picks its built-in probe agent", () => {
+    const resolved = resolveAcpxPluginConfig({
+      rawConfig: undefined,
+      workspaceDir: "/tmp/joopo-acpx",
+    });
+
+    expect(resolved.probeAgent).toBeUndefined();
+  });
+
+  it("carries an explicit probeAgent through to the resolved plugin config, trimmed and lowercased", () => {
+    const resolved = resolveAcpxPluginConfig({
+      rawConfig: {
+        probeAgent: "  OpenCode  ",
+      },
+      workspaceDir: "/tmp/joopo-acpx",
+    });
+
+    expect(resolved.probeAgent).toBe("opencode");
+  });
+
+  it("rejects an empty probeAgent string", () => {
+    expect(() =>
+      resolveAcpxPluginConfig({
+        rawConfig: {
+          probeAgent: "",
+        },
+        workspaceDir: "/tmp/joopo-acpx",
+      }),
+    ).toThrow(/probeAgent must be a non-empty string/);
+  });
+
+  it("injects the built-in plugin-tools MCP server only when explicitly enabled", () => {
+    const resolved = resolveAcpxPluginConfig({
+      rawConfig: {
+        pluginToolsMcpBridge: true,
+      },
+      workspaceDir: "/tmp/joopo-acpx",
+    });
+
+    const server = resolved.mcpServers["joopo-plugin-tools"];
+    expect(server).toMatchObject({
+      command: process.execPath,
+      args: expect.any(Array),
+    });
+    expect(server.command).toBe(process.execPath);
+    expect(Array.isArray(server.args)).toBe(true);
+    expect(server.args?.length).toBeGreaterThan(0);
+  });
+
+  it("injects the built-in Joopo tools MCP server only when explicitly enabled", () => {
+    const resolved = resolveAcpxPluginConfig({
+      rawConfig: {
+        joopoToolsMcpBridge: true,
+      },
+      workspaceDir: "/tmp/joopo-acpx",
+    });
+
+    const server = resolved.mcpServers["joopo-tools"];
+    expect(server).toMatchObject({
+      command: process.execPath,
+      args: expect.any(Array),
+    });
+    expect(server.command).toBe(process.execPath);
+    expect(Array.isArray(server.args)).toBe(true);
+    expect(server.args?.length).toBeGreaterThan(0);
+  });
+
+  it("resolves the plugin root from shared dist chunk paths", () => {
+    const moduleUrl = new URL("../../../dist/extensions/acpx/service-shared.js", import.meta.url)
+      .href;
+
+    expect(resolveAcpxPluginRoot(moduleUrl)).toBe(path.resolve("extensions/acpx"));
+  });
+
+  it("keeps the runtime json schema in sync with the manifest config schema", () => {
+    const pluginRoot = resolveAcpxPluginRoot();
+    const manifest = JSON.parse(
+      fs.readFileSync(path.join(pluginRoot, "joopo.plugin.json"), "utf8"),
+    ) as { configSchema?: unknown };
+
+    expect(manifest.configSchema).toMatchObject({
+      type: "object",
+      additionalProperties: false,
+      properties: expect.objectContaining({
+        cwd: expect.any(Object),
+        stateDir: expect.any(Object),
+        probeAgent: expect.any(Object),
+        timeoutSeconds: expect.objectContaining({
+          default: 120,
+        }),
+        agents: expect.any(Object),
+        mcpServers: expect.any(Object),
+        joopoToolsMcpBridge: expect.any(Object),
+      }),
+    });
+  });
+});

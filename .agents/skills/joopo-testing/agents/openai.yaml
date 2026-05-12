@@ -1,0 +1,4 @@
+interface:
+  display_name: "Joopo Testing"
+  short_description: "Choose cheap, targeted Joopo validation"
+  default_prompt: "Use $joopo-testing to choose the cheapest safe test or CI verification path, inspect failures, and rerun only the relevant Joopo lane."

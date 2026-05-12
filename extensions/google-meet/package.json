@@ -1,0 +1,46 @@
+{
+  "name": "@joopo/google-meet",
+  "version": "2026.5.6",
+  "description": "Joopo Google Meet participant plugin",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joopo/joopo"
+  },
+  "type": "module",
+  "dependencies": {
+    "commander": "^14.0.3",
+    "typebox": "1.1.37"
+  },
+  "devDependencies": {
+    "@joopo/plugin-sdk": "workspace:*",
+    "joopo": "workspace:*"
+  },
+  "peerDependencies": {
+    "joopo": ">=2026.5.6"
+  },
+  "peerDependenciesMeta": {
+    "joopo": {
+      "optional": true
+    }
+  },
+  "joopo": {
+    "extensions": [
+      "./index.ts"
+    ],
+    "install": {
+      "npmSpec": "@joopo/google-meet",
+      "defaultChoice": "npm",
+      "minHostVersion": ">=2026.4.20"
+    },
+    "compat": {
+      "pluginApi": ">=2026.5.6"
+    },
+    "build": {
+      "joopoVersion": "2026.5.6"
+    },
+    "release": {
+      "publishToClawHub": true,
+      "publishToNpm": true
+    }
+  }
+}

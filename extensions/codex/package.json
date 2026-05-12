@@ -1,0 +1,39 @@
+{
+  "name": "@joopo/codex",
+  "version": "2026.5.6",
+  "description": "Joopo Codex harness and model provider plugin",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joopo/joopo"
+  },
+  "type": "module",
+  "dependencies": {
+    "@mariozechner/pi-coding-agent": "0.73.0",
+    "@openai/codex": "0.129.0",
+    "ajv": "^8.20.0",
+    "ws": "^8.20.0"
+  },
+  "devDependencies": {
+    "@joopo/plugin-sdk": "workspace:*"
+  },
+  "joopo": {
+    "extensions": [
+      "./index.ts"
+    ],
+    "install": {
+      "npmSpec": "@joopo/codex",
+      "defaultChoice": "npm",
+      "minHostVersion": ">=2026.5.1-beta.1"
+    },
+    "compat": {
+      "pluginApi": ">=2026.5.6"
+    },
+    "build": {
+      "joopoVersion": "2026.5.6"
+    },
+    "release": {
+      "publishToClawHub": true,
+      "publishToNpm": true
+    }
+  }
+}

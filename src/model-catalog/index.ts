@@ -1,0 +1,29 @@
+export { mergeModelCatalogRowsByAuthority } from "./authority.js";
+export {
+  buildModelCatalogMergeKey,
+  buildModelCatalogRef,
+  normalizeModelCatalogProviderId,
+} from "./refs.js";
+export { normalizeModelCatalog, normalizeModelCatalogRows } from "./normalize.js";
+export { loadJoopoProviderIndex } from "./provider-index/index.js";
+export {
+  planManifestModelCatalogRows,
+  planManifestModelCatalogSuppressions,
+} from "./manifest-planner.js";
+export { planProviderIndexModelCatalogRows } from "./provider-index-planner.js";
+export type { ManifestModelCatalogSuppressionEntry } from "./manifest-planner.js";
+export type {
+  ModelCatalog,
+  ModelCatalogAlias,
+  ModelCatalogCost,
+  ModelCatalogDiscovery,
+  ModelCatalogInput,
+  ModelCatalogModel,
+  ModelCatalogProvider,
+  ModelCatalogSource,
+  ModelCatalogStatus,
+  ModelCatalogSuppression,
+  ModelCatalogTieredCost,
+  NormalizedModelCatalogRow,
+} from "./types.js";
+export type { JoopoProviderIndexProvider } from "./provider-index/index.js";

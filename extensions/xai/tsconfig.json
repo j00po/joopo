@@ -1,0 +1,64 @@
+{
+  "extends": "../tsconfig.package-boundary.base.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "paths": {
+      "joopo/extension-api": ["../../src/extensionAPI.ts"],
+      "joopo/plugin-sdk": ["../../dist/plugin-sdk/src/plugin-sdk/index.d.ts"],
+      "joopo/plugin-sdk/*": ["../../dist/plugin-sdk/src/plugin-sdk/*.d.ts"],
+      "joopo/plugin-sdk/account-id": ["../../dist/plugin-sdk/src/plugin-sdk/account-id.d.ts"],
+      "joopo/plugin-sdk/channel-entry-contract": [
+        "../../dist/plugin-sdk/src/plugin-sdk/channel-entry-contract.d.ts"
+      ],
+      "joopo/plugin-sdk/browser-maintenance": [
+        "../../dist/plugin-sdk/src/plugin-sdk/browser-maintenance.d.ts"
+      ],
+      "joopo/plugin-sdk/channel-secret-runtime": [
+        "../../dist/plugin-sdk/src/plugin-sdk/channel-secret-runtime.d.ts"
+      ],
+      "joopo/plugin-sdk/channel-streaming": [
+        "../../dist/plugin-sdk/src/plugin-sdk/channel-streaming.d.ts"
+      ],
+      "joopo/plugin-sdk/cli-runtime": ["../../dist/plugin-sdk/src/plugin-sdk/cli-runtime.d.ts"],
+      "joopo/plugin-sdk/error-runtime": [
+        "../../dist/plugin-sdk/src/plugin-sdk/error-runtime.d.ts"
+      ],
+      "joopo/plugin-sdk/provider-catalog-shared": [
+        "../../dist/plugin-sdk/src/plugin-sdk/provider-catalog-shared.d.ts"
+      ],
+      "joopo/plugin-sdk/provider-env-vars": [
+        "../../dist/plugin-sdk/src/plugin-sdk/provider-env-vars.d.ts"
+      ],
+      "joopo/plugin-sdk/provider-entry": [
+        "../../dist/plugin-sdk/src/plugin-sdk/provider-entry.d.ts"
+      ],
+      "joopo/plugin-sdk/provider-web-search-contract": [
+        "../../dist/plugin-sdk/src/plugin-sdk/provider-web-search-contract.d.ts"
+      ],
+      "joopo/plugin-sdk/secret-ref-runtime": [
+        "../../dist/plugin-sdk/src/plugin-sdk/secret-ref-runtime.d.ts"
+      ],
+      "joopo/plugin-sdk/ssrf-runtime": [
+        "../../dist/plugin-sdk/src/plugin-sdk/ssrf-runtime.d.ts"
+      ],
+      "@joopo/qa-channel/api.js": ["../../dist/plugin-sdk/extensions/qa-channel/api.d.ts"],
+      "@joopo/*.js": ["../../packages/plugin-sdk/dist/extensions/*.d.ts", "../*"],
+      "@joopo/*": ["../*"],
+      "@joopo/plugin-sdk/*": ["../../dist/plugin-sdk/src/plugin-sdk/*.d.ts"],
+      "@joopo/anthropic-vertex/api.js": ["./.boundary-stubs/anthropic-vertex-api.d.ts"],
+      "@joopo/ollama/api.js": ["./.boundary-stubs/ollama-api.d.ts"],
+      "@joopo/ollama/runtime-api.js": ["./.boundary-stubs/ollama-runtime-api.d.ts"],
+      "@joopo/speech-core/runtime-api.js": ["./.boundary-stubs/speech-core-runtime-api.d.ts"]
+    }
+  },
+  "include": ["./*.ts", "./src/**/*.ts"],
+  "exclude": [
+    "./**/*.test.ts",
+    "./dist/**",
+    "./node_modules/**",
+    "./src/test-support/**",
+    "./src/**/*test-helpers.ts",
+    "./src/**/*test-harness.ts",
+    "./src/**/*test-support.ts"
+  ]
+}

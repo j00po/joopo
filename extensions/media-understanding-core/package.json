@@ -1,0 +1,14 @@
+{
+  "name": "@joopo/media-understanding-core",
+  "version": "2026.5.6",
+  "private": true,
+  "description": "Joopo media understanding runtime package",
+  "type": "module",
+  "dependencies": {
+    "sharp": "^0.34.5"
+  },
+  "devDependencies": {
+    "@joopo/plugin-sdk": "workspace:*"
+  },
+  "joopo": {}
+}

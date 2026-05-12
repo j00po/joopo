@@ -1,0 +1,33 @@
+{
+  "name": "@joopo/brave-plugin",
+  "version": "2026.5.6",
+  "description": "Joopo Brave plugin",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joopo/joopo"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@joopo/plugin-sdk": "workspace:*"
+  },
+  "joopo": {
+    "extensions": [
+      "./index.ts"
+    ],
+    "install": {
+      "npmSpec": "@joopo/brave-plugin",
+      "defaultChoice": "npm",
+      "minHostVersion": ">=2026.4.10"
+    },
+    "compat": {
+      "pluginApi": ">=2026.5.6"
+    },
+    "build": {
+      "joopoVersion": "2026.5.6"
+    },
+    "release": {
+      "publishToClawHub": true,
+      "publishToNpm": true
+    }
+  }
+}

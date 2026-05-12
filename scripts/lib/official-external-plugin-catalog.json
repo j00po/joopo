@@ -1,0 +1,174 @@
+{
+  "entries": [
+    {
+      "name": "@joopo/acpx",
+      "description": "Joopo ACP runtime backend",
+      "source": "official",
+      "kind": "plugin",
+      "joopo": {
+        "plugin": {
+          "id": "acpx",
+          "label": "ACPX Runtime"
+        },
+        "install": {
+          "npmSpec": "@joopo/acpx",
+          "defaultChoice": "npm",
+          "minHostVersion": ">=2026.4.25"
+        }
+      }
+    },
+    {
+      "name": "@joopo/brave-plugin",
+      "description": "Joopo Brave plugin",
+      "source": "official",
+      "kind": "plugin",
+      "joopo": {
+        "plugin": {
+          "id": "brave",
+          "label": "Brave"
+        },
+        "webSearchProviders": [
+          {
+            "id": "brave",
+            "label": "Brave Search",
+            "hint": "Brave Search web results.",
+            "onboardingScopes": ["text-inference"],
+            "credentialLabel": "Brave Search API key",
+            "envVars": ["BRAVE_API_KEY"],
+            "placeholder": "BSA...",
+            "signupUrl": "https://api-dashboard.search.brave.com/app/keys",
+            "docsUrl": "https://docs.joopo.ai/tools/brave-search",
+            "credentialPath": "plugins.entries.brave.config.webSearch.apiKey",
+            "autoDetectOrder": 10
+          }
+        ],
+        "install": {
+          "npmSpec": "@joopo/brave-plugin",
+          "defaultChoice": "npm",
+          "minHostVersion": ">=2026.4.10"
+        }
+      }
+    },
+    {
+      "name": "@joopo/diagnostics-otel",
+      "description": "Joopo diagnostics OpenTelemetry exporter",
+      "source": "official",
+      "kind": "plugin",
+      "joopo": {
+        "plugin": {
+          "id": "diagnostics-otel",
+          "label": "Diagnostics OpenTelemetry"
+        },
+        "install": {
+          "clawhubSpec": "clawhub:@joopo/diagnostics-otel",
+          "npmSpec": "@joopo/diagnostics-otel",
+          "defaultChoice": "npm",
+          "minHostVersion": ">=2026.4.25"
+        }
+      }
+    },
+    {
+      "name": "@joopo/diagnostics-prometheus",
+      "description": "Joopo diagnostics Prometheus exporter",
+      "source": "official",
+      "kind": "plugin",
+      "joopo": {
+        "plugin": {
+          "id": "diagnostics-prometheus",
+          "label": "Diagnostics Prometheus"
+        },
+        "install": {
+          "clawhubSpec": "clawhub:@joopo/diagnostics-prometheus",
+          "npmSpec": "@joopo/diagnostics-prometheus",
+          "defaultChoice": "npm",
+          "minHostVersion": ">=2026.4.25"
+        }
+      }
+    },
+    {
+      "name": "@joopo/diffs",
+      "description": "Joopo diff viewer plugin",
+      "source": "official",
+      "kind": "plugin",
+      "joopo": {
+        "plugin": {
+          "id": "diffs",
+          "label": "Diffs"
+        },
+        "install": {
+          "npmSpec": "@joopo/diffs",
+          "defaultChoice": "npm",
+          "minHostVersion": ">=2026.4.30"
+        }
+      }
+    },
+    {
+      "name": "@joopo/google-meet",
+      "description": "Joopo Google Meet participant plugin",
+      "source": "official",
+      "kind": "plugin",
+      "joopo": {
+        "plugin": {
+          "id": "google-meet",
+          "label": "Google Meet"
+        },
+        "install": {
+          "npmSpec": "@joopo/google-meet",
+          "defaultChoice": "npm",
+          "minHostVersion": ">=2026.4.20"
+        }
+      }
+    },
+    {
+      "name": "@joopo/lobster",
+      "description": "Lobster workflow tool plugin (typed pipelines + resumable approvals)",
+      "source": "official",
+      "kind": "plugin",
+      "joopo": {
+        "plugin": {
+          "id": "lobster",
+          "label": "Lobster"
+        },
+        "install": {
+          "npmSpec": "@joopo/lobster",
+          "defaultChoice": "npm",
+          "minHostVersion": ">=2026.4.25"
+        }
+      }
+    },
+    {
+      "name": "@joopo/memory-lancedb",
+      "description": "Joopo LanceDB-backed long-term memory plugin with auto-recall/capture",
+      "source": "official",
+      "kind": "plugin",
+      "joopo": {
+        "plugin": {
+          "id": "memory-lancedb",
+          "label": "Memory LanceDB"
+        },
+        "install": {
+          "npmSpec": "@joopo/memory-lancedb",
+          "defaultChoice": "npm",
+          "minHostVersion": ">=2026.4.10"
+        }
+      }
+    },
+    {
+      "name": "@joopo/voice-call",
+      "description": "Joopo voice-call plugin",
+      "source": "official",
+      "kind": "plugin",
+      "joopo": {
+        "plugin": {
+          "id": "voice-call",
+          "label": "Voice Call"
+        },
+        "install": {
+          "npmSpec": "@joopo/voice-call",
+          "defaultChoice": "npm",
+          "minHostVersion": ">=2026.4.10"
+        }
+      }
+    }
+  ]
+}

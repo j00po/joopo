@@ -1,0 +1,10 @@
+{
+  "name": "@joopo/speech-core",
+  "version": "2026.5.6",
+  "private": true,
+  "description": "Joopo speech runtime package",
+  "type": "module",
+  "devDependencies": {
+    "@joopo/plugin-sdk": "workspace:*"
+  }
+}

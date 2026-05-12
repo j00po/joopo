@@ -1,0 +1,15 @@
+{
+  "name": "@joopo/xiaomi-provider",
+  "version": "2026.5.6",
+  "private": true,
+  "description": "Joopo Xiaomi provider plugin",
+  "type": "module",
+  "devDependencies": {
+    "@joopo/plugin-sdk": "workspace:*"
+  },
+  "joopo": {
+    "extensions": [
+      "./index.ts"
+    ]
+  }
+}

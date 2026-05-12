@@ -1,0 +1,26 @@
+{
+  "name": "@joopo/document-extract-plugin",
+  "version": "2026.5.6",
+  "private": true,
+  "description": "Joopo local document extraction plugin",
+  "type": "module",
+  "dependencies": {
+    "pdfjs-dist": "^5.7.284"
+  },
+  "devDependencies": {
+    "@joopo/plugin-sdk": "workspace:*"
+  },
+  "peerDependencies": {
+    "@napi-rs/canvas": "^0.1.89"
+  },
+  "peerDependenciesMeta": {
+    "@napi-rs/canvas": {
+      "optional": true
+    }
+  },
+  "joopo": {
+    "extensions": [
+      "./index.ts"
+    ]
+  }
+}

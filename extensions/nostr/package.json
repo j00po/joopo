@@ -1,0 +1,66 @@
+{
+  "name": "@joopo/nostr",
+  "version": "2026.5.6",
+  "description": "Joopo Nostr channel plugin for NIP-04 encrypted DMs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joopo/joopo"
+  },
+  "type": "module",
+  "dependencies": {
+    "nostr-tools": "^2.23.3"
+  },
+  "devDependencies": {
+    "@joopo/plugin-sdk": "workspace:*",
+    "joopo": "workspace:*"
+  },
+  "peerDependencies": {
+    "joopo": ">=2026.5.6"
+  },
+  "peerDependenciesMeta": {
+    "joopo": {
+      "optional": true
+    }
+  },
+  "joopo": {
+    "extensions": [
+      "./index.ts"
+    ],
+    "setupEntry": "./setup-entry.ts",
+    "channel": {
+      "id": "nostr",
+      "label": "Nostr",
+      "selectionLabel": "Nostr (NIP-04 DMs)",
+      "docsPath": "/channels/nostr",
+      "docsLabel": "nostr",
+      "blurb": "Decentralized protocol; encrypted DMs via NIP-04.",
+      "order": 55,
+      "quickstartAllowFrom": true,
+      "cliAddOptions": [
+        {
+          "flags": "--private-key <key>",
+          "description": "Nostr private key (nsec... or hex)"
+        },
+        {
+          "flags": "--relay-urls <list>",
+          "description": "Nostr relay URLs (comma-separated)"
+        }
+      ]
+    },
+    "install": {
+      "npmSpec": "@joopo/nostr",
+      "defaultChoice": "npm",
+      "minHostVersion": ">=2026.4.10"
+    },
+    "compat": {
+      "pluginApi": ">=2026.5.6"
+    },
+    "build": {
+      "joopoVersion": "2026.5.6"
+    },
+    "release": {
+      "publishToClawHub": true,
+      "publishToNpm": true
+    }
+  }
+}

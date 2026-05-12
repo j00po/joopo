@@ -1,0 +1,32 @@
+export type { AuthProfileStore } from "joopo/plugin-sdk/video-generation-core";
+export {
+  buildNoCapabilityModelConfiguredMessage,
+  createSubsystemLogger,
+  describeFailoverError,
+  getProviderEnvVars,
+  getVideoGenerationProvider,
+  isFailoverError,
+  listVideoGenerationProviders,
+  parseVideoGenerationModelRef,
+  resolveAgentModelFallbackValues,
+  resolveAgentModelPrimaryValue,
+  resolveCapabilityModelCandidates,
+  throwCapabilityGenerationFailure,
+} from "joopo/plugin-sdk/video-generation-core";
+export type {
+  FallbackAttempt,
+  GeneratedVideoAsset,
+  JoopoConfig,
+  VideoGenerationIgnoredOverride,
+  VideoGenerationMode,
+  VideoGenerationModeCapabilities,
+  VideoGenerationProvider,
+  VideoGenerationProviderCapabilities,
+  VideoGenerationProviderConfiguredContext,
+  VideoGenerationProviderPlugin,
+  VideoGenerationRequest,
+  VideoGenerationResolution,
+  VideoGenerationResult,
+  VideoGenerationSourceAsset,
+  VideoGenerationTransformCapabilities,
+} from "joopo/plugin-sdk/video-generation-core";

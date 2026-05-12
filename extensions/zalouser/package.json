@@ -1,0 +1,66 @@
+{
+  "name": "@joopo/zalouser",
+  "version": "2026.5.6",
+  "description": "Joopo Zalo Personal Account plugin via native zca-js integration",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joopo/joopo"
+  },
+  "type": "module",
+  "dependencies": {
+    "typebox": "1.1.37",
+    "zca-js": "2.1.2"
+  },
+  "devDependencies": {
+    "@joopo/plugin-sdk": "workspace:*",
+    "joopo": "workspace:*"
+  },
+  "peerDependencies": {
+    "joopo": ">=2026.5.6"
+  },
+  "peerDependenciesMeta": {
+    "joopo": {
+      "optional": true
+    }
+  },
+  "joopo": {
+    "extensions": [
+      "./index.ts"
+    ],
+    "setupEntry": "./setup-entry.ts",
+    "channel": {
+      "id": "zalouser",
+      "label": "Zalo Personal",
+      "selectionLabel": "Zalo (Personal Account)",
+      "docsPath": "/channels/zalouser",
+      "docsLabel": "zalouser",
+      "blurb": "Zalo personal account via QR code login.",
+      "aliases": [
+        "zlu"
+      ],
+      "order": 85,
+      "quickstartAllowFrom": false,
+      "doctorCapabilities": {
+        "dmAllowFromMode": "topOnly",
+        "groupModel": "hybrid",
+        "groupAllowFromFallbackToAllowFrom": false,
+        "warnOnEmptyGroupSenderAllowlist": false
+      }
+    },
+    "install": {
+      "npmSpec": "@joopo/zalouser",
+      "defaultChoice": "npm",
+      "minHostVersion": ">=2026.4.10"
+    },
+    "compat": {
+      "pluginApi": ">=2026.5.6"
+    },
+    "build": {
+      "joopoVersion": "2026.5.6"
+    },
+    "release": {
+      "publishToClawHub": true,
+      "publishToNpm": true
+    }
+  }
+}

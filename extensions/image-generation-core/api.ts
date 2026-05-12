@@ -1,0 +1,31 @@
+export type { AuthProfileStore } from "joopo/plugin-sdk/image-generation-core";
+export {
+  buildNoCapabilityModelConfiguredMessage,
+  createSubsystemLogger,
+  describeFailoverError,
+  getImageGenerationProvider,
+  getProviderEnvVars,
+  isFailoverError,
+  listImageGenerationProviders,
+  normalizeGoogleModelId,
+  OPENAI_DEFAULT_IMAGE_MODEL,
+  parseGeminiAuth,
+  parseImageGenerationModelRef,
+  resolveAgentModelFallbackValues,
+  resolveAgentModelPrimaryValue,
+  resolveApiKeyForProvider,
+  resolveCapabilityModelCandidates,
+  throwCapabilityGenerationFailure,
+} from "joopo/plugin-sdk/image-generation-core";
+export type {
+  FallbackAttempt,
+  GeneratedImageAsset,
+  ImageGenerationProvider,
+  ImageGenerationProviderConfiguredContext,
+  ImageGenerationProviderPlugin,
+  ImageGenerationRequest,
+  ImageGenerationResolution,
+  ImageGenerationResult,
+  ImageGenerationSourceImage,
+  JoopoConfig,
+} from "joopo/plugin-sdk/image-generation-core";

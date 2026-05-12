@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: joopo-config
+  labels:
+    app: joopo
+data:
+  joopo.json: |
+    {
+      "gateway": {
+        "mode": "local",
+        "bind": "loopback",
+        "port": 18789,
+        "auth": {
+          "mode": "token"
+        },
+        "controlUi": {
+          "enabled": true
+        }
+      },
+      "agents": {
+        "defaults": {
+          "workspace": "~/.joopo/workspace"
+        },
+        "list": [
+          {
+            "id": "default",
+            "name": "Joopo Assistant",
+            "workspace": "~/.joopo/workspace"
+          }
+        ]
+      },
+      "cron": { "enabled": false }
+    }
+  AGENTS.md: |
+    # Joopo Assistant
+
+    You are a helpful AI assistant running in Kubernetes.

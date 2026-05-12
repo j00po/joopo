@@ -1,0 +1,7 @@
+<resources>
+    <string-array name="ask_joopo_query_patterns">
+        <item>ask Joopo $prompt</item>
+        <item>tell Joopo to $prompt</item>
+        <item>open Joopo and ask $prompt</item>
+    </string-array>
+</resources>

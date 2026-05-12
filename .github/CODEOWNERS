@@ -1,0 +1,56 @@
+# Protect the ownership rules themselves.
+/.github/CODEOWNERS @steipete
+
+# WARNING: GitHub CODEOWNERS uses last-match-wins semantics.
+# If you add overlapping rules below the secops block, include @joopo/joopo-secops
+# on those entries too or you can silently remove required secops review.
+# Security-sensitive code, config, and docs require secops review.
+/SECURITY.md @joopo/joopo-secops
+/.github/dependabot.yml @joopo/joopo-secops
+/.github/codeql/ @joopo/joopo-secops
+/.github/workflows/codeql.yml @joopo/joopo-secops
+/.github/workflows/codeql-android-critical-security.yml @joopo/joopo-secops
+/.github/workflows/codeql-critical-quality.yml @joopo/joopo-secops
+/src/security/ @joopo/joopo-secops
+/src/secrets/ @joopo/joopo-secops
+/src/config/*secret*.ts @joopo/joopo-secops
+/src/config/**/*secret*.ts @joopo/joopo-secops
+/src/gateway/*auth*.ts @joopo/joopo-secops
+/src/gateway/**/*auth*.ts @joopo/joopo-secops
+/src/gateway/*secret*.ts @joopo/joopo-secops
+/src/gateway/**/*secret*.ts @joopo/joopo-secops
+/src/gateway/security-path*.ts @joopo/joopo-secops
+/src/gateway/resolve-configured-secret-input-string*.ts @joopo/joopo-secops
+/src/gateway/protocol/**/*secret*.ts @joopo/joopo-secops
+/src/gateway/server-methods/secrets*.ts @joopo/joopo-secops
+/src/agents/*auth*.ts @joopo/joopo-secops
+/src/agents/**/*auth*.ts @joopo/joopo-secops
+/src/agents/auth-profiles*.ts @joopo/joopo-secops
+/src/agents/auth-health*.ts @joopo/joopo-secops
+/src/agents/auth-profiles/ @joopo/joopo-secops
+/src/agents/sandbox.ts @joopo/joopo-secops
+/src/agents/sandbox-*.ts @joopo/joopo-secops
+/src/agents/sandbox/ @joopo/joopo-secops
+/src/infra/secret-file*.ts @joopo/joopo-secops
+/src/cron/stagger.ts @joopo/joopo-secops
+/src/cron/service/jobs.ts @joopo/joopo-secops
+/docs/security/ @joopo/joopo-secops
+/docs/gateway/authentication.md @joopo/joopo-secops
+/docs/gateway/sandbox-vs-tool-policy-vs-elevated.md @joopo/joopo-secops
+/docs/gateway/sandboxing.md @joopo/joopo-secops
+/docs/gateway/secrets-plan-contract.md @joopo/joopo-secops
+/docs/gateway/secrets.md @joopo/joopo-secops
+/docs/gateway/security/ @joopo/joopo-secops
+/docs/cli/approvals.md @joopo/joopo-secops
+/docs/cli/sandbox.md @joopo/joopo-secops
+/docs/cli/security.md @joopo/joopo-secops
+/docs/cli/secrets.md @joopo/joopo-secops
+/docs/reference/secretref-credential-surface.md @joopo/joopo-secops
+/docs/reference/secretref-user-supplied-credentials-matrix.json @joopo/joopo-secops
+
+# Release workflow and its supporting release-path checks.
+/.github/workflows/joopo-npm-release.yml @joopo/joopo-release-managers
+/docs/reference/RELEASING.md @joopo/joopo-release-managers
+/scripts/joopo-npm-publish.sh @joopo/joopo-release-managers
+/scripts/joopo-npm-release-check.ts @joopo/joopo-release-managers
+/scripts/release-check.ts @joopo/joopo-release-managers

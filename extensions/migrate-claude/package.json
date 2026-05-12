@@ -1,0 +1,24 @@
+{
+  "name": "@joopo/migrate-claude",
+  "version": "2026.5.6",
+  "private": true,
+  "description": "Claude to Joopo migration provider",
+  "type": "module",
+  "devDependencies": {
+    "@joopo/plugin-sdk": "workspace:*",
+    "joopo": "workspace:*"
+  },
+  "peerDependencies": {
+    "joopo": ">=2026.5.6"
+  },
+  "peerDependenciesMeta": {
+    "joopo": {
+      "optional": true
+    }
+  },
+  "joopo": {
+    "extensions": [
+      "./index.ts"
+    ]
+  }
+}

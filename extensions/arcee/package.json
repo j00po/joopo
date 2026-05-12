@@ -1,0 +1,15 @@
+{
+  "name": "@joopo/arcee-provider",
+  "version": "2026.5.6",
+  "private": true,
+  "description": "Joopo Arcee provider plugin",
+  "type": "module",
+  "devDependencies": {
+    "@joopo/plugin-sdk": "workspace:*"
+  },
+  "joopo": {
+    "extensions": [
+      "./index.ts"
+    ]
+  }
+}

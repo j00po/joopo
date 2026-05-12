@@ -1,0 +1,15 @@
+{
+  "name": "@joopo/exa-plugin",
+  "version": "2026.5.6",
+  "private": true,
+  "description": "Joopo Exa plugin",
+  "type": "module",
+  "devDependencies": {
+    "@joopo/plugin-sdk": "workspace:*"
+  },
+  "joopo": {
+    "extensions": [
+      "./index.ts"
+    ]
+  }
+}

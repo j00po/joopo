@@ -1,0 +1,71 @@
+{
+  "name": "@joopo/msteams",
+  "version": "2026.5.6",
+  "description": "Joopo Microsoft Teams channel plugin",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joopo/joopo"
+  },
+  "type": "module",
+  "dependencies": {
+    "@azure/identity": "4.13.1",
+    "@microsoft/teams.api": "2.0.9",
+    "@microsoft/teams.apps": "2.0.9",
+    "express": "5.2.1",
+    "jsonwebtoken": "9.0.3",
+    "jwks-rsa": "4.0.1",
+    "typebox": "1.1.37"
+  },
+  "devDependencies": {
+    "@joopo/plugin-sdk": "workspace:*",
+    "@types/jsonwebtoken": "^9.0.10",
+    "joopo": "workspace:*"
+  },
+  "peerDependencies": {
+    "joopo": ">=2026.5.6"
+  },
+  "peerDependenciesMeta": {
+    "joopo": {
+      "optional": true
+    }
+  },
+  "joopo": {
+    "extensions": [
+      "./index.ts"
+    ],
+    "setupEntry": "./setup-entry.ts",
+    "channel": {
+      "id": "msteams",
+      "label": "Microsoft Teams",
+      "selectionLabel": "Microsoft Teams (Teams SDK)",
+      "docsPath": "/channels/msteams",
+      "docsLabel": "msteams",
+      "blurb": "Teams SDK; enterprise support.",
+      "aliases": [
+        "teams"
+      ],
+      "order": 60,
+      "doctorCapabilities": {
+        "dmAllowFromMode": "topOnly",
+        "groupModel": "hybrid",
+        "groupAllowFromFallbackToAllowFrom": false,
+        "warnOnEmptyGroupSenderAllowlist": true
+      }
+    },
+    "install": {
+      "npmSpec": "@joopo/msteams",
+      "defaultChoice": "npm",
+      "minHostVersion": ">=2026.4.10"
+    },
+    "compat": {
+      "pluginApi": ">=2026.5.6"
+    },
+    "build": {
+      "joopoVersion": "2026.5.6"
+    },
+    "release": {
+      "publishToClawHub": true,
+      "publishToNpm": true
+    }
+  }
+}

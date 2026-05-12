@@ -1,0 +1,47 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "joopo/extension-api": ["../src/extensionAPI.ts"],
+      "joopo/plugin-sdk": ["../dist/plugin-sdk/src/plugin-sdk/index.d.ts"],
+      "joopo/plugin-sdk/*": ["../dist/plugin-sdk/src/plugin-sdk/*.d.ts"],
+      "joopo/plugin-sdk/account-id": ["../dist/plugin-sdk/src/plugin-sdk/account-id.d.ts"],
+      "joopo/plugin-sdk/channel-entry-contract": [
+        "../packages/plugin-sdk/dist/src/plugin-sdk/channel-entry-contract.d.ts"
+      ],
+      "joopo/plugin-sdk/browser-maintenance": [
+        "../packages/plugin-sdk/dist/extensions/browser/browser-maintenance.d.ts"
+      ],
+      "joopo/plugin-sdk/channel-secret-basic-runtime": [
+        "../packages/plugin-sdk/dist/src/plugin-sdk/channel-secret-basic-runtime.d.ts"
+      ],
+      "joopo/plugin-sdk/channel-secret-runtime": [
+        "../dist/plugin-sdk/src/plugin-sdk/channel-secret-runtime.d.ts"
+      ],
+      "joopo/plugin-sdk/channel-secret-tts-runtime": [
+        "../packages/plugin-sdk/dist/src/plugin-sdk/channel-secret-tts-runtime.d.ts"
+      ],
+      "joopo/plugin-sdk/channel-streaming": [
+        "../dist/plugin-sdk/src/plugin-sdk/channel-streaming.d.ts"
+      ],
+      "joopo/plugin-sdk/error-runtime": ["../dist/plugin-sdk/src/plugin-sdk/error-runtime.d.ts"],
+      "joopo/plugin-sdk/provider-catalog-shared": [
+        "../packages/plugin-sdk/dist/src/plugin-sdk/provider-catalog-shared.d.ts"
+      ],
+      "joopo/plugin-sdk/provider-entry": [
+        "../packages/plugin-sdk/dist/src/plugin-sdk/provider-entry.d.ts"
+      ],
+      "joopo/plugin-sdk/secret-ref-runtime": [
+        "../dist/plugin-sdk/src/plugin-sdk/secret-ref-runtime.d.ts"
+      ],
+      "joopo/plugin-sdk/ssrf-runtime": ["../dist/plugin-sdk/src/plugin-sdk/ssrf-runtime.d.ts"],
+      "@joopo/qa-channel/api.js": ["../dist/plugin-sdk/extensions/qa-channel/api.d.ts"],
+      "@joopo/discord/api.js": ["../dist/plugin-sdk/extensions/discord/api.d.ts"],
+      "@joopo/slack/api.js": ["../dist/plugin-sdk/extensions/slack/api.d.ts"],
+      "@joopo/whatsapp/api.js": ["../dist/plugin-sdk/extensions/whatsapp/api.d.ts"],
+      "@joopo/*.js": ["../packages/plugin-sdk/dist/extensions/*.d.ts", "../extensions/*"],
+      "@joopo/*": ["../packages/plugin-sdk/dist/extensions/*", "../extensions/*"],
+      "@joopo/plugin-sdk/*": ["../dist/plugin-sdk/src/plugin-sdk/*.d.ts"]
+    }
+  }
+}

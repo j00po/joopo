@@ -1,0 +1,23 @@
+import {
+  findModelInCatalog,
+  loadModelCatalog,
+  modelSupportsVision,
+  resolveDefaultModelForAgent,
+} from "joopo/plugin-sdk/agent-runtime";
+import type { JoopoConfig } from "joopo/plugin-sdk/config-types";
+
+export async function resolveStickerVisionSupportRuntime(params: {
+  cfg: JoopoConfig;
+  agentId?: string;
+}): Promise<boolean> {
+  const catalog = await loadModelCatalog({ config: params.cfg });
+  const defaultModel = resolveDefaultModelForAgent({
+    cfg: params.cfg,
+    agentId: params.agentId,
+  });
+  const entry = findModelInCatalog(catalog, defaultModel.provider, defaultModel.model);
+  if (!entry) {
+    return false;
+  }
+  return modelSupportsVision(entry);
+}

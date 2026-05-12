@@ -1,0 +1,39 @@
+{
+  "name": "@joopo/memory-lancedb",
+  "version": "2026.5.6",
+  "description": "Joopo LanceDB-backed long-term memory plugin with auto-recall/capture",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joopo/joopo"
+  },
+  "type": "module",
+  "dependencies": {
+    "@lancedb/lancedb": "^0.27.2",
+    "apache-arrow": "18.1.0",
+    "openai": "^6.36.0",
+    "typebox": "1.1.37"
+  },
+  "devDependencies": {
+    "@joopo/plugin-sdk": "workspace:*"
+  },
+  "joopo": {
+    "extensions": [
+      "./index.ts"
+    ],
+    "install": {
+      "npmSpec": "@joopo/memory-lancedb",
+      "defaultChoice": "npm",
+      "minHostVersion": ">=2026.4.10"
+    },
+    "compat": {
+      "pluginApi": ">=2026.5.6"
+    },
+    "build": {
+      "joopoVersion": "2026.5.6"
+    },
+    "release": {
+      "publishToClawHub": true,
+      "publishToNpm": true
+    }
+  }
+}

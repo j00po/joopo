@@ -1,0 +1,56 @@
+{
+  "name": "@joopo/zalo",
+  "version": "2026.5.6",
+  "description": "Joopo Zalo channel plugin",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joopo/joopo"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@joopo/plugin-sdk": "workspace:*",
+    "joopo": "workspace:*"
+  },
+  "peerDependencies": {
+    "joopo": ">=2026.5.6"
+  },
+  "peerDependenciesMeta": {
+    "joopo": {
+      "optional": true
+    }
+  },
+  "joopo": {
+    "extensions": [
+      "./index.ts"
+    ],
+    "setupEntry": "./setup-entry.ts",
+    "channel": {
+      "id": "zalo",
+      "label": "Zalo",
+      "selectionLabel": "Zalo (Bot API)",
+      "docsPath": "/channels/zalo",
+      "docsLabel": "zalo",
+      "blurb": "Vietnam-focused messaging platform with Bot API.",
+      "aliases": [
+        "zl"
+      ],
+      "order": 80,
+      "quickstartAllowFrom": true
+    },
+    "install": {
+      "npmSpec": "@joopo/zalo",
+      "defaultChoice": "npm",
+      "minHostVersion": ">=2026.4.10"
+    },
+    "compat": {
+      "pluginApi": ">=2026.5.6"
+    },
+    "build": {
+      "joopoVersion": "2026.5.6"
+    },
+    "release": {
+      "publishToClawHub": true,
+      "publishToNpm": true
+    }
+  }
+}

@@ -1,0 +1,25 @@
+// Shared iOS signing defaults for local development + CI.
+#include "Version.xcconfig"
+
+JOOPO_IOS_DEFAULT_TEAM = Y5PE65HELJ
+JOOPO_IOS_SELECTED_TEAM = $(JOOPO_IOS_DEFAULT_TEAM)
+JOOPO_DEVELOPMENT_TEAM = $(JOOPO_IOS_SELECTED_TEAM)
+JOOPO_CODE_SIGN_STYLE = Automatic
+JOOPO_APP_BUNDLE_ID = ai.joopo.client
+JOOPO_WATCH_APP_BUNDLE_ID = ai.joopo.client.watchkitapp
+JOOPO_WATCH_EXTENSION_BUNDLE_ID = ai.joopo.client.watchkitapp.extension
+JOOPO_ACTIVITY_WIDGET_BUNDLE_ID = ai.joopo.client.activitywidget
+JOOPO_WATCH_APP_PROFILE =
+JOOPO_WATCH_EXTENSION_PROFILE =
+
+// Local contributors can override this by running scripts/ios-configure-signing.sh.
+// Keep include after defaults: xcconfig is evaluated top-to-bottom.
+#include? "../.local-signing.xcconfig"
+#include? "../LocalSigning.xcconfig"
+
+CODE_SIGN_STYLE = $(JOOPO_CODE_SIGN_STYLE)
+CODE_SIGN_IDENTITY = Apple Development
+DEVELOPMENT_TEAM = $(JOOPO_DEVELOPMENT_TEAM)
+
+// Let Xcode manage provisioning for the selected local team unless a local override pins one.
+PROVISIONING_PROFILE_SPECIFIER =

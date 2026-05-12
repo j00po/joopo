@@ -1,0 +1,17 @@
+// Copy to LocalSigning.xcconfig for personal local signing overrides.
+// This file is only an example and should stay committed.
+
+JOOPO_CODE_SIGN_STYLE = Automatic
+JOOPO_DEVELOPMENT_TEAM = YOUR_TEAM_ID
+
+JOOPO_APP_BUNDLE_ID = ai.joopo.client
+JOOPO_SHARE_BUNDLE_ID = ai.joopo.client.share
+JOOPO_ACTIVITY_WIDGET_BUNDLE_ID = ai.joopo.client.activitywidget
+JOOPO_WATCH_APP_BUNDLE_ID = ai.joopo.client.watchkitapp
+JOOPO_WATCH_EXTENSION_BUNDLE_ID = ai.joopo.client.watchkitapp.extension
+
+// Leave empty with automatic signing.
+JOOPO_APP_PROFILE =
+JOOPO_SHARE_PROFILE =
+JOOPO_WATCH_APP_PROFILE =
+JOOPO_WATCH_EXTENSION_PROFILE =

@@ -1,0 +1,9 @@
+import { defineBundledChannelSetupEntry } from "joopo/plugin-sdk/channel-entry-contract";
+
+export default defineBundledChannelSetupEntry({
+  importMetaUrl: import.meta.url,
+  plugin: {
+    specifier: "./setup-plugin-api.js",
+    exportName: "discordSetupPlugin",
+  },
+});

@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: joopo
+    runtime: docker
+    plan: starter
+    healthCheckPath: /health
+    envVars:
+      - key: JOOPO_GATEWAY_PORT
+        value: "8080"
+      - key: JOOPO_STATE_DIR
+        value: /data/.joopo
+      - key: JOOPO_WORKSPACE_DIR
+        value: /data/workspace
+      - key: JOOPO_GATEWAY_TOKEN
+        generateValue: true
+    disk:
+      name: joopo-data
+      mountPath: /data
+      sizeGB: 1

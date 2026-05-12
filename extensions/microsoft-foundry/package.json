@@ -1,0 +1,15 @@
+{
+  "name": "@joopo/microsoft-foundry",
+  "version": "2026.5.6",
+  "private": true,
+  "description": "Joopo Microsoft Foundry provider plugin",
+  "type": "module",
+  "devDependencies": {
+    "@joopo/plugin-sdk": "workspace:*"
+  },
+  "joopo": {
+    "extensions": [
+      "./index.ts"
+    ]
+  }
+}

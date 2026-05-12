@@ -1,0 +1,29 @@
+{
+  "name": "@joopo/memory-core",
+  "version": "2026.5.6",
+  "private": true,
+  "description": "Joopo core memory search plugin",
+  "type": "module",
+  "dependencies": {
+    "chokidar": "^5.0.0",
+    "json5": "^2.2.3",
+    "typebox": "1.1.37"
+  },
+  "devDependencies": {
+    "@joopo/plugin-sdk": "workspace:*",
+    "joopo": "workspace:*"
+  },
+  "peerDependencies": {
+    "joopo": ">=2026.5.6"
+  },
+  "peerDependenciesMeta": {
+    "joopo": {
+      "optional": true
+    }
+  },
+  "joopo": {
+    "extensions": [
+      "./index.ts"
+    ]
+  }
+}

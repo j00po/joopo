@@ -1,0 +1,51 @@
+import Foundation
+
+// Stable identifier used for both the macOS LaunchAgent label and Nix-managed defaults suite.
+// nix-joopo writes app defaults into this suite to survive app bundle identifier churn.
+let launchdLabel = "ai.joopo.mac"
+let gatewayLaunchdLabel = "ai.joopo.gateway"
+let onboardingVersionKey = "joopo.onboardingVersion"
+let onboardingSeenKey = "joopo.onboardingSeen"
+let currentOnboardingVersion = 7
+let pauseDefaultsKey = "joopo.pauseEnabled"
+let iconAnimationsEnabledKey = "joopo.iconAnimationsEnabled"
+let swabbleEnabledKey = "joopo.swabbleEnabled"
+let swabbleTriggersKey = "joopo.swabbleTriggers"
+let voiceWakeTriggerChimeKey = "joopo.voiceWakeTriggerChime"
+let voiceWakeSendChimeKey = "joopo.voiceWakeSendChime"
+let showDockIconKey = "joopo.showDockIcon"
+let defaultVoiceWakeTriggers = ["joopo"]
+let voiceWakeMaxWords = 32
+let voiceWakeMaxWordLength = 64
+let voiceWakeMicKey = "joopo.voiceWakeMicID"
+let voiceWakeMicNameKey = "joopo.voiceWakeMicName"
+let voiceWakeLocaleKey = "joopo.voiceWakeLocaleID"
+let voiceWakeAdditionalLocalesKey = "joopo.voiceWakeAdditionalLocaleIDs"
+let voicePushToTalkEnabledKey = "joopo.voicePushToTalkEnabled"
+let voiceWakeTriggersTalkModeKey = "joopo.voiceWakeTriggersTalkMode"
+let talkEnabledKey = "joopo.talkEnabled"
+let talkPhaseSoundsEnabledKey = "joopo.talkPhaseSoundsEnabled"
+let talkShiftToStopEnabledKey = "joopo.talkShiftToStopEnabled"
+let iconOverrideKey = "joopo.iconOverride"
+let connectionModeKey = "joopo.connectionMode"
+let remoteTargetKey = "joopo.remoteTarget"
+let remoteIdentityKey = "joopo.remoteIdentity"
+let remoteProjectRootKey = "joopo.remoteProjectRoot"
+let remoteCliPathKey = "joopo.remoteCliPath"
+let canvasEnabledKey = "joopo.canvasEnabled"
+let cameraEnabledKey = "joopo.cameraEnabled"
+let systemRunPolicyKey = "joopo.systemRunPolicy"
+let systemRunAllowlistKey = "joopo.systemRunAllowlist"
+let systemRunEnabledKey = "joopo.systemRunEnabled"
+let locationModeKey = "joopo.locationMode"
+let locationPreciseKey = "joopo.locationPreciseEnabled"
+let peekabooBridgeEnabledKey = "joopo.peekabooBridgeEnabled"
+let deepLinkKeyKey = "joopo.deepLinkKey"
+let modelCatalogPathKey = "joopo.modelCatalogPath"
+let modelCatalogReloadKey = "joopo.modelCatalogReload"
+let cliInstallPromptedVersionKey = "joopo.cliInstallPromptedVersion"
+let heartbeatsEnabledKey = "joopo.heartbeatsEnabled"
+let debugPaneEnabledKey = "joopo.debugPaneEnabled"
+let debugFileLogEnabledKey = "joopo.debug.fileLogEnabled"
+let appLogLevelKey = "joopo.debug.appLogLevel"
+let voiceWakeSupported: Bool = ProcessInfo.processInfo.operatingSystemVersion.majorVersion >= 26

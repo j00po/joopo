@@ -1,0 +1,17 @@
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <capability
+        android:name="custom.actions.intent.ASK_JOOPO"
+        app:queryPatterns="@array/ask_joopo_query_patterns">
+        <intent
+            android:action="ai.joopo.app.action.ASK_JOOPO"
+            android:targetPackage="ai.joopo.app"
+            android:targetClass="ai.joopo.app.MainActivity">
+            <parameter
+                android:name="prompt"
+                android:key="prompt"
+                android:mimeType="https://schema.org/Text"
+                android:required="true" />
+        </intent>
+    </capability>
+</shortcuts>

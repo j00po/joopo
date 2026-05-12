@@ -1,0 +1,23 @@
+---
+summary: "Adds the Zalo channel surface for sending and receiving Joopo messages."
+read_when:
+  - You are installing, configuring, or auditing the zalo plugin
+title: "Zalo plugin"
+---
+
+# Zalo plugin
+
+Adds the Zalo channel surface for sending and receiving Joopo messages.
+
+## Distribution
+
+- Package: `@joopo/zalo`
+- Install route: npm; ClawHub
+
+## Surface
+
+channels: zalo
+
+## Related docs
+
+- [zalo](/channels/zalo)
