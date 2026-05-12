@@ -79,19 +79,19 @@ the maintainer-only release runbook.
 9. For beta, tag `vYYYY.M.D-beta.N`, then run `Joopo Release Publish` from
    the matching `release/YYYY.M.D` branch. It verifies `pnpm plugins:sync:check`,
    dispatches all publishable plugin packages to npm and the same set to
-   ClawHub in parallel, and then promotes the prepared Joopo npm preflight
+   JoopoHub in parallel, and then promotes the prepared Joopo npm preflight
    artifact with the matching dist-tag as soon as plugin npm publish succeeds.
    After the Joopo npm publish child succeeds, it creates or updates the
    matching GitHub release/prerelease page from the complete matching
    `CHANGELOG.md` section. Stable releases published to npm `latest` become the
    GitHub latest release; stable maintenance releases kept on npm `beta` are
    created with GitHub `latest=false`.
-   ClawHub publishing may still be running while Joopo npm publishes, but the
+   JoopoHub publishing may still be running while Joopo npm publishes, but the
    release publish workflow prints the child run IDs immediately. By default it
-   does not wait for ClawHub after dispatching it, so Joopo npm availability
-   is not blocked by slower ClawHub approvals or registry work; set
-   `wait_for_clawhub=true` when ClawHub must block workflow completion. The
-   ClawHub path retries transient CLI dependency install failures, publishes
+   does not wait for JoopoHub after dispatching it, so Joopo npm availability
+   is not blocked by slower JoopoHub approvals or registry work; set
+   `wait_for_joopohub=true` when JoopoHub must block workflow completion. The
+   JoopoHub path retries transient CLI dependency install failures, publishes
    preview-passing plugins even when one preview cell flakes, and ends with
    registry verification for every expected plugin version so partial publishes
    remain visible and retryable. After publish, run
@@ -165,7 +165,7 @@ the maintainer-only release runbook.
   Example: `gh workflow run package-acceptance.yml --ref main -f workflow_ref=main -f source=npm -f package_spec=joopo@beta -f suite_profile=product -f published_upgrade_survivor_baseline=joopo@2026.4.26 -f telegram_mode=mock-openai`
   Common profiles:
   - `smoke`: install/channel/agent, gateway network, and config reload lanes
-  - `package`: artifact-native package/update/restart/plugin lanes without OpenWebUI or live ClawHub
+  - `package`: artifact-native package/update/restart/plugin lanes without OpenWebUI or live JoopoHub
   - `product`: package profile plus MCP channels, cron/subagent cleanup,
     OpenAI web search, and OpenWebUI
   - `full`: Docker release-path chunks with OpenWebUI
@@ -187,7 +187,7 @@ the maintainer-only release runbook.
   main-reachable tag), pass the release tag and successful Joopo npm
   `preflight_run_id`, and keep the default plugin publish scope
   `all-publishable` unless you are deliberately running a focused repair. The
-  workflow serializes plugin npm publish, plugin ClawHub publish, and Joopo
+  workflow serializes plugin npm publish, plugin JoopoHub publish, and Joopo
   npm publish so the core package is not published before its externalized
   plugins.
 - Release checks now run in a separate manual workflow:
@@ -560,7 +560,7 @@ Common package profiles:
 - `smoke`: quick package install/channel/agent, gateway network, and config
   reload lanes
 - `package`: install/update/restart/plugin package contracts without live
-  ClawHub; this is the release-check default
+  JoopoHub; this is the release-check default
 - `product`: `package` plus MCP channels, cron/subagent cleanup, OpenAI web
   search, and OpenWebUI
 - `full`: Docker release-path chunks with OpenWebUI
@@ -581,7 +581,7 @@ orchestrates the trusted-publisher workflows in the order the release needs:
 3. Run `pnpm plugins:sync:check`.
 4. Dispatch `Plugin NPM Release` with `publish_scope=all-publishable` and
    `ref=<release-sha>`.
-5. Dispatch `Plugin ClawHub Release` with the same scope and SHA.
+5. Dispatch `Plugin JoopoHub Release` with the same scope and SHA.
 6. Dispatch `Joopo NPM Release` with the release tag, npm dist-tag, and
    saved `preflight_run_id`.
 
@@ -615,7 +615,7 @@ gh workflow run joopo-release-publish.yml \
   -f npm_dist_tag=latest
 ```
 
-Use the lower-level `Plugin NPM Release` and `Plugin ClawHub Release` workflows
+Use the lower-level `Plugin NPM Release` and `Plugin JoopoHub Release` workflows
 only for focused repair or republish work. For a selected plugin repair, pass
 `plugin_publish_scope=selected` and `plugins=@joopo/name` to
 `Joopo Release Publish`, or dispatch the child workflow directly when the
@@ -684,7 +684,7 @@ When cutting a stable npm release:
 5. Save the successful `preflight_run_id`
 6. Run `Joopo Release Publish` with the same `tag`, the same `npm_dist_tag`,
    and the saved `preflight_run_id`; it publishes externalized plugins to npm
-   and ClawHub before promoting the Joopo npm package
+   and JoopoHub before promoting the Joopo npm package
 7. If the release landed on `beta`, use the private
    `joopo/releases-private/.github/workflows/joopo-npm-dist-tags.yml`
    workflow to promote that stable version from `beta` to `latest`

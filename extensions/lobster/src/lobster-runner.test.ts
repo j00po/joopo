@@ -420,7 +420,7 @@ describe("createEmbeddedLobsterRunner", () => {
   it("deduplicates content-identical schema compilation in the installed Lobster runtime", async () => {
     await loadEmbeddedToolRuntimeFromPackage();
 
-    const corePath = requireForTest.resolve("@clawdbot/lobster/core");
+    const corePath = requireForTest.resolve("@joopobot/lobster/core");
     const validationPath = path.join(path.dirname(path.dirname(corePath)), "validation.js");
     const validationModule = (await import(pathToFileURL(validationPath).href)) as {
       sharedAjv: import("ajv").default;
@@ -439,7 +439,7 @@ describe("createEmbeddedLobsterRunner", () => {
 
   it("falls back to the installed package core file when the core export is unavailable", async () => {
     const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "joopo-lobster-package-"));
-    const packageRoot = path.join(tempDir, "node_modules", "@clawdbot", "lobster");
+    const packageRoot = path.join(tempDir, "node_modules", "@joopobot", "lobster");
     const packageEntryPath = path.join(packageRoot, "dist", "src", "sdk", "index.js");
     const packageCorePath = path.join(packageRoot, "dist", "src", "core", "index.js");
 
@@ -449,7 +449,7 @@ describe("createEmbeddedLobsterRunner", () => {
       await fs.writeFile(
         path.join(packageRoot, "package.json"),
         JSON.stringify({
-          name: "@clawdbot/lobster",
+          name: "@joopobot/lobster",
           type: "module",
           main: "./dist/src/sdk/index.js",
         }),
@@ -472,7 +472,7 @@ describe("createEmbeddedLobsterRunner", () => {
 
       const runtime = await loadEmbeddedToolRuntimeFromPackage({
         importModule: async (specifier) => {
-          if (specifier === "@clawdbot/lobster/core") {
+          if (specifier === "@joopobot/lobster/core") {
             throw new Error("package export missing");
           }
           return (await import(`${specifier}?t=${Date.now()}`)) as object;

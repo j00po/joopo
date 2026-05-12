@@ -576,7 +576,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
     );
   });
 
-  it("offers ClawHub as the first-class install source for channel catalog entries", async () => {
+  it("offers JoopoHub as the first-class install source for channel catalog entries", async () => {
     const runtime = makeRuntime();
     const { prompter, select } = makeSkipInstallPrompter();
     const cfg: JoopoConfig = { update: { channel: "beta" } };
@@ -586,18 +586,18 @@ describe("ensureChannelSetupPluginInstalled", () => {
     await ensureChannelSetupPluginInstalled({
       cfg,
       entry: {
-        id: "clawhub-chat",
-        pluginId: "clawhub-chat",
+        id: "joopohub-chat",
+        pluginId: "joopohub-chat",
         meta: {
-          id: "clawhub-chat",
-          label: "ClawHub Chat",
-          selectionLabel: "ClawHub Chat",
-          docsPath: "/channels/clawhub-chat",
+          id: "joopohub-chat",
+          label: "JoopoHub Chat",
+          selectionLabel: "JoopoHub Chat",
+          docsPath: "/channels/joopohub-chat",
           blurb: "Test",
         },
         install: {
-          clawhubSpec: "clawhub:joopo/clawhub-chat@2026.5.2",
-          defaultChoice: "clawhub",
+          joopohubSpec: "joopohub:joopo/joopohub-chat@2026.5.2",
+          defaultChoice: "joopohub",
         },
       },
       prompter,
@@ -606,11 +606,11 @@ describe("ensureChannelSetupPluginInstalled", () => {
 
     expect(select).toHaveBeenCalledWith(
       expect.objectContaining({
-        initialValue: "clawhub",
+        initialValue: "joopohub",
         options: [
           expect.objectContaining({
-            value: "clawhub",
-            label: "Download from ClawHub (clawhub:joopo/clawhub-chat@2026.5.2)",
+            value: "joopohub",
+            label: "Download from JoopoHub (joopohub:joopo/joopohub-chat@2026.5.2)",
           }),
           expect.objectContaining({
             value: "skip",

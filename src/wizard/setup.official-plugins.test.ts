@@ -62,21 +62,21 @@ describe("formatInstallHint", () => {
   it("describes dual-source npm-default installs as npm first", () => {
     expect(
       __testing.formatInstallHint({
-        clawhubSpec: "clawhub:@joopo/diagnostics-otel",
+        joopohubSpec: "joopohub:@joopo/diagnostics-otel",
         npmSpec: "@joopo/diagnostics-otel",
         defaultChoice: "npm",
       }),
-    ).toBe("npm, with ClawHub fallback");
+    ).toBe("npm, with JoopoHub fallback");
   });
 
-  it("keeps dual-source clawhub-default installs ClawHub first", () => {
+  it("keeps dual-source joopohub-default installs JoopoHub first", () => {
     expect(
       __testing.formatInstallHint({
-        clawhubSpec: "clawhub:@joopo/diagnostics-otel",
+        joopohubSpec: "joopohub:@joopo/diagnostics-otel",
         npmSpec: "@joopo/diagnostics-otel",
-        defaultChoice: "clawhub",
+        defaultChoice: "joopohub",
       }),
-    ).toBe("ClawHub, with npm fallback");
+    ).toBe("JoopoHub, with npm fallback");
   });
 });
 
@@ -114,7 +114,7 @@ describe("setupOfficialPluginInstalls", () => {
           pluginId: "diagnostics-otel",
           trustedSourceLinkedOfficialInstall: true,
           install: expect.objectContaining({
-            clawhubSpec: "clawhub:@joopo/diagnostics-otel",
+            joopohubSpec: "joopohub:@joopo/diagnostics-otel",
             npmSpec: "@joopo/diagnostics-otel",
             defaultChoice: "npm",
           }),

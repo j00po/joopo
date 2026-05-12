@@ -4,7 +4,7 @@ import path from "node:path";
 import { verifyChannelMessageAdapterCapabilityProofs } from "joopo/plugin-sdk/channel-message";
 import type { MessagePresentation } from "joopo/plugin-sdk/interactive-runtime";
 import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { ClawdbotConfig } from "../runtime-api.js";
+import type { JoopobotConfig } from "../runtime-api.js";
 
 const sendMediaFeishuMock = vi.hoisted(() => vi.fn());
 const sendMessageFeishuMock = vi.hoisted(() => vi.fn());
@@ -76,8 +76,8 @@ import { feishuPlugin } from "./channel.js";
 import { feishuOutbound } from "./outbound.js";
 import { createFeishuSendReceipt } from "./send-result.js";
 const sendText = feishuOutbound.sendText!;
-const emptyConfig: ClawdbotConfig = {};
-const cardRenderConfig: ClawdbotConfig = {
+const emptyConfig: JoopobotConfig = {};
+const cardRenderConfig: JoopobotConfig = {
   channels: {
     feishu: {
       renderMode: "card",

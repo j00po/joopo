@@ -71,11 +71,11 @@ function formatInstallLines(install: PluginInstallRecord | undefined): string[] 
   if (install.version) {
     lines.push(`Recorded version: ${install.version}`);
   }
-  if (install.clawhubPackage) {
-    lines.push(`ClawHub package: ${install.clawhubPackage}`);
+  if (install.joopohubPackage) {
+    lines.push(`JoopoHub package: ${install.joopohubPackage}`);
   }
-  if (install.clawhubChannel) {
-    lines.push(`ClawHub channel: ${install.clawhubChannel}`);
+  if (install.joopohubChannel) {
+    lines.push(`JoopoHub channel: ${install.joopohubChannel}`);
   }
   if (install.artifactKind) {
     lines.push(`Artifact kind: ${install.artifactKind}`);

@@ -11,6 +11,11 @@ const nodeBin = process.execPath;
 const WINDOWS_BUILD_MAX_OLD_SPACE_MB = 4096;
 const BUILD_CACHE_VERSION = 2;
 export const BUILD_ALL_STEPS = [
+  {
+    label: "build:workspace-runtime-deps",
+    kind: "pnpm",
+    pnpmArgs: ["--filter", "@joopo/fs-safe", "--filter", "@joopobot/lobster", "build"],
+  },
   { label: "plugins:assets:build", kind: "pnpm", pnpmArgs: ["plugins:assets:build"] },
   { label: "tsdown", kind: "node", args: ["scripts/tsdown-build.mjs"] },
   {
@@ -95,6 +100,7 @@ export const BUILD_ALL_STEPS = [
 export const BUILD_ALL_PROFILES = {
   full: BUILD_ALL_STEPS.map((step) => step.label),
   ciArtifacts: [
+    "build:workspace-runtime-deps",
     "plugins:assets:build",
     "tsdown",
     "check-cli-bootstrap-imports",
@@ -112,6 +118,7 @@ export const BUILD_ALL_PROFILES = {
     "write-cli-compat",
   ],
   gatewayWatch: [
+    "build:workspace-runtime-deps",
     "tsdown",
     "check-cli-bootstrap-imports",
     "runtime-postbuild",

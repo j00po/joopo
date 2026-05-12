@@ -218,8 +218,8 @@ function assertSlashInstall() {
   }
 }
 
-function parseClawHubPackageName(rawSpec) {
-  const value = rawSpec.slice("clawhub:".length).trim();
+function parseJoopoHubPackageName(rawSpec) {
+  const value = rawSpec.slice("joopohub:".length).trim();
   const slashIndex = value.lastIndexOf("/");
   const atIndex = value.lastIndexOf("@");
   return atIndex > 0 && atIndex > slashIndex ? value.slice(0, atIndex) : value;
@@ -424,45 +424,49 @@ function assertRealPathInside(parentPath, childPath, label) {
   }
 }
 
-function assertClawHubExternalInstallContract(installPath) {
+function assertJoopoHubExternalInstallContract(installPath) {
   const joopoPeerPath = path.join(installPath, "node_modules", "joopo");
   if (!fs.existsSync(joopoPeerPath)) {
-    throw new Error(`missing ClawHub joopo peer symlink: ${joopoPeerPath}`);
+    throw new Error(`missing JoopoHub joopo peer symlink: ${joopoPeerPath}`);
   }
   if (!fs.lstatSync(joopoPeerPath).isSymbolicLink()) {
-    throw new Error(`ClawHub joopo peer is not a symlink: ${joopoPeerPath}`);
+    throw new Error(`JoopoHub joopo peer is not a symlink: ${joopoPeerPath}`);
   }
   const hostRoot = fs.realpathSync(process.cwd());
   const linkedHostRoot = fs.realpathSync(joopoPeerPath);
   if (linkedHostRoot !== hostRoot) {
-    throw new Error(`expected ClawHub joopo peer ${linkedHostRoot} to target ${hostRoot}`);
+    throw new Error(`expected JoopoHub joopo peer ${linkedHostRoot} to target ${hostRoot}`);
   }
 
   const dependencyPackagePath = path.join(installPath, "node_modules", "is-number", "package.json");
   if (fs.existsSync(dependencyPackagePath)) {
-    assertRealPathInside(installPath, dependencyPackagePath, "ClawHub isolated dependency");
+    assertRealPathInside(installPath, dependencyPackagePath, "JoopoHub isolated dependency");
   }
 }
 
-function assertClawHubArtifactMetadata(record, pluginId) {
+function assertJoopoHubArtifactMetadata(record, pluginId) {
   if (record.artifactKind === "legacy-zip") {
     if (record.artifactFormat !== "zip") {
       throw new Error(
-        `missing ClawHub legacy ZIP artifact metadata for ${pluginId}: ${JSON.stringify(record)}`,
+        `missing JoopoHub legacy ZIP artifact metadata for ${pluginId}: ${JSON.stringify(record)}`,
       );
     }
     return;
   }
 
   if (record.artifactKind !== "npm-pack" || record.artifactFormat !== "tgz") {
-    throw new Error(`missing ClawHub artifact metadata for ${pluginId}: ${JSON.stringify(record)}`);
+    throw new Error(
+      `missing JoopoHub artifact metadata for ${pluginId}: ${JSON.stringify(record)}`,
+    );
   }
   if (!record.clawpackSha256 || typeof record.clawpackSize !== "number") {
-    throw new Error(`missing ClawHub ClawPack metadata for ${pluginId}: ${JSON.stringify(record)}`);
+    throw new Error(
+      `missing JoopoHub ClawPack metadata for ${pluginId}: ${JSON.stringify(record)}`,
+    );
   }
   if (!record.npmIntegrity || !record.npmShasum || !record.npmTarballName) {
     throw new Error(
-      `missing ClawHub npm artifact metadata for ${pluginId}: ${JSON.stringify(record)}`,
+      `missing JoopoHub npm artifact metadata for ${pluginId}: ${JSON.stringify(record)}`,
     );
   }
 }
@@ -674,22 +678,22 @@ function assertGitPluginUpdated() {
   );
 }
 
-async function assertClawHubPreflight() {
-  const spec = process.env.CLAWHUB_PLUGIN_SPEC;
-  if (!spec?.startsWith("clawhub:")) {
-    throw new Error(`expected clawhub: spec, got ${spec}`);
+async function assertJoopoHubPreflight() {
+  const spec = process.env.JOOPOHUB_PLUGIN_SPEC;
+  if (!spec?.startsWith("joopohub:")) {
+    throw new Error(`expected joopohub: spec, got ${spec}`);
   }
 
-  const packageName = parseClawHubPackageName(spec);
+  const packageName = parseJoopoHubPackageName(spec);
   const baseUrl = (
-    process.env.JOOPO_CLAWHUB_URL ||
-    process.env.CLAWHUB_URL ||
-    "https://clawhub.ai"
+    process.env.JOOPO_JOOPOHUB_URL ||
+    process.env.JOOPOHUB_URL ||
+    "https://joopohub.ai"
   ).replace(/\/+$/, "");
   const token =
-    process.env.JOOPO_CLAWHUB_TOKEN ||
-    process.env.CLAWHUB_TOKEN ||
-    process.env.CLAWHUB_AUTH_TOKEN ||
+    process.env.JOOPO_JOOPOHUB_TOKEN ||
+    process.env.JOOPOHUB_TOKEN ||
+    process.env.JOOPOHUB_AUTH_TOKEN ||
     "";
   const response = await fetch(`${baseUrl}/api/v1/packages/${encodeURIComponent(packageName)}`, {
     headers: token ? { Authorization: `Bearer ${token}` } : undefined,
@@ -697,37 +701,37 @@ async function assertClawHubPreflight() {
   if (!response.ok) {
     const body = await response.text().catch(() => "");
     throw new Error(
-      `ClawHub package preflight failed for ${packageName}: ${response.status} ${body}`,
+      `JoopoHub package preflight failed for ${packageName}: ${response.status} ${body}`,
     );
   }
   const detail = await response.json();
   const family = detail.package?.family;
   if (family !== "code-plugin" && family !== "bundle-plugin") {
-    throw new Error(`ClawHub package ${packageName} is not installable as a plugin: ${family}`);
+    throw new Error(`JoopoHub package ${packageName} is not installable as a plugin: ${family}`);
   }
-  if (detail.package?.runtimeId && detail.package.runtimeId !== process.env.CLAWHUB_PLUGIN_ID) {
+  if (detail.package?.runtimeId && detail.package.runtimeId !== process.env.JOOPOHUB_PLUGIN_ID) {
     throw new Error(
-      `ClawHub package ${packageName} runtimeId ${detail.package.runtimeId} does not match expected ${process.env.CLAWHUB_PLUGIN_ID}`,
+      `JoopoHub package ${packageName} runtimeId ${detail.package.runtimeId} does not match expected ${process.env.JOOPOHUB_PLUGIN_ID}`,
     );
   }
-  console.log(`Using ClawHub package ${packageName} (${family}).`);
+  console.log(`Using JoopoHub package ${packageName} (${family}).`);
 }
 
-function assertClawHubInstalled() {
-  const pluginId = process.env.CLAWHUB_PLUGIN_ID;
-  const spec = process.env.CLAWHUB_PLUGIN_SPEC;
-  const packageName = parseClawHubPackageName(spec);
-  const list = readJson("/tmp/plugins-clawhub-installed.json");
-  const inspect = readJson("/tmp/plugins-clawhub-inspect.json");
+function assertJoopoHubInstalled() {
+  const pluginId = process.env.JOOPOHUB_PLUGIN_ID;
+  const spec = process.env.JOOPOHUB_PLUGIN_SPEC;
+  const packageName = parseJoopoHubPackageName(spec);
+  const list = readJson("/tmp/plugins-joopohub-installed.json");
+  const inspect = readJson("/tmp/plugins-joopohub-inspect.json");
   const plugin = (list.plugins || []).find((entry) => entry.id === pluginId);
   if (!plugin) {
-    throw new Error(`ClawHub plugin not found after install: ${pluginId}`);
+    throw new Error(`JoopoHub plugin not found after install: ${pluginId}`);
   }
   if (plugin.status !== "loaded") {
-    throw new Error(`unexpected ClawHub plugin status for ${pluginId}: ${plugin.status}`);
+    throw new Error(`unexpected JoopoHub plugin status for ${pluginId}: ${plugin.status}`);
   }
   if (inspect.plugin?.id !== pluginId) {
-    throw new Error(`unexpected ClawHub inspect plugin id: ${inspect.plugin?.id}`);
+    throw new Error(`unexpected JoopoHub inspect plugin id: ${inspect.plugin?.id}`);
   }
 
   const indexPath = path.join(process.env.HOME, ".joopo", "plugins", "installs.json");
@@ -743,44 +747,44 @@ function assertClawHubInstalled() {
     : (index.installRecords ?? {});
   const record = installRecords[pluginId];
   if (!record) {
-    throw new Error(`missing ClawHub install record for ${pluginId}`);
+    throw new Error(`missing JoopoHub install record for ${pluginId}`);
   }
-  if (record.source !== "clawhub") {
-    throw new Error(`unexpected ClawHub install source for ${pluginId}: ${record.source}`);
+  if (record.source !== "joopohub") {
+    throw new Error(`unexpected JoopoHub install source for ${pluginId}: ${record.source}`);
   }
-  if (record.clawhubPackage !== packageName) {
+  if (record.joopohubPackage !== packageName) {
     throw new Error(
-      `unexpected ClawHub package for ${pluginId}: ${record.clawhubPackage}, expected ${packageName}`,
+      `unexpected JoopoHub package for ${pluginId}: ${record.joopohubPackage}, expected ${packageName}`,
     );
   }
-  if (record.clawhubFamily !== "code-plugin" && record.clawhubFamily !== "bundle-plugin") {
-    throw new Error(`unexpected ClawHub family for ${pluginId}: ${record.clawhubFamily}`);
+  if (record.joopohubFamily !== "code-plugin" && record.joopohubFamily !== "bundle-plugin") {
+    throw new Error(`unexpected JoopoHub family for ${pluginId}: ${record.joopohubFamily}`);
   }
   if (typeof record.installPath !== "string" || record.installPath.length === 0) {
-    throw new Error(`missing ClawHub install path for ${pluginId}`);
+    throw new Error(`missing JoopoHub install path for ${pluginId}`);
   }
-  assertClawHubArtifactMetadata(record, pluginId);
+  assertJoopoHubArtifactMetadata(record, pluginId);
 
   const installPath = record.installPath.replace(/^~(?=$|\/)/u, process.env.HOME);
   const extensionsRoot = path.join(process.env.HOME, ".joopo", "extensions");
   if (!installPath.startsWith(`${extensionsRoot}${path.sep}`)) {
-    throw new Error(`ClawHub install path is outside managed extensions root: ${installPath}`);
+    throw new Error(`JoopoHub install path is outside managed extensions root: ${installPath}`);
   }
   if (!fs.existsSync(installPath)) {
-    throw new Error(`ClawHub install path missing on disk: ${installPath}`);
+    throw new Error(`JoopoHub install path missing on disk: ${installPath}`);
   }
   if (record.artifactKind === "npm-pack") {
-    assertClawHubExternalInstallContract(installPath);
+    assertJoopoHubExternalInstallContract(installPath);
   }
-  fs.writeFileSync("/tmp/plugins-clawhub-install-path.txt", installPath, "utf8");
+  fs.writeFileSync("/tmp/plugins-joopohub-install-path.txt", installPath, "utf8");
 }
 
-function assertClawHubRemoved() {
-  const pluginId = process.env.CLAWHUB_PLUGIN_ID;
-  const installPath = fs.readFileSync("/tmp/plugins-clawhub-install-path.txt", "utf8").trim();
-  const list = readJson("/tmp/plugins-clawhub-uninstalled.json");
+function assertJoopoHubRemoved() {
+  const pluginId = process.env.JOOPOHUB_PLUGIN_ID;
+  const installPath = fs.readFileSync("/tmp/plugins-joopohub-install-path.txt", "utf8").trim();
+  const list = readJson("/tmp/plugins-joopohub-uninstalled.json");
   if ((list.plugins || []).some((entry) => entry.id === pluginId)) {
-    throw new Error(`ClawHub plugin still listed after uninstall: ${pluginId}`);
+    throw new Error(`JoopoHub plugin still listed after uninstall: ${pluginId}`);
   }
 
   const indexPath = path.join(process.env.HOME, ".joopo", "plugins", "installs.json");
@@ -789,7 +793,7 @@ function assertClawHubRemoved() {
   const config = fs.existsSync(configPath) ? readJson(configPath) : {};
   const installRecords = index.installRecords ?? index.records ?? config.plugins?.installs ?? {};
   if (installRecords[pluginId]) {
-    throw new Error(`ClawHub install record still present after uninstall: ${pluginId}`);
+    throw new Error(`JoopoHub install record still present after uninstall: ${pluginId}`);
   }
 
   const configAfterUninstallPath = path.join(process.env.HOME, ".joopo", "joopo.json");
@@ -797,27 +801,27 @@ function assertClawHubRemoved() {
     ? readJson(configAfterUninstallPath)
     : {};
   if (configAfterUninstall.plugins?.entries?.[pluginId]) {
-    throw new Error(`ClawHub config entry still present after uninstall: ${pluginId}`);
+    throw new Error(`JoopoHub config entry still present after uninstall: ${pluginId}`);
   }
   if ((configAfterUninstall.plugins?.allow || []).includes(pluginId)) {
-    throw new Error(`ClawHub allowlist entry still present after uninstall: ${pluginId}`);
+    throw new Error(`JoopoHub allowlist entry still present after uninstall: ${pluginId}`);
   }
   if ((configAfterUninstall.plugins?.deny || []).includes(pluginId)) {
-    throw new Error(`ClawHub denylist entry still present after uninstall: ${pluginId}`);
+    throw new Error(`JoopoHub denylist entry still present after uninstall: ${pluginId}`);
   }
   if (fs.existsSync(installPath)) {
     throw new Error(
-      `ClawHub managed install directory still exists after uninstall: ${installPath}`,
+      `JoopoHub managed install directory still exists after uninstall: ${installPath}`,
     );
   }
 }
 
-function assertClawHubUpdated() {
-  const output = fs.readFileSync("/tmp/plugins-clawhub-update.log", "utf8");
-  if (!output.includes(`${process.env.CLAWHUB_PLUGIN_ID} already at `)) {
-    throw new Error(`expected ClawHub update to report already-at version:\n${output}`);
+function assertJoopoHubUpdated() {
+  const output = fs.readFileSync("/tmp/plugins-joopohub-update.log", "utf8");
+  if (!output.includes(`${process.env.JOOPOHUB_PLUGIN_ID} already at `)) {
+    throw new Error(`expected JoopoHub update to report already-at version:\n${output}`);
   }
-  assertClawHubInstalled();
+  assertJoopoHubInstalled();
 }
 
 const commands = {
@@ -845,10 +849,10 @@ const commands = {
   "marketplace-installed": assertMarketplaceInstalled,
   "marketplace-records": assertMarketplaceRecords,
   "marketplace-updated": assertMarketplaceUpdated,
-  "clawhub-preflight": assertClawHubPreflight,
-  "clawhub-installed": assertClawHubInstalled,
-  "clawhub-updated": assertClawHubUpdated,
-  "clawhub-removed": assertClawHubRemoved,
+  "joopohub-preflight": assertJoopoHubPreflight,
+  "joopohub-installed": assertJoopoHubInstalled,
+  "joopohub-updated": assertJoopoHubUpdated,
+  "joopohub-removed": assertJoopoHubRemoved,
 };
 
 const fn = commands[command];

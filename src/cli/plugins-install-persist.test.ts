@@ -145,8 +145,8 @@ describe("persistPluginInstall", () => {
     enablePluginInConfig.mockReturnValue({ config: enabledConfig });
     setInstalledPluginIndexInstallRecords({
       codex: {
-        source: "clawhub",
-        spec: "clawhub:@joopo/codex",
+        source: "joopohub",
+        spec: "joopohub:@joopo/codex",
         installPath: "/tmp/joopo/extensions/codex",
       },
     });
@@ -192,8 +192,8 @@ describe("persistPluginInstall", () => {
         plugins: {
           installs: {
             codex: {
-              source: "clawhub",
-              spec: "clawhub:@joopo/codex",
+              source: "joopohub",
+              spec: "joopohub:@joopo/codex",
               installPath: "/tmp/joopo/extensions/codex",
             },
           },

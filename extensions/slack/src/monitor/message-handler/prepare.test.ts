@@ -459,7 +459,7 @@ describe("slack prepareSlackMessage inbound contract", () => {
   });
 
   it("recovers full Slack DM text from top-level rich text blocks when text is only a preview", async () => {
-    const preview = "Yo Molty what is uppppp ".repeat(7).slice(0, 160);
+    const preview = "Yo Babuli what is uppppp ".repeat(7).slice(0, 160);
     const fullText = `${preview}and this tail should still reach the agent`;
 
     const prepared = await prepareWithDefaultCtx(

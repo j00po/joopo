@@ -12,7 +12,7 @@ Adds web search provider support.
 ## Distribution
 
 - Package: `@joopo/brave-plugin`
-- Install route: npm; ClawHub
+- Install route: npm; JoopoHub
 
 ## Surface
 

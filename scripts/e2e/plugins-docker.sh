@@ -13,22 +13,22 @@ DOCKER_ENV_ARGS=(
   -e "JOOPO_TEST_STATE_SCRIPT_B64=$JOOPO_TEST_STATE_SCRIPT_B64"
 )
 for env_name in \
-  JOOPO_PLUGINS_E2E_CLAWHUB \
-  JOOPO_PLUGINS_E2E_LIVE_CLAWHUB \
-  JOOPO_PLUGINS_E2E_CLAWHUB_SPEC \
-  JOOPO_PLUGINS_E2E_CLAWHUB_ID; do
+  JOOPO_PLUGINS_E2E_JOOPOHUB \
+  JOOPO_PLUGINS_E2E_LIVE_JOOPOHUB \
+  JOOPO_PLUGINS_E2E_JOOPOHUB_SPEC \
+  JOOPO_PLUGINS_E2E_JOOPOHUB_ID; do
   env_value="${!env_name:-}"
   if [[ -n "$env_value" && "$env_value" != "undefined" && "$env_value" != "null" ]]; then
     DOCKER_ENV_ARGS+=(-e "$env_name")
   fi
 done
-if [[ "${JOOPO_PLUGINS_E2E_LIVE_CLAWHUB:-0}" = "1" ]]; then
+if [[ "${JOOPO_PLUGINS_E2E_LIVE_JOOPOHUB:-0}" = "1" ]]; then
   for env_name in \
-    JOOPO_CLAWHUB_URL \
-    CLAWHUB_URL \
-    JOOPO_CLAWHUB_TOKEN \
-    CLAWHUB_TOKEN \
-    CLAWHUB_AUTH_TOKEN; do
+    JOOPO_JOOPOHUB_URL \
+    JOOPOHUB_URL \
+    JOOPO_JOOPOHUB_TOKEN \
+    JOOPOHUB_TOKEN \
+    JOOPOHUB_AUTH_TOKEN; do
     env_value="${!env_name:-}"
     if [[ -n "$env_value" && "$env_value" != "undefined" && "$env_value" != "null" ]]; then
       DOCKER_ENV_ARGS+=(-e "$env_name")

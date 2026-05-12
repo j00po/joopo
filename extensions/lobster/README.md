@@ -69,6 +69,6 @@ Notes:
 
 ## Security
 
-- Runs Lobster in process via the published `@clawdbot/lobster/core` runtime.
+- Runs Lobster in process via the published `@joopobot/lobster/core` runtime.
 - Does not manage OAuth/tokens.
 - Uses timeouts, stdout caps, and strict JSON envelope parsing.

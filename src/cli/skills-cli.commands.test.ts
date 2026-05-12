@@ -77,10 +77,10 @@ const mocks = vi.hoisted(() => {
       (_config: unknown, _workspacePath: string): string | undefined => undefined,
     ),
     resolveAgentWorkspaceDirMock: vi.fn((_config: unknown, _agentId: string) => "/tmp/workspace"),
-    searchSkillsFromClawHubMock: vi.fn(),
-    installSkillFromClawHubMock: vi.fn(),
-    updateSkillsFromClawHubMock: vi.fn(),
-    readTrackedClawHubSkillSlugsMock: vi.fn(),
+    searchSkillsFromJoopoHubMock: vi.fn(),
+    installSkillFromJoopoHubMock: vi.fn(),
+    updateSkillsFromJoopoHubMock: vi.fn(),
+    readTrackedJoopoHubSkillSlugsMock: vi.fn(),
     buildWorkspaceSkillStatusMock,
     skillStatusReportFixture,
     defaultRuntime,
@@ -95,10 +95,10 @@ const {
   resolveDefaultAgentIdMock,
   resolveAgentIdByWorkspacePathMock,
   resolveAgentWorkspaceDirMock,
-  searchSkillsFromClawHubMock,
-  installSkillFromClawHubMock,
-  updateSkillsFromClawHubMock,
-  readTrackedClawHubSkillSlugsMock,
+  searchSkillsFromJoopoHubMock,
+  installSkillFromJoopoHubMock,
+  updateSkillsFromJoopoHubMock,
+  readTrackedJoopoHubSkillSlugsMock,
   buildWorkspaceSkillStatusMock,
   skillStatusReportFixture,
   defaultRuntime,
@@ -124,12 +124,12 @@ vi.mock("../agents/agent-scope.js", () => ({
     mocks.resolveAgentWorkspaceDirMock(config, agentId),
 }));
 
-vi.mock("../agents/skills-clawhub.js", () => ({
-  searchSkillsFromClawHub: (...args: unknown[]) => mocks.searchSkillsFromClawHubMock(...args),
-  installSkillFromClawHub: (...args: unknown[]) => mocks.installSkillFromClawHubMock(...args),
-  updateSkillsFromClawHub: (...args: unknown[]) => mocks.updateSkillsFromClawHubMock(...args),
-  readTrackedClawHubSkillSlugs: (...args: unknown[]) =>
-    mocks.readTrackedClawHubSkillSlugsMock(...args),
+vi.mock("../agents/skills-joopohub.js", () => ({
+  searchSkillsFromJoopoHub: (...args: unknown[]) => mocks.searchSkillsFromJoopoHubMock(...args),
+  installSkillFromJoopoHub: (...args: unknown[]) => mocks.installSkillFromJoopoHubMock(...args),
+  updateSkillsFromJoopoHub: (...args: unknown[]) => mocks.updateSkillsFromJoopoHubMock(...args),
+  readTrackedJoopoHubSkillSlugs: (...args: unknown[]) =>
+    mocks.readTrackedJoopoHubSkillSlugsMock(...args),
 }));
 
 vi.mock("../agents/skills-status.js", () => ({
@@ -164,23 +164,23 @@ describe("skills cli commands", () => {
     resolveDefaultAgentIdMock.mockReset();
     resolveAgentIdByWorkspacePathMock.mockReset();
     resolveAgentWorkspaceDirMock.mockReset();
-    searchSkillsFromClawHubMock.mockReset();
-    installSkillFromClawHubMock.mockReset();
-    updateSkillsFromClawHubMock.mockReset();
-    readTrackedClawHubSkillSlugsMock.mockReset();
+    searchSkillsFromJoopoHubMock.mockReset();
+    installSkillFromJoopoHubMock.mockReset();
+    updateSkillsFromJoopoHubMock.mockReset();
+    readTrackedJoopoHubSkillSlugsMock.mockReset();
     buildWorkspaceSkillStatusMock.mockReset();
 
     loadConfigMock.mockReturnValue({});
     resolveDefaultAgentIdMock.mockReturnValue("main");
     resolveAgentIdByWorkspacePathMock.mockReturnValue(undefined);
     resolveAgentWorkspaceDirMock.mockReturnValue("/tmp/workspace");
-    searchSkillsFromClawHubMock.mockResolvedValue([]);
-    installSkillFromClawHubMock.mockResolvedValue({
+    searchSkillsFromJoopoHubMock.mockResolvedValue([]);
+    installSkillFromJoopoHubMock.mockResolvedValue({
       ok: false,
       error: "install disabled in test",
     });
-    updateSkillsFromClawHubMock.mockResolvedValue([]);
-    readTrackedClawHubSkillSlugsMock.mockResolvedValue([]);
+    updateSkillsFromJoopoHubMock.mockResolvedValue([]);
+    readTrackedJoopoHubSkillSlugsMock.mockResolvedValue([]);
     buildWorkspaceSkillStatusMock.mockReturnValue(skillStatusReportFixture);
     defaultRuntime.log.mockClear();
     defaultRuntime.error.mockClear();
@@ -204,8 +204,8 @@ describe("skills cli commands", () => {
     );
   }
 
-  it("searches ClawHub skills from the native CLI", async () => {
-    searchSkillsFromClawHubMock.mockResolvedValue([
+  it("searches JoopoHub skills from the native CLI", async () => {
+    searchSkillsFromJoopoHubMock.mockResolvedValue([
       {
         slug: "calendar",
         displayName: "Calendar",
@@ -216,15 +216,15 @@ describe("skills cli commands", () => {
 
     await runCommand(["skills", "search", "calendar"]);
 
-    expect(searchSkillsFromClawHubMock).toHaveBeenCalledWith({
+    expect(searchSkillsFromJoopoHubMock).toHaveBeenCalledWith({
       query: "calendar",
       limit: undefined,
     });
     expect(runtimeLogs.some((line) => line.includes("calendar v1.2.3  Calendar"))).toBe(true);
   });
 
-  it("installs a skill from ClawHub into the active workspace", async () => {
-    installSkillFromClawHubMock.mockResolvedValue({
+  it("installs a skill from JoopoHub into the active workspace", async () => {
+    installSkillFromJoopoHubMock.mockResolvedValue({
       ok: true,
       slug: "calendar",
       version: "1.2.3",
@@ -233,7 +233,7 @@ describe("skills cli commands", () => {
 
     await runCommand(["skills", "install", "calendar", "--version", "1.2.3"]);
 
-    expect(installSkillFromClawHubMock).toHaveBeenCalledWith({
+    expect(installSkillFromJoopoHubMock).toHaveBeenCalledWith({
       workspaceDir: "/tmp/workspace",
       slug: "calendar",
       version: "1.2.3",
@@ -250,7 +250,7 @@ describe("skills cli commands", () => {
   it("installs a skill into the cwd-inferred agent workspace", async () => {
     routeWorkspaceByAgent();
     resolveAgentIdByWorkspacePathMock.mockReturnValue("writer");
-    installSkillFromClawHubMock.mockResolvedValue({
+    installSkillFromJoopoHubMock.mockResolvedValue({
       ok: true,
       slug: "calendar",
       version: "1.2.3",
@@ -265,7 +265,7 @@ describe("skills cli commands", () => {
       {},
       "/tmp/workspace-writer/project",
     );
-    expect(installSkillFromClawHubMock).toHaveBeenCalledWith(
+    expect(installSkillFromJoopoHubMock).toHaveBeenCalledWith(
       expect.objectContaining({
         workspaceDir: "/tmp/workspace-writer",
       }),
@@ -275,7 +275,7 @@ describe("skills cli commands", () => {
   it("lets --agent override cwd-inferred workspace for installs", async () => {
     routeWorkspaceByAgent();
     resolveAgentIdByWorkspacePathMock.mockReturnValue("writer");
-    installSkillFromClawHubMock.mockResolvedValue({
+    installSkillFromJoopoHubMock.mockResolvedValue({
       ok: true,
       slug: "calendar",
       version: "1.2.3",
@@ -288,7 +288,7 @@ describe("skills cli commands", () => {
 
     expect(resolveAgentIdByWorkspacePathMock).not.toHaveBeenCalled();
     expect(resolveAgentWorkspaceDirMock).toHaveBeenCalledWith({}, "main");
-    expect(installSkillFromClawHubMock).toHaveBeenCalledWith(
+    expect(installSkillFromJoopoHubMock).toHaveBeenCalledWith(
       expect.objectContaining({
         workspaceDir: "/tmp/workspace-main",
       }),
@@ -297,7 +297,7 @@ describe("skills cli commands", () => {
 
   it("honors parent --agent for subcommands", async () => {
     routeWorkspaceByAgent();
-    installSkillFromClawHubMock.mockResolvedValue({
+    installSkillFromJoopoHubMock.mockResolvedValue({
       ok: true,
       slug: "calendar",
       version: "1.2.3",
@@ -307,16 +307,16 @@ describe("skills cli commands", () => {
     await runCommand(["skills", "--agent", "writer", "install", "calendar"]);
 
     expect(resolveAgentWorkspaceDirMock).toHaveBeenCalledWith({}, "writer");
-    expect(installSkillFromClawHubMock).toHaveBeenCalledWith(
+    expect(installSkillFromJoopoHubMock).toHaveBeenCalledWith(
       expect.objectContaining({
         workspaceDir: "/tmp/workspace-writer",
       }),
     );
   });
 
-  it("updates all tracked ClawHub skills", async () => {
-    readTrackedClawHubSkillSlugsMock.mockResolvedValue(["calendar"]);
-    updateSkillsFromClawHubMock.mockResolvedValue([
+  it("updates all tracked JoopoHub skills", async () => {
+    readTrackedJoopoHubSkillSlugsMock.mockResolvedValue(["calendar"]);
+    updateSkillsFromJoopoHubMock.mockResolvedValue([
       {
         ok: true,
         slug: "calendar",
@@ -329,8 +329,8 @@ describe("skills cli commands", () => {
 
     await runCommand(["skills", "update", "--all"]);
 
-    expect(readTrackedClawHubSkillSlugsMock).toHaveBeenCalledWith("/tmp/workspace");
-    expect(updateSkillsFromClawHubMock).toHaveBeenCalledWith({
+    expect(readTrackedJoopoHubSkillSlugsMock).toHaveBeenCalledWith("/tmp/workspace");
+    expect(updateSkillsFromJoopoHubMock).toHaveBeenCalledWith({
       workspaceDir: "/tmp/workspace",
       slug: undefined,
       logger: expect.any(Object),
@@ -341,11 +341,11 @@ describe("skills cli commands", () => {
     expect(runtimeErrors).toEqual([]);
   });
 
-  it("updates tracked ClawHub skills in the cwd-inferred agent workspace", async () => {
+  it("updates tracked JoopoHub skills in the cwd-inferred agent workspace", async () => {
     routeWorkspaceByAgent();
     resolveAgentIdByWorkspacePathMock.mockReturnValue("writer");
-    readTrackedClawHubSkillSlugsMock.mockResolvedValue(["calendar"]);
-    updateSkillsFromClawHubMock.mockResolvedValue([
+    readTrackedJoopoHubSkillSlugsMock.mockResolvedValue(["calendar"]);
+    updateSkillsFromJoopoHubMock.mockResolvedValue([
       {
         ok: true,
         slug: "calendar",
@@ -360,8 +360,8 @@ describe("skills cli commands", () => {
       await runCommand(["skills", "update", "--all"]);
     });
 
-    expect(readTrackedClawHubSkillSlugsMock).toHaveBeenCalledWith("/tmp/workspace-writer");
-    expect(updateSkillsFromClawHubMock).toHaveBeenCalledWith({
+    expect(readTrackedJoopoHubSkillSlugsMock).toHaveBeenCalledWith("/tmp/workspace-writer");
+    expect(updateSkillsFromJoopoHubMock).toHaveBeenCalledWith({
       workspaceDir: "/tmp/workspace-writer",
       slug: undefined,
       logger: expect.any(Object),
@@ -371,8 +371,8 @@ describe("skills cli commands", () => {
   it("lets --agent override cwd-inferred workspace for updates", async () => {
     routeWorkspaceByAgent();
     resolveAgentIdByWorkspacePathMock.mockReturnValue("writer");
-    readTrackedClawHubSkillSlugsMock.mockResolvedValue(["calendar"]);
-    updateSkillsFromClawHubMock.mockResolvedValue([
+    readTrackedJoopoHubSkillSlugsMock.mockResolvedValue(["calendar"]);
+    updateSkillsFromJoopoHubMock.mockResolvedValue([
       {
         ok: true,
         slug: "calendar",
@@ -388,7 +388,7 @@ describe("skills cli commands", () => {
     });
 
     expect(resolveAgentIdByWorkspacePathMock).not.toHaveBeenCalled();
-    expect(updateSkillsFromClawHubMock).toHaveBeenCalledWith({
+    expect(updateSkillsFromJoopoHubMock).toHaveBeenCalledWith({
       workspaceDir: "/tmp/workspace-main",
       slug: "calendar",
       logger: expect.any(Object),

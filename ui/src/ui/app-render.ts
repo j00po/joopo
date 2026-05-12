@@ -112,14 +112,14 @@ import {
   toggleSessionCompactionCheckpoints,
 } from "./controllers/sessions.ts";
 import {
-  closeClawHubDetail,
-  installFromClawHub,
+  closeJoopoHubDetail,
+  installFromJoopoHub,
   installSkill,
-  loadClawHubDetail,
+  loadJoopoHubDetail,
   loadSkills,
   saveSkillApiKey,
-  searchClawHub,
-  setClawHubSearchQuery,
+  searchJoopoHub,
+  setJoopoHubSearchQuery,
   updateSkillEdit,
   updateSkillEnabled,
 } from "./controllers/skills.ts";
@@ -213,7 +213,7 @@ function resolveDreamingNextCycle(
   return formatDreamNextCycle(nextRunAtMs);
 }
 
-let clawhubSearchTimer: ReturnType<typeof setTimeout> | null = null;
+let joopohubSearchTimer: ReturnType<typeof setTimeout> | null = null;
 
 const UPDATE_BANNER_DISMISS_KEY = "joopo:control-ui:update-banner-dismissed:v1";
 const CRON_THINKING_SUGGESTIONS = ["off", "minimal", "low", "medium", "high"];
@@ -2300,16 +2300,16 @@ export function renderApp(state: AppViewState) {
                 messages: state.skillMessages,
                 busyKey: state.skillsBusyKey,
                 detailKey: state.skillsDetailKey,
-                clawhubQuery: state.clawhubSearchQuery,
-                clawhubResults: state.clawhubSearchResults,
-                clawhubSearchLoading: state.clawhubSearchLoading,
-                clawhubSearchError: state.clawhubSearchError,
-                clawhubDetail: state.clawhubDetail,
-                clawhubDetailSlug: state.clawhubDetailSlug,
-                clawhubDetailLoading: state.clawhubDetailLoading,
-                clawhubDetailError: state.clawhubDetailError,
-                clawhubInstallSlug: state.clawhubInstallSlug,
-                clawhubInstallMessage: state.clawhubInstallMessage,
+                joopohubQuery: state.joopohubSearchQuery,
+                joopohubResults: state.joopohubSearchResults,
+                joopohubSearchLoading: state.joopohubSearchLoading,
+                joopohubSearchError: state.joopohubSearchError,
+                joopohubDetail: state.joopohubDetail,
+                joopohubDetailSlug: state.joopohubDetailSlug,
+                joopohubDetailLoading: state.joopohubDetailLoading,
+                joopohubDetailError: state.joopohubDetailError,
+                joopohubInstallSlug: state.joopohubInstallSlug,
+                joopohubInstallMessage: state.joopohubInstallMessage,
                 onFilterChange: (next) => (state.skillsFilter = next),
                 onStatusFilterChange: (next) => (state.skillsStatusFilter = next),
                 onRefresh: () => loadSkills(state, { clearMessages: true }),
@@ -2320,16 +2320,16 @@ export function renderApp(state: AppViewState) {
                   installSkill(state, skillKey, name, installId),
                 onDetailOpen: (key) => (state.skillsDetailKey = key),
                 onDetailClose: () => (state.skillsDetailKey = null),
-                onClawHubQueryChange: (query) => {
-                  setClawHubSearchQuery(state, query);
-                  if (clawhubSearchTimer) {
-                    clearTimeout(clawhubSearchTimer);
+                onJoopoHubQueryChange: (query) => {
+                  setJoopoHubSearchQuery(state, query);
+                  if (joopohubSearchTimer) {
+                    clearTimeout(joopohubSearchTimer);
                   }
-                  clawhubSearchTimer = setTimeout(() => searchClawHub(state, query), 300);
+                  joopohubSearchTimer = setTimeout(() => searchJoopoHub(state, query), 300);
                 },
-                onClawHubDetailOpen: (slug) => loadClawHubDetail(state, slug),
-                onClawHubDetailClose: () => closeClawHubDetail(state),
-                onClawHubInstall: (slug) => installFromClawHub(state, slug),
+                onJoopoHubDetailOpen: (slug) => loadJoopoHubDetail(state, slug),
+                onJoopoHubDetailClose: () => closeJoopoHubDetail(state),
+                onJoopoHubInstall: (slug) => installFromJoopoHub(state, slug),
               }),
             )
           : nothing}

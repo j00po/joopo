@@ -12,7 +12,7 @@ Adds the Google Chat channel surface for sending and receiving Joopo messages.
 ## Distribution
 
 - Package: `@joopo/googlechat`
-- Install route: npm; ClawHub
+- Install route: npm; JoopoHub
 
 ## Surface
 

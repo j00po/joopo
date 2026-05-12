@@ -1,4 +1,4 @@
-import { parseClawHubPluginSpec } from "../../infra/clawhub-spec.js";
+import { parseJoopoHubPluginSpec } from "../../infra/joopohub-spec.js";
 import { parseRegistryNpmSpec } from "../../infra/npm-registry-spec.js";
 import { isBlockedObjectKey } from "../../infra/prototype-keys.js";
 import { normalizeOptionalString } from "../../shared/string-coerce.js";
@@ -26,23 +26,23 @@ function normalizeInstall(value: unknown): JoopoProviderIndexPluginInstall | und
   if (!isRecord(value)) {
     return undefined;
   }
-  const clawhubSpec = normalizeOptionalString(value.clawhubSpec);
-  const parsedClawHub = clawhubSpec ? parseClawHubPluginSpec(clawhubSpec) : null;
+  const joopohubSpec = normalizeOptionalString(value.joopohubSpec);
+  const parsedJoopoHub = joopohubSpec ? parseJoopoHubPluginSpec(joopohubSpec) : null;
   const npmSpec = normalizeOptionalString(value.npmSpec);
   const parsedNpm = npmSpec ? parseRegistryNpmSpec(npmSpec) : null;
-  if (!parsedClawHub && !parsedNpm) {
+  if (!parsedJoopoHub && !parsedNpm) {
     return undefined;
   }
   const defaultChoice =
-    value.defaultChoice === "clawhub" && parsedClawHub
-      ? "clawhub"
+    value.defaultChoice === "joopohub" && parsedJoopoHub
+      ? "joopohub"
       : value.defaultChoice === "npm" && parsedNpm
         ? "npm"
         : undefined;
   const minHostVersion = normalizeOptionalString(value.minHostVersion);
   const expectedIntegrity = normalizeOptionalString(value.expectedIntegrity);
   return {
-    ...(parsedClawHub ? { clawhubSpec } : {}),
+    ...(parsedJoopoHub ? { joopohubSpec } : {}),
     ...(parsedNpm ? { npmSpec: parsedNpm.raw } : {}),
     ...(defaultChoice ? { defaultChoice } : {}),
     ...(minHostVersion ? { minHostVersion } : {}),

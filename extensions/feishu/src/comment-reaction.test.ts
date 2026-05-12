@@ -1,5 +1,5 @@
 import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { ClawdbotConfig } from "../runtime-api.js";
+import type { JoopobotConfig } from "../runtime-api.js";
 import {
   cleanupAmbientCommentTypingReaction,
   createCommentTypingReactionLifecycle,
@@ -45,7 +45,7 @@ describe("createCommentTypingReactionLifecycle", () => {
 
   function createTypingReactionLifecycle(...args: [replyId?: string]) {
     return createCommentTypingReactionLifecycle({
-      cfg: {} as ClawdbotConfig,
+      cfg: {} as JoopobotConfig,
       fileToken: "doc_token_1",
       fileType: "docx",
       replyId: args.length === 0 ? "reply_1" : args[0],

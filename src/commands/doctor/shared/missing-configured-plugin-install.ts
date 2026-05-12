@@ -7,7 +7,7 @@ import {
 import { listChannelPluginCatalogEntries } from "../../../channels/plugins/catalog.js";
 import type { JoopoConfig } from "../../../config/types.joopo.js";
 import type { PluginInstallRecord } from "../../../config/types.plugins.js";
-import { parseClawHubPluginSpec } from "../../../infra/clawhub-spec.js";
+import { parseJoopoHubPluginSpec } from "../../../infra/joopohub-spec.js";
 import { parseRegistryNpmSpec } from "../../../infra/npm-registry-spec.js";
 import {
   normalizeUpdateChannel,
@@ -15,10 +15,8 @@ import {
   type UpdateChannel,
 } from "../../../infra/update-channels.js";
 import { resolveConfiguredChannelPresencePolicy } from "../../../plugins/channel-plugin-ids.js";
-import { buildClawHubPluginInstallRecordFields } from "../../../plugins/clawhub-install-records.js";
-import { CLAWHUB_INSTALL_ERROR_CODE, installPluginFromClawHub } from "../../../plugins/clawhub.js";
 import {
-  resolveClawHubInstallSpecsForUpdateChannel,
+  resolveJoopoHubInstallSpecsForUpdateChannel,
   resolveNpmInstallSpecsForUpdateChannel,
 } from "../../../plugins/install-channel-specs.js";
 import { resolveDefaultPluginExtensionsDir } from "../../../plugins/install-paths.js";
@@ -27,6 +25,11 @@ import { loadInstalledPluginIndexInstallRecords } from "../../../plugins/install
 import { writePersistedInstalledPluginIndexInstallRecords } from "../../../plugins/installed-plugin-index-records.js";
 import { loadInstalledPluginIndex } from "../../../plugins/installed-plugin-index.js";
 import { buildNpmResolutionInstallFields } from "../../../plugins/installs.js";
+import { buildJoopoHubPluginInstallRecordFields } from "../../../plugins/joopohub-install-records.js";
+import {
+  JOOPOHUB_INSTALL_ERROR_CODE,
+  installPluginFromJoopoHub,
+} from "../../../plugins/joopohub.js";
 import { loadManifestMetadataSnapshot } from "../../../plugins/manifest-contract-eligibility.js";
 import type { PluginPackageInstall } from "../../../plugins/manifest.js";
 import {
@@ -48,7 +51,7 @@ type DownloadableInstallCandidate = {
   pluginId: string;
   label: string;
   npmSpec?: string;
-  clawhubSpec?: string;
+  joopohubSpec?: string;
   expectedIntegrity?: string;
   trustedSourceLinkedOfficialInstall?: boolean;
   defaultChoice?: PluginPackageInstall["defaultChoice"];
@@ -78,15 +81,15 @@ const RUNTIME_PLUGIN_INSTALL_CANDIDATES: readonly DownloadableInstallCandidate[]
 const MISSING_CHANNEL_CONFIG_DESCRIPTOR_DIAGNOSTIC = "without channelConfigs metadata";
 const UPDATE_IN_PROGRESS_ENV = "JOOPO_UPDATE_IN_PROGRESS";
 
-function shouldFallbackClawHubToNpm(result: { ok: false; code?: string }): boolean {
+function shouldFallbackJoopoHubToNpm(result: { ok: false; code?: string }): boolean {
   return (
-    result.code === CLAWHUB_INSTALL_ERROR_CODE.PACKAGE_NOT_FOUND ||
-    result.code === CLAWHUB_INSTALL_ERROR_CODE.VERSION_NOT_FOUND
+    result.code === JOOPOHUB_INSTALL_ERROR_CODE.PACKAGE_NOT_FOUND ||
+    result.code === JOOPOHUB_INSTALL_ERROR_CODE.VERSION_NOT_FOUND
   );
 }
 
-function resolveCandidateClawHubSpec(install: PluginPackageInstall): string | undefined {
-  const explicit = install.clawhubSpec?.trim();
+function resolveCandidateJoopoHubSpec(install: PluginPackageInstall): string | undefined {
+  const explicit = install.joopohubSpec?.trim();
   if (explicit) {
     return explicit;
   }
@@ -275,15 +278,15 @@ function collectDownloadableInstallCandidates(params: {
       continue;
     }
     const npmSpec = entry.install.npmSpec?.trim();
-    const clawhubSpec = resolveCandidateClawHubSpec(entry.install);
-    if (!npmSpec && !clawhubSpec) {
+    const joopohubSpec = resolveCandidateJoopoHubSpec(entry.install);
+    if (!npmSpec && !joopohubSpec) {
       continue;
     }
     candidates.set(pluginId, {
       pluginId,
       label: entry.meta.label,
       ...(npmSpec ? { npmSpec } : {}),
-      ...(clawhubSpec ? { clawhubSpec } : {}),
+      ...(joopohubSpec ? { joopohubSpec } : {}),
       ...(entry.install.expectedIntegrity
         ? { expectedIntegrity: entry.install.expectedIntegrity }
         : {}),
@@ -306,15 +309,15 @@ function collectDownloadableInstallCandidates(params: {
       continue;
     }
     const npmSpec = entry.install.npmSpec?.trim();
-    const clawhubSpec = resolveCandidateClawHubSpec(entry.install);
-    if (!npmSpec && !clawhubSpec) {
+    const joopohubSpec = resolveCandidateJoopoHubSpec(entry.install);
+    if (!npmSpec && !joopohubSpec) {
       continue;
     }
     candidates.set(entry.pluginId, {
       pluginId: entry.pluginId,
       label: entry.label,
       ...(npmSpec ? { npmSpec } : {}),
-      ...(clawhubSpec ? { clawhubSpec } : {}),
+      ...(joopohubSpec ? { joopohubSpec } : {}),
       ...(entry.install.expectedIntegrity
         ? { expectedIntegrity: entry.install.expectedIntegrity }
         : {}),
@@ -336,15 +339,15 @@ function collectDownloadableInstallCandidates(params: {
       continue;
     }
     const npmSpec = install.npmSpec?.trim();
-    const clawhubSpec = resolveCandidateClawHubSpec(install);
-    if (!npmSpec && !clawhubSpec) {
+    const joopohubSpec = resolveCandidateJoopoHubSpec(install);
+    if (!npmSpec && !joopohubSpec) {
       continue;
     }
     candidates.set(pluginId, {
       pluginId,
       label: resolveOfficialExternalPluginLabel(entry),
       ...(npmSpec ? { npmSpec } : {}),
-      ...(clawhubSpec ? { clawhubSpec } : {}),
+      ...(joopohubSpec ? { joopohubSpec } : {}),
       ...(install.expectedIntegrity ? { expectedIntegrity: install.expectedIntegrity } : {}),
       trustedSourceLinkedOfficialInstall: true,
       ...(install.defaultChoice ? { defaultChoice: install.defaultChoice } : {}),
@@ -443,9 +446,9 @@ function recordMatchesBundledPackage(
       (value) => recordNpmPackageName(value) === packageName,
     );
   }
-  if (record.source === "clawhub") {
-    return [record.clawhubPackage, record.spec].some(
-      (value) => recordClawHubPackageName(value) === packageName,
+  if (record.source === "joopohub") {
+    return [record.joopohubPackage, record.spec].some(
+      (value) => recordJoopoHubPackageName(value) === packageName,
     );
   }
   return false;
@@ -456,12 +459,12 @@ function recordNpmPackageName(value: string | undefined): string | undefined {
   return trimmed ? parseRegistryNpmSpec(trimmed)?.name : undefined;
 }
 
-function recordClawHubPackageName(value: string | undefined): string | undefined {
+function recordJoopoHubPackageName(value: string | undefined): string | undefined {
   const trimmed = value?.trim();
   if (!trimmed) {
     return undefined;
   }
-  return parseClawHubPluginSpec(trimmed)?.name ?? trimmed;
+  return parseJoopoHubPluginSpec(trimmed)?.name ?? trimmed;
 }
 
 async function installCandidate(params: {
@@ -476,9 +479,9 @@ async function installCandidate(params: {
   const { candidate } = params;
   const extensionsDir = resolveDefaultPluginExtensionsDir();
   const changes: string[] = [];
-  const clawhubSpecs = candidate.clawhubSpec
-    ? resolveClawHubInstallSpecsForUpdateChannel({
-        spec: candidate.clawhubSpec,
+  const joopohubSpecs = candidate.joopohubSpec
+    ? resolveJoopoHubInstallSpecsForUpdateChannel({
+        spec: candidate.joopohubSpec,
         updateChannel: params.updateChannel,
       })
     : null;
@@ -488,42 +491,42 @@ async function installCandidate(params: {
         updateChannel: params.updateChannel,
       })
     : null;
-  const clawhubInstallSpec = clawhubSpecs?.installSpec ?? candidate.clawhubSpec;
+  const joopohubInstallSpec = joopohubSpecs?.installSpec ?? candidate.joopohubSpec;
   const npmInstallSpec = npmSpecs?.installSpec ?? candidate.npmSpec;
-  if (clawhubInstallSpec && candidate.defaultChoice !== "npm") {
-    const clawhubResult = await installPluginFromClawHub({
-      spec: clawhubInstallSpec,
+  if (joopohubInstallSpec && candidate.defaultChoice !== "npm") {
+    const joopohubResult = await installPluginFromJoopoHub({
+      spec: joopohubInstallSpec,
       extensionsDir,
       expectedPluginId: candidate.pluginId,
       mode: "install",
     });
-    if (clawhubResult.ok) {
-      const pluginId = clawhubResult.pluginId;
+    if (joopohubResult.ok) {
+      const pluginId = joopohubResult.pluginId;
       return {
         records: {
           ...params.records,
           [pluginId]: {
-            ...buildClawHubPluginInstallRecordFields(clawhubResult.clawhub),
-            spec: clawhubSpecs?.recordSpec ?? clawhubInstallSpec,
-            installPath: clawhubResult.targetDir,
+            ...buildJoopoHubPluginInstallRecordFields(joopohubResult.joopohub),
+            spec: joopohubSpecs?.recordSpec ?? joopohubInstallSpec,
+            installPath: joopohubResult.targetDir,
             installedAt: new Date().toISOString(),
           },
         },
-        changes: [`Installed missing configured plugin "${pluginId}" from ${clawhubInstallSpec}.`],
+        changes: [`Installed missing configured plugin "${pluginId}" from ${joopohubInstallSpec}.`],
         warnings: [],
       };
     }
-    if (!npmInstallSpec || !shouldFallbackClawHubToNpm(clawhubResult)) {
+    if (!npmInstallSpec || !shouldFallbackJoopoHubToNpm(joopohubResult)) {
       return {
         records: params.records,
         changes: [],
         warnings: [
-          `Failed to install missing configured plugin "${candidate.pluginId}" from ${clawhubInstallSpec}: ${clawhubResult.error}`,
+          `Failed to install missing configured plugin "${candidate.pluginId}" from ${joopohubInstallSpec}: ${joopohubResult.error}`,
         ],
       };
     }
     changes.push(
-      `ClawHub ${clawhubInstallSpec} unavailable for "${candidate.pluginId}"; falling back to npm ${npmInstallSpec}.`,
+      `JoopoHub ${joopohubInstallSpec} unavailable for "${candidate.pluginId}"; falling back to npm ${npmInstallSpec}.`,
     );
   }
   if (!npmInstallSpec) {

@@ -12,7 +12,7 @@ const NODE_WINDOWS_TASK_NAME = "Joopo Node";
 export const NODE_SERVICE_MARKER = "joopo";
 export const NODE_SERVICE_KIND = "node";
 export const NODE_WINDOWS_TASK_SCRIPT_NAME = "node.cmd";
-export const LEGACY_GATEWAY_SYSTEMD_SERVICE_NAMES: string[] = ["clawdbot-gateway"];
+export const LEGACY_GATEWAY_SYSTEMD_SERVICE_NAMES: string[] = ["joopobot-gateway"];
 
 export function normalizeGatewayProfile(profile?: string): string | null {
   const trimmed = profile?.trim();

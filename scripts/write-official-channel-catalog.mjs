@@ -9,18 +9,18 @@ export const OFFICIAL_CHANNEL_CATALOG_RELATIVE_PATH = "dist/channel-catalog.json
 
 function toCatalogInstall(value, packageName) {
   const install = isRecord(value) ? value : {};
-  const clawhubSpec = trimString(install.clawhubSpec);
+  const joopohubSpec = trimString(install.joopohubSpec);
   const npmSpec = trimString(install.npmSpec) || packageName;
-  if (!clawhubSpec && !npmSpec) {
+  if (!joopohubSpec && !npmSpec) {
     return null;
   }
   const defaultChoice = trimString(install.defaultChoice);
   const minHostVersion = trimString(install.minHostVersion);
   const expectedIntegrity = trimString(install.expectedIntegrity);
   return {
-    ...(clawhubSpec ? { clawhubSpec } : {}),
+    ...(joopohubSpec ? { joopohubSpec } : {}),
     ...(npmSpec ? { npmSpec } : {}),
-    ...(defaultChoice === "clawhub" || defaultChoice === "npm" || defaultChoice === "local"
+    ...(defaultChoice === "joopohub" || defaultChoice === "npm" || defaultChoice === "local"
       ? { defaultChoice }
       : {}),
     ...(minHostVersion ? { minHostVersion } : {}),

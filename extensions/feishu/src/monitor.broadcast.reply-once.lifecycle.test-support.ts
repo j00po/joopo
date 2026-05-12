@@ -1,7 +1,7 @@
 import "./lifecycle.test-support.js";
 import { createNonExitingRuntimeEnv } from "joopo/plugin-sdk/plugin-test-runtime";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { ClawdbotConfig, RuntimeEnv } from "../runtime-api.js";
+import type { JoopobotConfig, RuntimeEnv } from "../runtime-api.js";
 import { FeishuConfigSchema } from "./config-schema.js";
 import {
   getFeishuLifecycleTestMocks,
@@ -33,7 +33,7 @@ let handlersByAccount = new Map<string, Record<string, (data: unknown) => Promis
 let runtimesByAccount = new Map<string, RuntimeEnv>();
 const originalStateDir = process.env.JOOPO_STATE_DIR;
 
-function createLifecycleConfig(): ClawdbotConfig {
+function createLifecycleConfig(): JoopobotConfig {
   return {
     broadcast: {
       oc_broadcast_group: ["susan", "main"],
@@ -87,7 +87,7 @@ function createLifecycleConfig(): ClawdbotConfig {
         },
       },
     },
-  } as ClawdbotConfig;
+  } as JoopobotConfig;
 }
 
 function createLifecycleAccount(accountId: "account-A" | "account-B"): ResolvedFeishuAccount {

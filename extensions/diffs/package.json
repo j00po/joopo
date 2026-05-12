@@ -42,7 +42,7 @@
       ]
     },
     "release": {
-      "publishToClawHub": true,
+      "publishToJoopoHub": true,
       "publishToNpm": true
     }
   }

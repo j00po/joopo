@@ -12,7 +12,7 @@ Adds the Microsoft Teams channel surface for sending and receiving Joopo message
 ## Distribution
 
 - Package: `@joopo/msteams`
-- Install route: npm; ClawHub
+- Install route: npm; JoopoHub
 
 ## Surface
 

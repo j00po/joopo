@@ -12,7 +12,7 @@ Adds the LINE channel surface for sending and receiving Joopo messages.
 ## Distribution
 
 - Package: `@joopo/line`
-- Install route: npm; ClawHub
+- Install route: npm; JoopoHub
 
 ## Surface
 

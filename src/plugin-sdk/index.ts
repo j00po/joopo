@@ -86,7 +86,7 @@ export type {
 } from "../plugins/runtime/task-domain-types.js";
 export type { JoopoConfig } from "../config/config.js";
 /** @deprecated Use JoopoConfig instead */
-export type { JoopoConfig as ClawdbotConfig } from "../config/config.js";
+export type { JoopoConfig as JoopobotConfig } from "../config/config.js";
 /** @deprecated Use JoopoConfig instead */
 export type { JoopoConfig as JoopoSchemaType } from "../config/config.js";
 export type {

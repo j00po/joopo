@@ -1,5 +1,5 @@
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { ClawdbotConfig } from "../runtime-api.js";
+import type { JoopobotConfig } from "../runtime-api.js";
 import { expectFirstSentCardUsesFillWidthOnly } from "./card-test-helpers.js";
 import { createFeishuBotMenuHandler } from "./monitor.bot-menu-handler.js";
 
@@ -40,7 +40,7 @@ function createBotMenuEvent(params: { eventKey: string; timestamp: string }) {
 
 async function registerHandlers() {
   return createFeishuBotMenuHandler({
-    cfg: {} as ClawdbotConfig,
+    cfg: {} as JoopobotConfig,
     accountId: "default",
     runtime: {
       log: vi.fn(),

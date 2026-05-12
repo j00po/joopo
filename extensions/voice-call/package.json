@@ -40,7 +40,7 @@
       "joopoVersion": "2026.5.6"
     },
     "release": {
-      "publishToClawHub": true,
+      "publishToJoopoHub": true,
       "publishToNpm": true
     }
   }

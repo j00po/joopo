@@ -15,7 +15,7 @@
       "./index.ts"
     ],
     "install": {
-      "clawhubSpec": "clawhub:@joopo/diagnostics-prometheus",
+      "joopohubSpec": "joopohub:@joopo/diagnostics-prometheus",
       "npmSpec": "@joopo/diagnostics-prometheus",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.4.25"
@@ -27,7 +27,7 @@
       "joopoVersion": "2026.5.6"
     },
     "release": {
-      "publishToClawHub": true,
+      "publishToJoopoHub": true,
       "publishToNpm": true
     }
   }

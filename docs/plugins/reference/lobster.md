@@ -12,7 +12,7 @@ Typed workflow tool with resumable approvals.
 ## Distribution
 
 - Package: `@joopo/lobster`
-- Install route: npm; ClawHub
+- Install route: npm; JoopoHub
 
 ## Surface
 

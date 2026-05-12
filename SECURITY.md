@@ -16,7 +16,7 @@ Report vulnerabilities directly to the repository where the issue lives:
 - **macOS desktop app** — [joopo/joopo](https://github.com/joopo/joopo) (apps/macos)
 - **iOS app** — [joopo/joopo](https://github.com/joopo/joopo) (apps/ios)
 - **Android app** — [joopo/joopo](https://github.com/joopo/joopo) (apps/android)
-- **ClawHub** — [joopo/clawhub](https://github.com/joopo/clawhub)
+- **JoopoHub** — [joopo/joopohub](https://github.com/joopo/joopohub)
 - **Trust and threat model** — [joopo/trust](https://github.com/joopo/trust)
 
 For issues that don't fit a specific repo, or if you're unsure, email **[security@joopo.ai](mailto:security@joopo.ai)** and we'll route it.

@@ -4434,7 +4434,7 @@ describe("google-meet plugin", () => {
       {
         at: new Date(nowMs - 1_000).toISOString(),
         role: "assistant" as const,
-        text: "Hi Molty, glad to have you here. Let me know if there's anything specific you'd like to cover or if you need any support during the meeting.",
+        text: "Hi Babuli, glad to have you here. Let me know if there's anything specific you'd like to cover or if you need any support during the meeting.",
       },
     ];
 

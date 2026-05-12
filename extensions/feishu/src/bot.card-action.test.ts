@@ -1,6 +1,6 @@
 import { createRuntimeEnv } from "joopo/plugin-sdk/plugin-test-runtime";
 import { afterAll, afterEach, describe, it, expect, vi, beforeEach } from "vitest";
-import type { ClawdbotConfig, RuntimeEnv } from "../runtime-api.js";
+import type { JoopobotConfig, RuntimeEnv } from "../runtime-api.js";
 import {
   FeishuRetryableCardActionError,
   handleFeishuCardAction,
@@ -45,7 +45,7 @@ vi.mock("./send.js", () => ({
 import { handleFeishuMessage } from "./bot.js";
 
 describe("Feishu Card Action Handler", () => {
-  const cfg: ClawdbotConfig = {};
+  const cfg: JoopobotConfig = {};
   const runtime: RuntimeEnv = createRuntimeEnv();
 
   afterAll(() => {

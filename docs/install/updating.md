@@ -159,7 +159,7 @@ The auto-updater is off by default. Enable it in `~/.joopo/joopo.json`:
 | -------- | ------------------------------------------------------------------------------------------------------------- |
 | `stable` | Waits `stableDelayHours`, then applies with deterministic jitter across `stableJitterHours` (spread rollout). |
 | `beta`   | Checks every `betaCheckIntervalHours` (default: hourly) and applies immediately.                              |
-| `dev`    | No automatic apply. Use `joopo update` manually.                                                           |
+| `dev`    | No automatic apply. Use `joopo update` manually.                                                              |
 
 The gateway also logs an update hint on startup (disable with `update.checkOnStart: false`).
 For downgrade or incident recovery, set `JOOPO_NO_AUTO_UPDATE=1` in the gateway environment to block automatic applies even when `update.auto.enabled` is configured. Startup update hints can still run unless `update.checkOnStart` is also disabled.
@@ -227,7 +227,7 @@ To return to latest: `git checkout main && git pull`.
 - Run `joopo doctor` again and read the output carefully.
 - For `joopo update --channel dev` on source checkouts, the updater auto-bootstraps `pnpm` when needed. If you see a pnpm/corepack bootstrap error, install `pnpm` manually (or re-enable `corepack`) and rerun the update.
 - Check: [Troubleshooting](/gateway/troubleshooting)
-- Ask in Discord: [https://discord.gg/clawd](https://discord.gg/clawd)
+- Ask in Discord: [https://discord.gg/joopo](https://discord.gg/joopo)
 
 ## Related
 

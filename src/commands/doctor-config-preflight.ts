@@ -6,8 +6,8 @@ import {
   recoverConfigFromLastKnownGood,
 } from "../config/io.js";
 import { formatConfigIssueLines } from "../config/issue-format.js";
-import type { LegacyConfigIssue } from "../config/types.js";
 import type { JoopoConfig } from "../config/types.joopo.js";
+import type { LegacyConfigIssue } from "../config/types.js";
 import { note } from "../terminal/note.js";
 import { resolveHomeDir } from "../utils.js";
 import { noteIncludeConfinementWarning } from "./doctor-config-analysis.js";
@@ -29,7 +29,7 @@ async function maybeMigrateLegacyConfig(): Promise<string[]> {
     // missing config
   }
 
-  const legacyCandidates = [path.join(home, ".clawdbot", "clawdbot.json")];
+  const legacyCandidates = [path.join(home, ".joopobot", "joopobot.json")];
 
   let legacyPath: string | null = null;
   for (const candidate of legacyCandidates) {
@@ -116,10 +116,7 @@ export async function runDoctorConfigPreflight(
     } else if (
       await recoverConfigFromLastKnownGood({ snapshot, reason: "doctor-invalid-config" })
     ) {
-      note(
-        "Restored joopo.json from last-known-good; original saved as .clobbered.*.",
-        "Config",
-      );
+      note("Restored joopo.json from last-known-good; original saved as .clobbered.*.", "Config");
       snapshot = addDoctorLegacyIssues(await readConfigFileSnapshot());
     }
   }

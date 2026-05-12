@@ -1,5 +1,5 @@
 import type { JoopoConfig } from "../config/types.joopo.js";
-import { parseClawHubPluginSpec } from "../infra/clawhub-spec.js";
+import { parseJoopoHubPluginSpec } from "../infra/joopohub-spec.js";
 import type { PluginRecord } from "../plugins/registry.js";
 
 export function resolvePluginUninstallId<
@@ -26,14 +26,14 @@ export function resolvePluginUninstallId<
     }
   }
 
-  const requestedClawHub = parseClawHubPluginSpec(rawId);
-  if (requestedClawHub) {
+  const requestedJoopoHub = parseJoopoHubPluginSpec(rawId);
+  if (requestedJoopoHub) {
     for (const [pluginId, install] of Object.entries(params.config.plugins?.installs ?? {})) {
-      const installedClawHubName =
-        install.clawhubPackage ??
-        parseClawHubPluginSpec(install.spec ?? "")?.name ??
-        parseClawHubPluginSpec(install.resolvedSpec ?? "")?.name;
-      if (installedClawHubName === requestedClawHub.name) {
+      const installedJoopoHubName =
+        install.joopohubPackage ??
+        parseJoopoHubPluginSpec(install.spec ?? "")?.name ??
+        parseJoopoHubPluginSpec(install.resolvedSpec ?? "")?.name;
+      if (installedJoopoHubName === requestedJoopoHub.name) {
         return { pluginId };
       }
     }

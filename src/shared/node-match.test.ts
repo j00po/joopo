@@ -47,14 +47,14 @@ describe("shared/node-match", () => {
     ).toBe("mac-studio");
   });
 
-  it("prefers a unique current Joopo client over a legacy clawdbot client", () => {
+  it("prefers a unique current Joopo client over a legacy joopobot client", () => {
     expect(
       resolveNodeIdFromCandidates(
         [
           {
             nodeId: "legacy-mac",
             displayName: "Peter’s Mac Studio",
-            clientId: "clawdbot-macos",
+            clientId: "joopobot-macos",
             connected: false,
           },
           {
@@ -112,7 +112,7 @@ describe("shared/node-match", () => {
           {
             nodeId: "legacy-mac",
             displayName: "Peter’s Mac Studio",
-            clientId: "clawdbot-macos",
+            clientId: "joopobot-macos",
             connected: true,
           },
           {

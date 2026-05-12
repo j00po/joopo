@@ -2,7 +2,7 @@ parent_config: ../../config/swiftlint.yml
 
 included:
   - Sources
-  - ../shared/ClawdisNodeKit/Sources
+  - ../shared/JoopoisNodeKit/Sources
 
 type_body_length:
   warning: 900

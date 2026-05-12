@@ -1,6 +1,6 @@
 import { createNonExitingRuntimeEnv } from "joopo/plugin-sdk/plugin-test-runtime";
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { ClawdbotConfig } from "../runtime-api.js";
+import type { JoopobotConfig } from "../runtime-api.js";
 import * as dedup from "./dedup.js";
 import { createFeishuDriveCommentNoticeHandler } from "./monitor.comment-notice-handler.js";
 import {
@@ -29,14 +29,14 @@ afterAll(() => {
   vi.resetModules();
 });
 
-function buildMonitorConfig(): ClawdbotConfig {
+function buildMonitorConfig(): JoopobotConfig {
   return {
     channels: {
       feishu: {
         enabled: true,
       },
     },
-  } as ClawdbotConfig;
+  } as JoopobotConfig;
 }
 
 function makeDriveCommentEvent(

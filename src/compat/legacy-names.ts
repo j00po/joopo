@@ -1,6 +1,6 @@
 export const PROJECT_NAME = "joopo" as const;
 
-const LEGACY_PROJECT_NAMES = ["clawdbot"] as const;
+const LEGACY_PROJECT_NAMES = ["joopobot"] as const;
 
 export const MANIFEST_KEY = PROJECT_NAME;
 

@@ -1,4 +1,4 @@
-import { parseClawHubPluginSpec } from "../infra/clawhub-spec.js";
+import { parseJoopoHubPluginSpec } from "../infra/joopohub-spec.js";
 import { parseRegistryNpmSpec } from "../infra/npm-registry-spec.js";
 import type { UpdateChannel } from "../infra/update-channels.js";
 
@@ -23,8 +23,8 @@ function isDefaultNpmSpecForBetaChannel(spec: string): { name: string } | null {
   return null;
 }
 
-function isDefaultClawHubSpecForBetaChannel(spec: string): { name: string } | null {
-  const parsed = parseClawHubPluginSpec(spec);
+function isDefaultJoopoHubSpecForBetaChannel(spec: string): { name: string } | null {
+  const parsed = parseJoopoHubPluginSpec(spec);
   if (!parsed) {
     return null;
   }
@@ -60,7 +60,7 @@ export function resolveNpmInstallSpecsForUpdateChannel(params: {
   };
 }
 
-export function resolveClawHubInstallSpecsForUpdateChannel(params: {
+export function resolveJoopoHubInstallSpecsForUpdateChannel(params: {
   spec: string;
   updateChannel?: UpdateChannel;
 }): ChannelInstallSpecs {
@@ -70,14 +70,14 @@ export function resolveClawHubInstallSpecsForUpdateChannel(params: {
       recordSpec: params.spec,
     };
   }
-  const betaTarget = isDefaultClawHubSpecForBetaChannel(params.spec);
+  const betaTarget = isDefaultJoopoHubSpecForBetaChannel(params.spec);
   if (!betaTarget) {
     return {
       installSpec: params.spec,
       recordSpec: params.spec,
     };
   }
-  const betaSpec = `clawhub:${betaTarget.name}@beta`;
+  const betaSpec = `joopohub:${betaTarget.name}@beta`;
   return {
     installSpec: betaSpec,
     recordSpec: params.spec,

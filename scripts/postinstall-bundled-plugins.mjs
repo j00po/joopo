@@ -356,7 +356,7 @@ export function collectLegacyPluginRuntimeDepsStateRoots(params = {}) {
     addStateRoot(dirname(resolvePostinstallUserPath(configPath, joopoHome)));
   }
   addStateRoot(join(joopoHome, ".joopo"));
-  addStateRoot(join(joopoHome, ".clawdbot"));
+  addStateRoot(join(joopoHome, ".joopobot"));
 
   for (const entry of splitPostinstallPathList(env?.STATE_DIRECTORY)) {
     addStateRoot(resolvePostinstallUserPath(entry, joopoHome));

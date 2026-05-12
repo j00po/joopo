@@ -1,9 +1,9 @@
-import {
-  searchClawHubPackages,
-  type ClawHubPackageFamily,
-  type ClawHubPackageSearchResult,
-} from "../infra/clawhub.js";
 import { formatErrorMessage } from "../infra/errors.js";
+import {
+  searchJoopoHubPackages,
+  type JoopoHubPackageFamily,
+  type JoopoHubPackageSearchResult,
+} from "../infra/joopohub.js";
 import { defaultRuntime, writeRuntimeJson, type RuntimeEnv } from "../runtime.js";
 import { normalizeOptionalString } from "../shared/string-coerce.js";
 import { theme } from "../terminal/theme.js";
@@ -13,7 +13,7 @@ export type PluginsSearchOptions = {
   limit?: number;
 };
 
-const INSTALLABLE_PLUGIN_FAMILIES: ClawHubPackageFamily[] = ["code-plugin", "bundle-plugin"];
+const INSTALLABLE_PLUGIN_FAMILIES: JoopoHubPackageFamily[] = ["code-plugin", "bundle-plugin"];
 
 function clampSearchLimit(limit: number | undefined): number {
   if (!Number.isFinite(limit) || !limit || limit <= 0) {
@@ -23,10 +23,10 @@ function clampSearchLimit(limit: number | undefined): number {
 }
 
 function mergePackageSearchResults(
-  groups: readonly ClawHubPackageSearchResult[][],
+  groups: readonly JoopoHubPackageSearchResult[][],
   limit: number,
-): ClawHubPackageSearchResult[] {
-  const byName = new Map<string, ClawHubPackageSearchResult>();
+): JoopoHubPackageSearchResult[] {
+  const byName = new Map<string, JoopoHubPackageSearchResult>();
   for (const entry of groups.flat()) {
     const existing = byName.get(entry.package.name);
     if (!existing || entry.score > existing.score) {
@@ -36,7 +36,7 @@ function mergePackageSearchResults(
   return [...byName.values()].toSorted((a, b) => b.score - a.score).slice(0, limit);
 }
 
-function formatPackageSearchLine(entry: ClawHubPackageSearchResult): string {
+function formatPackageSearchLine(entry: JoopoHubPackageSearchResult): string {
   const pkg = entry.package;
   const flags = [
     pkg.family,
@@ -45,7 +45,7 @@ function formatPackageSearchLine(entry: ClawHubPackageSearchResult): string {
     pkg.latestVersion ? `v${pkg.latestVersion}` : undefined,
   ].filter(Boolean);
   const summary = pkg.summary ? theme.muted(` — ${pkg.summary}`) : "";
-  return `${pkg.name}  ${theme.muted(flags.join(" | "))}${summary}\n  ${theme.muted(`Install: joopo plugins install clawhub:${pkg.name}`)}`;
+  return `${pkg.name}  ${theme.muted(flags.join(" | "))}${summary}\n  ${theme.muted(`Install: joopo plugins install joopohub:${pkg.name}`)}`;
 }
 
 export async function runPluginsSearchCommand(
@@ -65,7 +65,7 @@ export async function runPluginsSearchCommand(
   try {
     const groups = await Promise.all(
       INSTALLABLE_PLUGIN_FAMILIES.map((family) =>
-        searchClawHubPackages({
+        searchJoopoHubPackages({
           query,
           family,
           limit,
@@ -79,10 +79,10 @@ export async function runPluginsSearchCommand(
       return;
     }
     if (results.length === 0) {
-      runtime.log("No ClawHub plugins found.");
+      runtime.log("No JoopoHub plugins found.");
       return;
     }
-    runtime.log(`${theme.heading("ClawHub plugins")} ${theme.muted(`(${results.length})`)}`);
+    runtime.log(`${theme.heading("JoopoHub plugins")} ${theme.muted(`(${results.length})`)}`);
     runtime.log(results.map(formatPackageSearchLine).join("\n"));
   } catch (error) {
     runtime.error(formatErrorMessage(error));

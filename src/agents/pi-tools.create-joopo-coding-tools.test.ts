@@ -322,9 +322,7 @@ describe("createJoopoCodingTools", () => {
     );
     expect(stages.indexOf("tool-policy")).toBeLessThan(stages.indexOf("workspace-policy"));
     expect(stages.indexOf("workspace-policy")).toBeLessThan(stages.indexOf("base-coding-tools"));
-    expect(stages.indexOf("joopo-tools:test-helper")).toBeLessThan(
-      stages.indexOf("joopo-tools"),
-    );
+    expect(stages.indexOf("joopo-tools:test-helper")).toBeLessThan(stages.indexOf("joopo-tools"));
     expect(stages.indexOf("schema-normalization")).toBeLessThan(stages.indexOf("tool-hooks"));
   });
 
@@ -986,7 +984,7 @@ describe("createJoopoCodingTools", () => {
           path: "structured-write.js",
           content: [
             { type: "text", text: "const path = require('path');\n" },
-            { type: "input_text", text: "const root = path.join(process.env.HOME, 'clawd');\n" },
+            { type: "input_text", text: "const root = path.join(process.env.HOME, 'joopo');\n" },
           ],
         }),
       ).rejects.toThrow(/Missing required parameter: content/);

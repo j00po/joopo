@@ -74,9 +74,9 @@ Native Joopo plugins must ship `joopo.plugin.json` with an inline JSON Schema (`
 ### Install
 
 ```bash
-joopo plugins search "calendar"                   # search ClawHub plugins
+joopo plugins search "calendar"                   # search JoopoHub plugins
 joopo plugins install <package>                      # npm by default
-joopo plugins install clawhub:<package>              # ClawHub only
+joopo plugins install joopohub:<package>              # JoopoHub only
 joopo plugins install npm:<package>                  # npm only
 joopo plugins install npm-pack:<path.tgz>            # local npm pack through npm install semantics
 joopo plugins install git:github.com/<owner>/<repo>  # git repo
@@ -91,15 +91,15 @@ joopo plugins install <plugin> --marketplace https://github.com/<owner>/<repo>
 ```
 
 <Warning>
-Bare package names install from npm by default during the launch cutover. Use `clawhub:<package>` for ClawHub. Treat plugin installs like running code. Prefer pinned versions.
+Bare package names install from npm by default during the launch cutover. Use `joopohub:<package>` for JoopoHub. Treat plugin installs like running code. Prefer pinned versions.
 </Warning>
 
-`plugins search` queries ClawHub for installable plugin packages and prints
+`plugins search` queries JoopoHub for installable plugin packages and prints
 install-ready package names. It searches code-plugin and bundle-plugin packages,
-not skills. Use `joopo skills search` for ClawHub skills.
+not skills. Use `joopo skills search` for JoopoHub skills.
 
 <Note>
-ClawHub is the primary distribution and discovery surface for most plugins. Npm
+JoopoHub is the primary distribution and discovery surface for most plugins. Npm
 remains a supported fallback and direct-install path. Joopo-owned
 `@joopo/*` plugin packages are published on npm again; see the current list
 on [npmjs.com/org/joopo](https://www.npmjs.com/org/joopo) or the
@@ -116,7 +116,7 @@ is available, then fall back to `latest`.
 
   </Accordion>
   <Accordion title="--force and reinstall vs update">
-    `--force` reuses the existing install target and overwrites an already-installed plugin or hook pack in place. Use it when you are intentionally reinstalling the same id from a new local path, archive, ClawHub package, or npm artifact. For routine upgrades of an already tracked npm plugin, prefer `joopo plugins update <id-or-npm-spec>`.
+    `--force` reuses the existing install target and overwrites an already-installed plugin or hook pack in place. Use it when you are intentionally reinstalling the same id from a new local path, archive, JoopoHub package, or npm artifact. For routine upgrades of an already tracked npm plugin, prefer `joopo plugins update <id-or-npm-spec>`.
 
     If you run `plugins install` for a plugin id that is already installed, Joopo stops and points you at `plugins update <id-or-npm-spec>` for a normal upgrade, or at `plugins install <package> --force` when you genuinely want to overwrite the current install from a different source.
 
@@ -127,9 +127,9 @@ is available, then fall back to `latest`.
   <Accordion title="--dangerously-force-unsafe-install">
     `--dangerously-force-unsafe-install` is a break-glass option for false positives in the built-in dangerous-code scanner. It allows the install to continue even when the built-in scanner reports `critical` findings, but it does **not** bypass plugin `before_install` hook policy blocks and does **not** bypass scan failures.
 
-    This CLI flag applies to plugin install/update flows. Gateway-backed skill dependency installs use the matching `dangerouslyForceUnsafeInstall` request override, while `joopo skills install` remains a separate ClawHub skill download/install flow.
+    This CLI flag applies to plugin install/update flows. Gateway-backed skill dependency installs use the matching `dangerouslyForceUnsafeInstall` request override, while `joopo skills install` remains a separate JoopoHub skill download/install flow.
 
-    If a plugin you published on ClawHub is blocked by a registry scan, use the publisher steps in [ClawHub](/clawhub/security).
+    If a plugin you published on JoopoHub is blocked by a registry scan, use the publisher steps in [JoopoHub](/joopohub/security).
 
   </Accordion>
   <Accordion title="Hook packs and npm specs">
@@ -166,11 +166,11 @@ is available, then fall back to `latest`.
   </Accordion>
 </AccordionGroup>
 
-ClawHub installs use an explicit `clawhub:<package>` locator:
+JoopoHub installs use an explicit `joopohub:<package>` locator:
 
 ```bash
-joopo plugins install clawhub:joopo-codex-app-server
-joopo plugins install clawhub:joopo-codex-app-server@1.2.3
+joopo plugins install joopohub:joopo-codex-app-server
+joopo plugins install joopohub:joopo-codex-app-server@1.2.3
 ```
 
 Bare npm-safe plugin specs install from npm by default during the launch cutover:
@@ -186,8 +186,8 @@ joopo plugins install npm:joopo-codex-app-server
 joopo plugins install npm:@scope/plugin-name@1.0.1
 ```
 
-Joopo checks the advertised plugin API / minimum gateway compatibility before install. When the selected ClawHub version publishes a ClawPack artifact, Joopo downloads the versioned npm-pack `.tgz`, verifies the ClawHub digest header and the artifact digest, then installs it through the normal archive path. Older ClawHub versions without ClawPack metadata still install through the legacy package archive verification path. Recorded installs keep their ClawHub source metadata, artifact kind, npm integrity, npm shasum, tarball name, and ClawPack digest facts for later updates.
-Unversioned ClawHub installs keep an unversioned recorded spec so `joopo plugins update` can follow newer ClawHub releases; explicit version or tag selectors such as `clawhub:pkg@1.2.3` and `clawhub:pkg@beta` remain pinned to that selector.
+Joopo checks the advertised plugin API / minimum gateway compatibility before install. When the selected JoopoHub version publishes a ClawPack artifact, Joopo downloads the versioned npm-pack `.tgz`, verifies the JoopoHub digest header and the artifact digest, then installs it through the normal archive path. Older JoopoHub versions without ClawPack metadata still install through the legacy package archive verification path. Recorded installs keep their JoopoHub source metadata, artifact kind, npm integrity, npm shasum, tarball name, and ClawPack digest facts for later updates.
+Unversioned JoopoHub installs keep an unversioned recorded spec so `joopo plugins update` can follow newer JoopoHub releases; explicit version or tag selectors such as `joopohub:pkg@1.2.3` and `joopohub:pkg@beta` remain pinned to that selector.
 
 #### Marketplace shorthand
 
@@ -264,10 +264,10 @@ does not import plugin runtime code, run a package manager, or repair missing
 dependencies.
 </Note>
 
-`plugins search` is a remote ClawHub catalog lookup. It does not inspect local
+`plugins search` is a remote JoopoHub catalog lookup. It does not inspect local
 state, mutate config, install packages, or load plugin runtime code. Search
-results include the ClawHub package name, family, channel, version, summary, and
-an install hint such as `joopo plugins install clawhub:<package>`.
+results include the JoopoHub package name, family, channel, version, summary, and
+an install hint such as `joopo plugins install joopohub:<package>`.
 
 For bundled plugin work inside a packaged Docker image, bind-mount the plugin
 source directory over the matching packaged source path, such as
@@ -335,7 +335,7 @@ Updates apply to tracked plugin installs in the managed plugin index and tracked
 
   </Accordion>
   <Accordion title="Beta channel updates">
-    `joopo plugins update` reuses the tracked plugin spec unless you pass a new spec. `joopo update` additionally knows the active Joopo update channel: on the beta channel, default-line npm and ClawHub plugin records try `@beta` first, then fall back to the recorded default/latest spec if no plugin beta release exists. Exact versions and explicit tags stay pinned to that selector.
+    `joopo plugins update` reuses the tracked plugin spec unless you pass a new spec. `joopo update` additionally knows the active Joopo update channel: on the beta channel, default-line npm and JoopoHub plugin records try `@beta` first, then fall back to the recorded default/latest spec if no plugin beta release exists. Exact versions and explicit tags stay pinned to that selector.
 
   </Accordion>
   <Accordion title="Version checks and integrity drift">
@@ -417,4 +417,4 @@ Marketplace list accepts a local marketplace path, a `marketplace.json` path, a 
 
 - [Building plugins](/plugins/building-plugins)
 - [CLI reference](/cli)
-- [ClawHub](/clawhub)
+- [JoopoHub](/joopohub)

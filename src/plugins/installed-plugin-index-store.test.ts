@@ -421,23 +421,23 @@ describe("installed plugin index persistence", () => {
     });
   });
 
-  it("preserves ClawHub ClawPack source facts when refreshing the manifest cache", async () => {
+  it("preserves JoopoHub ClawPack source facts when refreshing the manifest cache", async () => {
     const stateDir = makeTempDir();
     const installPath = path.join(stateDir, "plugins", "clawpack-demo");
     await writePersistedInstalledPluginIndex(
       createIndex({
         installRecords: {
           "clawpack-demo": {
-            source: "clawhub",
-            spec: "clawhub:clawpack-demo@2026.5.1-beta.2",
+            source: "joopohub",
+            spec: "joopohub:clawpack-demo@2026.5.1-beta.2",
             installPath,
             version: "2026.5.1-beta.2",
             integrity: "sha256-archive",
             resolvedAt: "2026-05-01T00:00:00.000Z",
-            clawhubUrl: "https://clawhub.ai",
-            clawhubPackage: "clawpack-demo",
-            clawhubFamily: "code-plugin",
-            clawhubChannel: "official",
+            joopohubUrl: "https://joopohub.ai",
+            joopohubPackage: "clawpack-demo",
+            joopohubFamily: "code-plugin",
+            joopohubChannel: "official",
             artifactKind: "npm-pack",
             artifactFormat: "tgz",
             npmIntegrity: "sha512-clawpack",
@@ -469,16 +469,16 @@ describe("installed plugin index persistence", () => {
     const expected = {
       installRecords: {
         "clawpack-demo": {
-          source: "clawhub",
-          spec: "clawhub:clawpack-demo@2026.5.1-beta.2",
+          source: "joopohub",
+          spec: "joopohub:clawpack-demo@2026.5.1-beta.2",
           installPath,
           version: "2026.5.1-beta.2",
           integrity: "sha256-archive",
           resolvedAt: "2026-05-01T00:00:00.000Z",
-          clawhubUrl: "https://clawhub.ai",
-          clawhubPackage: "clawpack-demo",
-          clawhubFamily: "code-plugin",
-          clawhubChannel: "official",
+          joopohubUrl: "https://joopohub.ai",
+          joopohubPackage: "clawpack-demo",
+          joopohubFamily: "code-plugin",
+          joopohubChannel: "official",
           artifactKind: "npm-pack",
           artifactFormat: "tgz",
           npmIntegrity: "sha512-clawpack",

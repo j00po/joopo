@@ -17,12 +17,12 @@ import { assertConfigWriteAllowedInCurrentMode } from "../../config/nix-mode-wri
 import type { JoopoConfig } from "../../config/types.joopo.js";
 import type { PluginInstallRecord } from "../../config/types.plugins.js";
 import { resolveArchiveKind } from "../../infra/archive.js";
-import { parseClawHubPluginSpec } from "../../infra/clawhub.js";
 import { formatErrorMessage } from "../../infra/errors.js";
-import { installPluginFromClawHub } from "../../plugins/clawhub.js";
+import { parseJoopoHubPluginSpec } from "../../infra/joopohub.js";
 import { installPluginFromGitSpec, parseGitPluginSpec } from "../../plugins/git-install.js";
 import { installPluginFromNpmSpec, installPluginFromPath } from "../../plugins/install.js";
 import { loadInstalledPluginIndexInstallRecords } from "../../plugins/installed-plugin-index-records.js";
+import { installPluginFromJoopoHub } from "../../plugins/joopohub.js";
 import {
   getOfficialExternalPluginCatalogEntryForPackage,
   resolveOfficialExternalPluginId,
@@ -276,9 +276,9 @@ async function installPluginFromPluginsCommand(params: {
     return { ok: true, pluginId: result.pluginId };
   }
 
-  const clawhubSpec = parseClawHubPluginSpec(params.raw);
-  if (clawhubSpec) {
-    const result = await installPluginFromClawHub({
+  const joopohubSpec = parseJoopoHubPluginSpec(params.raw);
+  if (joopohubSpec) {
+    const result = await installPluginFromJoopoHub({
       spec: params.raw,
       logger: createPluginInstallLogger(),
     });
@@ -289,16 +289,16 @@ async function installPluginFromPluginsCommand(params: {
       snapshot: params.snapshot,
       pluginId: result.pluginId,
       install: {
-        source: "clawhub",
+        source: "joopohub",
         spec: params.raw,
         installPath: result.targetDir,
         version: result.version,
-        integrity: result.clawhub.integrity,
-        resolvedAt: result.clawhub.resolvedAt,
-        clawhubUrl: result.clawhub.clawhubUrl,
-        clawhubPackage: result.clawhub.clawhubPackage,
-        clawhubFamily: result.clawhub.clawhubFamily,
-        clawhubChannel: result.clawhub.clawhubChannel,
+        integrity: result.joopohub.integrity,
+        resolvedAt: result.joopohub.resolvedAt,
+        joopohubUrl: result.joopohub.joopohubUrl,
+        joopohubPackage: result.joopohub.joopohubPackage,
+        joopohubFamily: result.joopohub.joopohubFamily,
+        joopohubChannel: result.joopohub.joopohubChannel,
       },
     });
     return { ok: true, pluginId: result.pluginId };

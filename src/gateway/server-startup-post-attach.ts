@@ -175,7 +175,7 @@ function resolveRestartSentinelPathFast(env: NodeJS.ProcessEnv = process.env): s
   if (env.JOOPO_TEST_FAST === "1" || fs.existsSync(newStateDir)) {
     return path.join(newStateDir, RESTART_SENTINEL_FILENAME);
   }
-  const legacyStateDir = path.join(home, ".clawdbot");
+  const legacyStateDir = path.join(home, ".joopobot");
   if (fs.existsSync(legacyStateDir)) {
     return path.join(legacyStateDir, RESTART_SENTINEL_FILENAME);
   }

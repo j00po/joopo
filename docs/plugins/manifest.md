@@ -167,13 +167,13 @@ or npm install metadata. Those belong in your plugin code and `package.json`.
 | `syntheticAuthRefs`                  | No       | `string[]`                       | Provider or CLI backend refs whose plugin-owned synthetic auth hook should be probed during cold model discovery before runtime loads.                                                                                              |
 | `nonSecretAuthMarkers`               | No       | `string[]`                       | Bundled-plugin-owned placeholder API key values that represent non-secret local, OAuth, or ambient credential state.                                                                                                                |
 | `commandAliases`                     | No       | `object[]`                       | Command names owned by this plugin that should produce plugin-aware config and CLI diagnostics before runtime loads.                                                                                                                |
-| `providerAuthEnvVars`                | No       | `Record<string, string[]>`       | Deprecated compatibility env metadata for provider auth/status lookup. Prefer `setup.providers[].envVars` for new plugins; Joopo still reads this during the deprecation window.                                                 |
+| `providerAuthEnvVars`                | No       | `Record<string, string[]>`       | Deprecated compatibility env metadata for provider auth/status lookup. Prefer `setup.providers[].envVars` for new plugins; Joopo still reads this during the deprecation window.                                                    |
 | `providerAuthAliases`                | No       | `Record<string, string>`         | Provider ids that should reuse another provider id for auth lookup, for example a coding provider that shares the base provider API key and auth profiles.                                                                          |
-| `channelEnvVars`                     | No       | `Record<string, string[]>`       | Cheap channel env metadata that Joopo can inspect without loading plugin code. Use this for env-driven channel setup or auth surfaces that generic startup/config helpers should see.                                            |
+| `channelEnvVars`                     | No       | `Record<string, string[]>`       | Cheap channel env metadata that Joopo can inspect without loading plugin code. Use this for env-driven channel setup or auth surfaces that generic startup/config helpers should see.                                               |
 | `providerAuthChoices`                | No       | `object[]`                       | Cheap auth-choice metadata for onboarding pickers, preferred-provider resolution, and simple CLI flag wiring.                                                                                                                       |
 | `activation`                         | No       | `object`                         | Cheap activation planner metadata for startup, provider, command, channel, route, and capability-triggered loading. Metadata only; plugin runtime still owns actual behavior.                                                       |
 | `setup`                              | No       | `object`                         | Cheap setup/onboarding descriptors that discovery and setup surfaces can inspect without loading plugin runtime.                                                                                                                    |
-| `qaRunners`                          | No       | `object[]`                       | Cheap QA runner descriptors used by the shared `joopo qa` host before plugin runtime loads.                                                                                                                                      |
+| `qaRunners`                          | No       | `object[]`                       | Cheap QA runner descriptors used by the shared `joopo qa` host before plugin runtime loads.                                                                                                                                         |
 | `contracts`                          | No       | `object`                         | Static capability ownership snapshot for external auth hooks, speech, realtime transcription, realtime voice, media-understanding, image-generation, music-generation, video-generation, web-fetch, web search, and tool ownership. |
 | `mediaUnderstandingProviderMetadata` | No       | `Record<string, object>`         | Cheap media-understanding defaults for provider ids declared in `contracts.mediaUnderstandingProviders`.                                                                                                                            |
 | `imageGenerationProviderMetadata`    | No       | `Record<string, object>`         | Cheap image-generation auth metadata for provider ids declared in `contracts.imageGenerationProviders`, including provider-owned auth aliases and base-url guards.                                                                  |
@@ -333,7 +333,7 @@ choices, and install-catalog metadata without loading provider runtime.
 | `provider`            | Yes      | `string`                                        | Provider id this choice belongs to.                                                                      |
 | `method`              | Yes      | `string`                                        | Auth method id to dispatch to.                                                                           |
 | `choiceId`            | Yes      | `string`                                        | Stable auth-choice id used by onboarding and CLI flows.                                                  |
-| `choiceLabel`         | No       | `string`                                        | User-facing label. If omitted, Joopo falls back to `choiceId`.                                        |
+| `choiceLabel`         | No       | `string`                                        | User-facing label. If omitted, Joopo falls back to `choiceId`.                                           |
 | `choiceHint`          | No       | `string`                                        | Short helper text for the picker.                                                                        |
 | `assistantPriority`   | No       | `number`                                        | Lower values sort earlier in assistant-driven interactive pickers.                                       |
 | `assistantVisibility` | No       | `"visible"` \| `"manual-only"`                  | Hide the choice from assistant pickers while still allowing manual CLI selection.                        |
@@ -472,7 +472,7 @@ runtime still owns actual CLI registration through a lightweight
 
 | Field         | Required | Type     | What it means                                                      |
 | ------------- | -------- | -------- | ------------------------------------------------------------------ |
-| `commandName` | Yes      | `string` | Subcommand mounted beneath `joopo qa`, for example `matrix`.    |
+| `commandName` | Yes      | `string` | Subcommand mounted beneath `joopo qa`, for example `matrix`.       |
 | `description` | No       | `string` | Fallback help text used when the shared host needs a stub command. |
 
 ## setup reference
@@ -649,7 +649,7 @@ Each list is optional:
 | `videoGenerationProviders`       | `string[]` | Video-generation provider ids this plugin owns.                       |
 | `webFetchProviders`              | `string[]` | Web-fetch provider ids this plugin owns.                              |
 | `webSearchProviders`             | `string[]` | Web-search provider ids this plugin owns.                             |
-| `migrationProviders`             | `string[]` | Import provider ids this plugin owns for `joopo migrate`.          |
+| `migrationProviders`             | `string[]` | Import provider ids this plugin owns for `joopo migrate`.             |
 | `tools`                          | `string[]` | Agent tool names this plugin owns.                                    |
 
 `contracts.embeddedExtensionFactories` is retained for bundled Codex
@@ -947,7 +947,7 @@ Model fields:
 | `contextTokens` | `number`                                                       | Optional effective runtime context cap when different from `contextWindow`. |
 | `maxTokens`     | `number`                                                       | Maximum output tokens when known.                                           |
 | `cost`          | `object`                                                       | Optional USD per million token pricing, including optional `tieredPricing`. |
-| `compat`        | `object`                                                       | Optional compatibility flags matching Joopo model config compatibility.  |
+| `compat`        | `object`                                                       | Optional compatibility flags matching Joopo model config compatibility.     |
 | `status`        | `"available"` \| `"preview"` \| `"deprecated"` \| `"disabled"` | Listing status. Suppress only when the row must not appear at all.          |
 | `statusReason`  | `string`                                                       | Optional reason shown with non-available status.                            |
 | `replaces`      | `string[]`                                                     | Older provider-local model ids this model supersedes.                       |
@@ -1087,11 +1087,11 @@ Provider fields:
 
 Source fields:
 
-| Field                      | Type               | What it means                                                                                                        |
-| -------------------------- | ------------------ | -------------------------------------------------------------------------------------------------------------------- |
+| Field                      | Type               | What it means                                                                                                     |
+| -------------------------- | ------------------ | ----------------------------------------------------------------------------------------------------------------- |
 | `provider`                 | `string`           | External catalog provider id when it differs from the Joopo provider id, for example `z-ai` for a `zai` provider. |
-| `passthroughProviderModel` | `boolean`          | Treat slash-containing model ids as nested provider/model refs, useful for proxy providers such as OpenRouter.       |
-| `modelIdTransforms`        | `"version-dots"[]` | Extra external catalog model-id variants. `version-dots` tries dotted version ids like `claude-opus-4.6`.            |
+| `passthroughProviderModel` | `boolean`          | Treat slash-containing model ids as nested provider/model refs, useful for proxy providers such as OpenRouter.    |
+| `modelIdTransforms`        | `"version-dots"[]` | Extra external catalog model-id variants. `version-dots` tries dotted version ids like `claude-opus-4.6`.         |
 
 ### Joopo Provider Index
 
@@ -1136,10 +1136,10 @@ ownership.
 
 The two files serve different jobs:
 
-| File                   | Use it for                                                                                                                       |
-| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `joopo.plugin.json` | Discovery, config validation, auth-choice metadata, and UI hints that must exist before plugin code runs                         |
-| `package.json`         | npm metadata, dependency installation, and the `joopo` block used for entrypoints, install gating, setup, or catalog metadata |
+| File                | Use it for                                                                                                                    |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `joopo.plugin.json` | Discovery, config validation, auth-choice metadata, and UI hints that must exist before plugin code runs                      |
+| `package.json`      | npm metadata, dependency installation, and the `joopo` block used for entrypoints, install gating, setup, or catalog metadata |
 
 If you are unsure where a piece of metadata belongs, use this rule:
 
@@ -1156,22 +1156,22 @@ native plugins must use `joopo.plugin.json` plus the supported
 
 Important examples:
 
-| Field                                                                                      | What it means                                                                                                                                                                        |
-| ------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `joopo.extensions`                                                                      | Declares native plugin entrypoints. Must stay inside the plugin package directory.                                                                                                   |
-| `joopo.runtimeExtensions`                                                               | Declares built JavaScript runtime entrypoints for installed packages. Must stay inside the plugin package directory.                                                                 |
-| `joopo.setupEntry`                                                                      | Lightweight setup-only entrypoint used during onboarding, deferred channel startup, and read-only channel status/SecretRef discovery. Must stay inside the plugin package directory. |
-| `joopo.runtimeSetupEntry`                                                               | Declares the built JavaScript setup entrypoint for installed packages. Requires `setupEntry`, must exist, and must stay inside the plugin package directory.                         |
-| `joopo.channel`                                                                         | Cheap channel catalog metadata like labels, docs paths, aliases, and selection copy.                                                                                                 |
-| `joopo.channel.commands`                                                                | Static native command and native skill auto-default metadata used by config, audit, and command-list surfaces before channel runtime loads.                                          |
-| `joopo.channel.configuredState`                                                         | Lightweight configured-state checker metadata that can answer "does env-only setup already exist?" without loading the full channel runtime.                                         |
-| `joopo.channel.persistedAuthState`                                                      | Lightweight persisted-auth checker metadata that can answer "is anything already signed in?" without loading the full channel runtime.                                               |
-| `joopo.install.clawhubSpec` / `joopo.install.npmSpec` / `joopo.install.localPath` | Install/update hints for bundled and externally published plugins.                                                                                                                   |
-| `joopo.install.defaultChoice`                                                           | Preferred install path when multiple install sources are available.                                                                                                                  |
-| `joopo.install.minHostVersion`                                                          | Minimum supported Joopo host version, using a semver floor like `>=2026.3.22` or `>=2026.5.1-beta.1`.                                                                             |
-| `joopo.install.expectedIntegrity`                                                       | Expected npm dist integrity string such as `sha512-...`; install and update flows verify the fetched artifact against it.                                                            |
-| `joopo.install.allowInvalidConfigRecovery`                                              | Allows a narrow bundled-plugin reinstall recovery path when config is invalid.                                                                                                       |
-| `joopo.startup.deferConfiguredChannelFullLoadUntilAfterListen`                          | Lets setup-only channel surfaces load before the full channel plugin during startup.                                                                                                 |
+| Field                                                                              | What it means                                                                                                                                                                        |
+| ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `joopo.extensions`                                                                 | Declares native plugin entrypoints. Must stay inside the plugin package directory.                                                                                                   |
+| `joopo.runtimeExtensions`                                                          | Declares built JavaScript runtime entrypoints for installed packages. Must stay inside the plugin package directory.                                                                 |
+| `joopo.setupEntry`                                                                 | Lightweight setup-only entrypoint used during onboarding, deferred channel startup, and read-only channel status/SecretRef discovery. Must stay inside the plugin package directory. |
+| `joopo.runtimeSetupEntry`                                                          | Declares the built JavaScript setup entrypoint for installed packages. Requires `setupEntry`, must exist, and must stay inside the plugin package directory.                         |
+| `joopo.channel`                                                                    | Cheap channel catalog metadata like labels, docs paths, aliases, and selection copy.                                                                                                 |
+| `joopo.channel.commands`                                                           | Static native command and native skill auto-default metadata used by config, audit, and command-list surfaces before channel runtime loads.                                          |
+| `joopo.channel.configuredState`                                                    | Lightweight configured-state checker metadata that can answer "does env-only setup already exist?" without loading the full channel runtime.                                         |
+| `joopo.channel.persistedAuthState`                                                 | Lightweight persisted-auth checker metadata that can answer "is anything already signed in?" without loading the full channel runtime.                                               |
+| `joopo.install.joopohubSpec` / `joopo.install.npmSpec` / `joopo.install.localPath` | Install/update hints for bundled and externally published plugins.                                                                                                                   |
+| `joopo.install.defaultChoice`                                                      | Preferred install path when multiple install sources are available.                                                                                                                  |
+| `joopo.install.minHostVersion`                                                     | Minimum supported Joopo host version, using a semver floor like `>=2026.3.22` or `>=2026.5.1-beta.1`.                                                                                |
+| `joopo.install.expectedIntegrity`                                                  | Expected npm dist integrity string such as `sha512-...`; install and update flows verify the fetched artifact against it.                                                            |
+| `joopo.install.allowInvalidConfigRecovery`                                         | Allows a narrow bundled-plugin reinstall recovery path when config is invalid.                                                                                                       |
+| `joopo.startup.deferConfiguredChannelFullLoadUntilAfterListen`                     | Lets setup-only channel surfaces load before the full channel plugin during startup.                                                                                                 |
 
 Manifest metadata decides which provider/channel/setup choices appear in
 onboarding before runtime loads. `package.json#joopo.install` tells
@@ -1183,10 +1183,10 @@ registry loading for non-bundled plugin sources. Invalid values are rejected;
 newer-but-valid values skip external plugins on older hosts. Bundled source
 plugins are assumed to be co-versioned with the host checkout.
 
-Official install-on-demand metadata should use `clawhubSpec` when the plugin is
-published on ClawHub; onboarding treats that as the preferred remote source and
-records ClawHub artifact facts after install. `npmSpec` remains the compatibility
-fallback for packages that have not moved to ClawHub yet.
+Official install-on-demand metadata should use `joopohubSpec` when the plugin is
+published on JoopoHub; onboarding treats that as the preferred remote source and
+records JoopoHub artifact facts after install. `npmSpec` remains the compatibility
+fallback for packages that have not moved to JoopoHub yet.
 
 Exact npm version pinning already lives in `npmSpec`, for example
 `"npmSpec": "@wecom/wecom-joopo-plugin@1.2.3"`. Official external catalog

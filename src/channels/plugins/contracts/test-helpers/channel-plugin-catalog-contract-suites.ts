@@ -122,9 +122,7 @@ export function describeChannelPluginCatalogEntriesContract() {
       {
         name: "includes external catalog entries",
         setup: () => {
-          const dir = fs.mkdtempSync(
-            path.join(resolvePreferredJoopoTmpDir(), "joopo-catalog-"),
-          );
+          const dir = fs.mkdtempSync(path.join(resolvePreferredJoopoTmpDir(), "joopo-catalog-"));
           const catalogPath = path.join(dir, "catalog.json");
           writeCatalogFile(
             catalogPath,
@@ -196,7 +194,7 @@ export function describeChannelPluginCatalogEntriesContract() {
             env: {
               ...process.env,
               JOOPO_STATE_DIR: stateDir,
-              CLAWDBOT_STATE_DIR: undefined,
+              JOOPOBOT_STATE_DIR: undefined,
               JOOPO_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
             },
             expected: {
@@ -322,10 +320,10 @@ export function describeChannelPluginCatalogEntriesContract() {
         },
       },
       {
-        name: "accepts external manifest entries with ClawHub-only install metadata",
+        name: "accepts external manifest entries with JoopoHub-only install metadata",
         setup: () => {
           const dir = fs.mkdtempSync(
-            path.join(resolvePreferredJoopoTmpDir(), "joopo-catalog-clawhub-"),
+            path.join(resolvePreferredJoopoTmpDir(), "joopo-catalog-joopohub-"),
           );
           const catalogPath = path.join(dir, "catalog.json");
           fs.writeFileSync(
@@ -341,19 +339,19 @@ export function describeChannelPluginCatalogEntriesContract() {
                   kind: "channel",
                   joopo: {
                     channel: {
-                      id: "clawhub-chat",
-                      label: "ClawHub Chat",
-                      selectionLabel: "ClawHub Chat",
-                      detailLabel: "ClawHub",
-                      docsPath: "/channels/clawhub-chat",
-                      docsLabel: "clawhub chat",
-                      blurb: "ClawHub-backed chat channel.",
+                      id: "joopohub-chat",
+                      label: "JoopoHub Chat",
+                      selectionLabel: "JoopoHub Chat",
+                      detailLabel: "JoopoHub",
+                      docsPath: "/channels/joopohub-chat",
+                      docsLabel: "joopohub chat",
+                      blurb: "JoopoHub-backed chat channel.",
                       aliases: ["chchat"],
                       order: 47,
                     },
                     install: {
-                      clawhubSpec: "clawhub:joopo/clawhub-chat@2026.5.2",
-                      defaultChoice: "clawhub",
+                      joopohubSpec: "joopohub:joopo/joopohub-chat@2026.5.2",
+                      defaultChoice: "joopohub",
                       minHostVersion: ">=2026.5.1",
                     },
                   },
@@ -362,28 +360,28 @@ export function describeChannelPluginCatalogEntriesContract() {
             }),
           );
           return {
-            channelId: "clawhub-chat",
+            channelId: "joopohub-chat",
             catalogPaths: [catalogPath],
             expected: {
-              id: "clawhub-chat",
+              id: "joopohub-chat",
               meta: {
-                label: "ClawHub Chat",
-                selectionLabel: "ClawHub Chat",
-                detailLabel: "ClawHub",
-                docsPath: "/channels/clawhub-chat",
-                docsLabel: "clawhub chat",
-                blurb: "ClawHub-backed chat channel.",
+                label: "JoopoHub Chat",
+                selectionLabel: "JoopoHub Chat",
+                detailLabel: "JoopoHub",
+                docsPath: "/channels/joopohub-chat",
+                docsLabel: "joopohub chat",
+                blurb: "JoopoHub-backed chat channel.",
               },
               install: {
-                clawhubSpec: "clawhub:joopo/clawhub-chat@2026.5.2",
-                defaultChoice: "clawhub",
+                joopohubSpec: "joopohub:joopo/joopohub-chat@2026.5.2",
+                defaultChoice: "joopohub",
                 minHostVersion: ">=2026.5.1",
               },
               installSource: {
-                defaultChoice: "clawhub",
-                clawhub: {
-                  spec: "clawhub:joopo/clawhub-chat@2026.5.2",
-                  packageName: "joopo/clawhub-chat",
+                defaultChoice: "joopohub",
+                joopohub: {
+                  spec: "joopohub:joopo/joopohub-chat@2026.5.2",
+                  packageName: "joopo/joopohub-chat",
                   version: "2026.5.2",
                   exactVersion: true,
                 },

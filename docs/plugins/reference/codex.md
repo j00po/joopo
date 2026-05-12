@@ -12,7 +12,7 @@ Codex app-server harness and Codex-managed GPT model catalog.
 ## Distribution
 
 - Package: `@joopo/codex`
-- Install route: npm; ClawHub
+- Install route: npm; JoopoHub
 
 ## Surface
 

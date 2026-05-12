@@ -121,7 +121,7 @@ function findLobsterPackageRoot(resolvedEntryPath: string): string {
     const packageJsonPath = path.join(dir, "package.json");
     try {
       const parsed = JSON.parse(readFileSync(packageJsonPath, "utf8")) as { name?: string };
-      if (parsed.name === "@clawdbot/lobster") {
+      if (parsed.name === "@joopobot/lobster") {
         return dir;
       }
     } catch {
@@ -130,7 +130,7 @@ function findLobsterPackageRoot(resolvedEntryPath: string): string {
 
     const parent = path.dirname(dir);
     if (parent === dir) {
-      throw new Error(`Could not locate @clawdbot/lobster package root from ${resolvedEntryPath}`);
+      throw new Error(`Could not locate @joopobot/lobster package root from ${resolvedEntryPath}`);
     }
     dir = parent;
   }
@@ -307,15 +307,15 @@ export async function loadEmbeddedToolRuntimeFromPackage(
 
   let coreLoadError: unknown;
   try {
-    const coreSpecifier = ["@clawdbot", "lobster", "core"].join("/");
-    return toEmbeddedToolRuntime(await importModule(coreSpecifier), "@clawdbot/lobster/core");
+    const coreSpecifier = ["@joopobot", "lobster", "core"].join("/");
+    return toEmbeddedToolRuntime(await importModule(coreSpecifier), "@joopobot/lobster/core");
   } catch (error) {
     coreLoadError = error;
   }
 
   let fallbackLoadError: unknown;
   try {
-    const packageEntryPath = resolvePackageEntry("@clawdbot/lobster");
+    const packageEntryPath = resolvePackageEntry("@joopobot/lobster");
     const packageRoot = findLobsterPackageRoot(packageEntryPath);
     const coreRuntimeUrl = pathToFileURL(path.join(packageRoot, "dist/src/core/index.js")).href;
     return toEmbeddedToolRuntime(await importModule(coreRuntimeUrl), coreRuntimeUrl);

@@ -60,7 +60,7 @@
           "label": "Diagnostics OpenTelemetry"
         },
         "install": {
-          "clawhubSpec": "clawhub:@joopo/diagnostics-otel",
+          "joopohubSpec": "joopohub:@joopo/diagnostics-otel",
           "npmSpec": "@joopo/diagnostics-otel",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.25"
@@ -78,7 +78,7 @@
           "label": "Diagnostics Prometheus"
         },
         "install": {
-          "clawhubSpec": "clawhub:@joopo/diagnostics-prometheus",
+          "joopohubSpec": "joopohub:@joopo/diagnostics-prometheus",
           "npmSpec": "@joopo/diagnostics-prometheus",
           "defaultChoice": "npm",
           "minHostVersion": ">=2026.4.25"

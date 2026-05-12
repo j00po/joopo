@@ -132,9 +132,7 @@ describe("resolvePostInstallDoctorEnv", () => {
     expect(env.PATH).toBe("/bin");
     expect(env.NODE_DISABLE_COMPILE_CACHE).toBe("1");
     expect(env.JOOPO_STATE_DIR).toBe(path.join("/srv/joopo", "daemon-state"));
-    expect(env.JOOPO_CONFIG_PATH).toBe(
-      path.join("/srv/joopo", "daemon-state", "joopo.json"),
-    );
+    expect(env.JOOPO_CONFIG_PATH).toBe(path.join("/srv/joopo", "daemon-state", "joopo.json"));
     expect(env.JOOPO_PROFILE).toBe("work");
   });
 
@@ -294,9 +292,9 @@ describe("collectMissingPluginInstallPayloads", () => {
     }
   });
 
-  it("keeps disabled trusted official ClawHub records eligible for payload repair when requested", async () => {
+  it("keeps disabled trusted official JoopoHub records eligible for payload repair when requested", async () => {
     const tmpDir = await fs.mkdtemp(path.join(os.tmpdir(), "joopo-update-plugin-payload-"));
-    const missingDir = path.join(tmpDir, "state", "clawhub", "diagnostics-otel");
+    const missingDir = path.join(tmpDir, "state", "joopohub", "diagnostics-otel");
     try {
       await expect(
         collectMissingPluginInstallPayloads({
@@ -314,8 +312,8 @@ describe("collectMissingPluginInstallPayloads", () => {
           },
           records: {
             "diagnostics-otel": {
-              source: "clawhub",
-              spec: "clawhub:@joopo/diagnostics-otel@2026.5.3",
+              source: "joopohub",
+              spec: "joopohub:@joopo/diagnostics-otel@2026.5.3",
               installPath: missingDir,
             },
           },

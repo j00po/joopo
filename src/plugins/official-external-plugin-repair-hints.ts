@@ -27,9 +27,9 @@ export function resolveOfficialExternalPluginRepairHint(
   }
   const install = resolveOfficialExternalPluginInstall(entry);
   const npmSpec = install?.npmSpec?.trim();
-  const clawhubSpec = install?.clawhubSpec?.trim();
+  const joopohubSpec = install?.joopohubSpec?.trim();
   const installSpec =
-    install?.defaultChoice === "clawhub" ? (clawhubSpec ?? npmSpec) : (npmSpec ?? clawhubSpec);
+    install?.defaultChoice === "joopohub" ? (joopohubSpec ?? npmSpec) : (npmSpec ?? joopohubSpec);
   if (!installSpec) {
     return null;
   }

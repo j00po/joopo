@@ -774,7 +774,7 @@ describe("installPluginFromArchive", () => {
     expect(warnings).toEqual([]);
   });
 
-  it("installs flat-root plugin archives from ClawHub-style downloads", async () => {
+  it("installs flat-root plugin archives from JoopoHub-style downloads", async () => {
     const result = await installArchivePackageAndReturnResult({
       packageJson: {
         name: "@joopo/rootless",

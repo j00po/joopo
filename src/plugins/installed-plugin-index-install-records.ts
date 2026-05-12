@@ -48,10 +48,10 @@ function normalizeInstallRecord(
   setInstallStringField(normalized, "shasum", record.shasum);
   setInstallStringField(normalized, "resolvedAt", record.resolvedAt);
   setInstallStringField(normalized, "installedAt", record.installedAt);
-  setInstallStringField(normalized, "clawhubUrl", record.clawhubUrl);
-  setInstallStringField(normalized, "clawhubPackage", record.clawhubPackage);
-  setInstallStringField(normalized, "clawhubFamily", record.clawhubFamily);
-  setInstallStringField(normalized, "clawhubChannel", record.clawhubChannel);
+  setInstallStringField(normalized, "joopohubUrl", record.joopohubUrl);
+  setInstallStringField(normalized, "joopohubPackage", record.joopohubPackage);
+  setInstallStringField(normalized, "joopohubFamily", record.joopohubFamily);
+  setInstallStringField(normalized, "joopohubChannel", record.joopohubChannel);
   setInstallStringField(normalized, "artifactKind", record.artifactKind);
   setInstallStringField(normalized, "artifactFormat", record.artifactFormat);
   setInstallStringField(normalized, "npmIntegrity", record.npmIntegrity);

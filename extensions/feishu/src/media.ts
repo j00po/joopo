@@ -12,7 +12,7 @@ import {
   withTempDownloadPath,
 } from "joopo/plugin-sdk/temp-path";
 import { normalizeLowercaseStringOrEmpty } from "joopo/plugin-sdk/text-runtime";
-import type { ClawdbotConfig } from "../runtime-api.js";
+import type { JoopobotConfig } from "../runtime-api.js";
 import { resolveFeishuRuntimeAccount } from "./accounts.js";
 import { createFeishuClient } from "./client.js";
 import { requestFeishuApi } from "./comment-shared.js";
@@ -56,7 +56,7 @@ export type DownloadMessageResourceResult = {
   fileName?: string;
 };
 
-function createConfiguredFeishuMediaClient(params: { cfg: ClawdbotConfig; accountId?: string }): {
+function createConfiguredFeishuMediaClient(params: { cfg: JoopobotConfig; accountId?: string }): {
   account: ReturnType<typeof resolveFeishuRuntimeAccount>;
   client: ReturnType<typeof createFeishuClient>;
 } {
@@ -310,7 +310,7 @@ async function readFeishuResponseBuffer(params: {
  * Used for downloading images sent in messages.
  */
 export async function downloadImageFeishu(params: {
-  cfg: ClawdbotConfig;
+  cfg: JoopobotConfig;
   imageKey: string;
   accountId?: string;
 }): Promise<DownloadImageResult> {
@@ -358,7 +358,7 @@ async function downloadMessageResourceWithType(params: {
  * Used for downloading files, audio, and video from messages.
  */
 export async function downloadMessageResourceFeishu(params: {
-  cfg: ClawdbotConfig;
+  cfg: JoopobotConfig;
   messageId: string;
   fileKey: string;
   type: "image" | "file";
@@ -415,7 +415,7 @@ export type SendMediaResult = {
  * Supports: JPEG, PNG, WEBP, GIF, TIFF, BMP, ICO
  */
 export async function uploadImageFeishu(params: {
-  cfg: ClawdbotConfig;
+  cfg: JoopobotConfig;
   image: Buffer | string; // Buffer or file path
   imageType?: "message" | "avatar";
   accountId?: string;
@@ -468,7 +468,7 @@ export function sanitizeFileNameForUpload(fileName: string): string {
  * Max file size: 30MB
  */
 export async function uploadFileFeishu(params: {
-  cfg: ClawdbotConfig;
+  cfg: JoopobotConfig;
   file: Buffer | string; // Buffer or file path
   fileName: string;
   fileType: "opus" | "mp4" | "pdf" | "doc" | "xls" | "ppt" | "stream";
@@ -512,7 +512,7 @@ export async function uploadFileFeishu(params: {
  * Send an image message using an image_key
  */
 export async function sendImageFeishu(params: {
-  cfg: ClawdbotConfig;
+  cfg: JoopobotConfig;
   to: string;
   imageKey: string;
   replyToMessageId?: string;
@@ -566,7 +566,7 @@ export async function sendImageFeishu(params: {
  * Send a file message using a file_key
  */
 export async function sendFileFeishu(params: {
-  cfg: ClawdbotConfig;
+  cfg: JoopobotConfig;
   to: string;
   fileKey: string;
   /** Use "audio" for audio, "media" for video (mp4), "file" for documents */
@@ -823,7 +823,7 @@ async function prepareFeishuVoiceMedia(params: {
  * must be passed so loadWebMedia allows the path (post CVE-2026-26321).
  */
 export async function sendMediaFeishu(params: {
-  cfg: ClawdbotConfig;
+  cfg: JoopobotConfig;
   to: string;
   mediaUrl?: string;
   mediaBuffer?: Buffer;

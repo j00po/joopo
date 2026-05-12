@@ -47,9 +47,9 @@ function isCurrentJoopoClient(clientId: string | undefined): boolean {
   return normalized.startsWith("joopo-");
 }
 
-function isLegacyClawdbotClient(clientId: string | undefined): boolean {
+function isLegacyJoopobotClient(clientId: string | undefined): boolean {
   const normalized = normalizeOptionalLowercaseString(clientId) ?? "";
-  return normalized.startsWith("clawdbot-") || normalized.startsWith("moldbot-");
+  return normalized.startsWith("joopobot-") || normalized.startsWith("moldbot-");
 }
 
 function pickPreferredLegacyMigrationMatch(
@@ -59,7 +59,7 @@ function pickPreferredLegacyMigrationMatch(
   if (current.length !== 1) {
     return undefined;
   }
-  const legacyCount = matches.filter((match) => isLegacyClawdbotClient(match.clientId)).length;
+  const legacyCount = matches.filter((match) => isLegacyJoopobotClient(match.clientId)).length;
   if (legacyCount === 0 || current.length + legacyCount !== matches.length) {
     return undefined;
   }
@@ -94,7 +94,7 @@ function scoreNodeCandidate(node: NodeMatchCandidate, matchScore: number): numbe
   }
   if (isCurrentJoopoClient(node.clientId)) {
     score += 10;
-  } else if (isLegacyClawdbotClient(node.clientId)) {
+  } else if (isLegacyJoopobotClient(node.clientId)) {
     score -= 10;
   }
   return score;

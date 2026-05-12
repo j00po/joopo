@@ -12,7 +12,7 @@ Joopo diagnostics OpenTelemetry exporter.
 ## Distribution
 
 - Package: `@joopo/diagnostics-otel`
-- Install route: npm; ClawHub: `clawhub:@joopo/diagnostics-otel`
+- Install route: npm; JoopoHub: `joopohub:@joopo/diagnostics-otel`
 
 ## Surface
 

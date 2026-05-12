@@ -27,7 +27,7 @@ For traces, logs, OTLP push, and OpenTelemetry GenAI semantic attributes, see [O
 <Steps>
   <Step title="Install the plugin">
     ```bash
-    joopo plugins install clawhub:@joopo/diagnostics-prometheus
+    joopo plugins install joopohub:@joopo/diagnostics-prometheus
     ```
   </Step>
   <Step title="Enable the plugin">
@@ -87,8 +87,8 @@ For traces, logs, OTLP push, and OpenTelemetry GenAI semantic attributes, see [O
 
 ## Metrics exported
 
-| Metric                                        | Type      | Labels                                                                                    |
-| --------------------------------------------- | --------- | ----------------------------------------------------------------------------------------- |
+| Metric                                     | Type      | Labels                                                                                    |
+| ------------------------------------------ | --------- | ----------------------------------------------------------------------------------------- |
 | `joopo_run_completed_total`                | counter   | `channel`, `model`, `outcome`, `provider`, `trigger`                                      |
 | `joopo_run_duration_seconds`               | histogram | `channel`, `model`, `outcome`, `provider`, `trigger`                                      |
 | `joopo_model_call_total`                   | counter   | `api`, `error_category`, `model`, `outcome`, `provider`, `transport`                      |

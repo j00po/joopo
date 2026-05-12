@@ -34,7 +34,7 @@ vi.mock("../views/agents-utils.ts", () => {
     /^data:image\//i.test(value) || (value.startsWith("/") && !value.startsWith("//"));
 
   return {
-    assistantAvatarFallbackUrl: () => "/joopo-molty.png",
+    assistantAvatarFallbackUrl: () => "/joopo-babuli.png",
     agentLogoUrl: () => "/joopo-logo.svg",
     isRenderableControlUiAvatarUrl,
     resolveAssistantTextAvatar: (value: string | null | undefined) => {
@@ -1155,8 +1155,7 @@ describe("grouped chat rendering", () => {
         {
           id: "assistant-local-media-inline",
           role: "assistant",
-          content:
-            "Local image\nMEDIA:/tmp/joopo/test image.png\nMEDIA:/tmp/joopo/test-doc.pdf",
+          content: "Local image\nMEDIA:/tmp/joopo/test image.png\nMEDIA:/tmp/joopo/test-doc.pdf",
           timestamp: Date.now(),
         },
         {
@@ -1319,8 +1318,7 @@ describe("grouped chat rendering", () => {
       {
         id: "assistant-same-origin-media-inline",
         role: "assistant",
-        content:
-          "Inline\nMEDIA:/media/inbound/test-image.png\nMEDIA:/__joopo__/media/test-doc.pdf",
+        content: "Inline\nMEDIA:/media/inbound/test-image.png\nMEDIA:/__joopo__/media/test-doc.pdf",
         timestamp: Date.now(),
       },
       {

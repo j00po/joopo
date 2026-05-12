@@ -46,7 +46,7 @@
       },
       {
         "label": "Discord",
-        "href": "https://discord.com/invite/clawd",
+        "href": "https://discord.com/invite/joopo",
         "icon": "discord"
       }
     ]
@@ -377,15 +377,15 @@
       "destination": "/nodes/camera"
     },
     {
-      "source": "/clawd",
+      "source": "/joopo",
       "destination": "/start/joopo"
     },
     {
-      "source": "/start/clawd",
+      "source": "/start/joopo",
       "destination": "/start/joopo"
     },
     {
-      "source": "/start/clawd/",
+      "source": "/start/joopo/",
       "destination": "/start/joopo"
     },
     {
@@ -393,16 +393,16 @@
       "destination": "/channels/pairing"
     },
     {
-      "source": "/clawdhub",
-      "destination": "/clawhub"
+      "source": "/joopohub",
+      "destination": "/joopohub"
     },
     {
-      "source": "/tools/clawhub",
-      "destination": "/clawhub"
+      "source": "/tools/joopohub",
+      "destination": "/joopohub"
     },
     {
-      "source": "/tools/clawdhub",
-      "destination": "/clawhub"
+      "source": "/tools/joopohub",
+      "destination": "/joopohub"
     },
     {
       "source": "/configuration",
@@ -1012,7 +1012,7 @@
                 "pages": [
                   "install/ansible",
                   "install/bun",
-                  "install/clawdock",
+                  "install/joopoock",
                   "install/docker",
                   "install/nix",
                   "install/podman"
@@ -1326,31 +1326,31 @@
             ]
           },
           {
-            "tab": "ClawHub",
+            "tab": "JoopoHub",
             "groups": [
               {
                 "group": "Overview",
-                "pages": ["clawhub/index", "clawhub/quickstart", "clawhub/how-it-works"]
+                "pages": ["joopohub/index", "joopohub/quickstart", "joopohub/how-it-works"]
               },
               {
-                "group": "Using ClawHub",
+                "group": "Using JoopoHub",
                 "pages": [
-                  "clawhub/cli",
-                  "clawhub/publishing",
-                  "clawhub/skill-format",
-                  "clawhub/soul-format",
-                  "clawhub/auth",
-                  "clawhub/telemetry",
-                  "clawhub/troubleshooting"
+                  "joopohub/cli",
+                  "joopohub/publishing",
+                  "joopohub/skill-format",
+                  "joopohub/soul-format",
+                  "joopohub/auth",
+                  "joopohub/telemetry",
+                  "joopohub/troubleshooting"
                 ]
               },
               {
                 "group": "API and trust",
                 "pages": [
-                  "clawhub/api",
-                  "clawhub/http-api",
-                  "clawhub/security",
-                  "clawhub/acceptable-usage"
+                  "joopohub/api",
+                  "joopohub/http-api",
+                  "joopohub/security",
+                  "joopohub/acceptable-usage"
                 ]
               }
             ]

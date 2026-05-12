@@ -13,9 +13,9 @@ describe("Joopo provider index", () => {
             id: "moonshot",
             package: " @joopo/plugin-moonshot ",
             install: {
-              clawhubSpec: " clawhub:joopo/moonshot@2026.5.2 ",
+              joopohubSpec: " joopohub:joopo/moonshot@2026.5.2 ",
               npmSpec: " @joopo/plugin-moonshot@1.2.3 ",
-              defaultChoice: "clawhub",
+              defaultChoice: "joopohub",
               expectedIntegrity: " sha512-moonshot ",
             },
           },
@@ -64,9 +64,9 @@ describe("Joopo provider index", () => {
             id: "moonshot",
             package: "@joopo/plugin-moonshot",
             install: {
-              clawhubSpec: "clawhub:joopo/moonshot@2026.5.2",
+              joopohubSpec: "joopohub:joopo/moonshot@2026.5.2",
               npmSpec: "@joopo/plugin-moonshot@1.2.3",
-              defaultChoice: "clawhub",
+              defaultChoice: "joopohub",
               expectedIntegrity: "sha512-moonshot",
             },
           },

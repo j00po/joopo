@@ -63,16 +63,16 @@ function createProps(overrides: Partial<SkillsProps> = {}): SkillsProps {
     busyKey: null,
     messages: {},
     detailKey: null,
-    clawhubQuery: "",
-    clawhubResults: null,
-    clawhubSearchLoading: false,
-    clawhubSearchError: null,
-    clawhubDetail: null,
-    clawhubDetailSlug: null,
-    clawhubDetailLoading: false,
-    clawhubDetailError: null,
-    clawhubInstallSlug: null,
-    clawhubInstallMessage: null,
+    joopohubQuery: "",
+    joopohubResults: null,
+    joopohubSearchLoading: false,
+    joopohubSearchError: null,
+    joopohubDetail: null,
+    joopohubDetailSlug: null,
+    joopohubDetailLoading: false,
+    joopohubDetailError: null,
+    joopohubInstallSlug: null,
+    joopohubInstallMessage: null,
     onFilterChange: () => undefined,
     onStatusFilterChange: () => undefined,
     onRefresh: () => undefined,
@@ -82,10 +82,10 @@ function createProps(overrides: Partial<SkillsProps> = {}): SkillsProps {
     onInstall: () => undefined,
     onDetailOpen: () => undefined,
     onDetailClose: () => undefined,
-    onClawHubQueryChange: () => undefined,
-    onClawHubDetailOpen: () => undefined,
-    onClawHubDetailClose: () => undefined,
-    onClawHubInstall: () => undefined,
+    onJoopoHubQueryChange: () => undefined,
+    onJoopoHubDetailOpen: () => undefined,
+    onJoopoHubDetailClose: () => undefined,
+    onJoopoHubInstall: () => undefined,
     ...overrides,
   };
 }
@@ -117,7 +117,7 @@ describe("renderSkills", () => {
     expect(container.querySelector("dialog")?.hasAttribute("open")).toBe(true);
   });
 
-  it("opens detail dialogs and routes ClawHub actions", async () => {
+  it("opens detail dialogs and routes JoopoHub actions", async () => {
     const container = document.createElement("div");
     document.body.append(container);
     dialogRestores.push(() => container.remove());
@@ -125,8 +125,8 @@ describe("renderSkills", () => {
     const showModal = vi.fn(function (this: HTMLDialogElement) {
       this.setAttribute("open", "");
     });
-    const onClawHubDetailOpen = vi.fn();
-    const onClawHubInstall = vi.fn();
+    const onJoopoHubDetailOpen = vi.fn();
+    const onJoopoHubInstall = vi.fn();
 
     installDialogMethod("showModal", showModal);
     installDialogMethod("close", function (this: HTMLDialogElement) {
@@ -155,8 +155,8 @@ describe("renderSkills", () => {
     render(
       renderSkills(
         createProps({
-          clawhubQuery: "git",
-          clawhubResults: [
+          joopohubQuery: "git",
+          joopohubResults: [
             {
               score: 0.95,
               slug: "github",
@@ -165,8 +165,8 @@ describe("renderSkills", () => {
               version: "1.2.3",
             },
           ],
-          onClawHubDetailOpen,
-          onClawHubInstall,
+          onJoopoHubDetailOpen,
+          onJoopoHubInstall,
         }),
       ),
       container,
@@ -183,21 +183,21 @@ describe("renderSkills", () => {
       .querySelector<HTMLButtonElement>(".list-item .btn.btn--sm")
       ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
 
-    expect(onClawHubDetailOpen).toHaveBeenCalledTimes(1);
-    expect(onClawHubDetailOpen).toHaveBeenCalledWith("github");
-    expect(onClawHubInstall).toHaveBeenCalledTimes(1);
-    expect(onClawHubInstall).toHaveBeenCalledWith("github");
+    expect(onJoopoHubDetailOpen).toHaveBeenCalledTimes(1);
+    expect(onJoopoHubDetailOpen).toHaveBeenCalledWith("github");
+    expect(onJoopoHubInstall).toHaveBeenCalledTimes(1);
+    expect(onJoopoHubInstall).toHaveBeenCalledWith("github");
 
-    onClawHubInstall.mockClear();
+    onJoopoHubInstall.mockClear();
     showModal.mockClear();
 
     render(
       renderSkills(
         createProps({
-          clawhubSearchError: "rate limited",
-          clawhubInstallMessage: { kind: "success", text: "Installed github" },
-          clawhubDetailSlug: "github",
-          clawhubDetail: {
+          joopohubSearchError: "rate limited",
+          joopohubInstallMessage: { kind: "success", text: "Installed github" },
+          joopohubDetailSlug: "github",
+          joopohubDetail: {
             skill: {
               slug: "github",
               displayName: "GitHub",
@@ -218,7 +218,7 @@ describe("renderSkills", () => {
               handle: "joopo",
             },
           },
-          onClawHubInstall,
+          onJoopoHubInstall,
         }),
       ),
       container,
@@ -238,8 +238,8 @@ describe("renderSkills", () => {
       .querySelector<HTMLButtonElement>(".md-preview-dialog__body .btn.primary")
       ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
 
-    expect(onClawHubInstall).toHaveBeenCalledTimes(1);
-    expect(onClawHubInstall).toHaveBeenCalledWith("github");
+    expect(onJoopoHubInstall).toHaveBeenCalledTimes(1);
+    expect(onJoopoHubInstall).toHaveBeenCalledWith("github");
   });
 });
 

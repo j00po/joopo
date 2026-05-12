@@ -25,7 +25,7 @@ const GATEWAY_PROMPT_MODE =
   process.env.JOOPO_PROMPT_MODE?.trim() === "override" ? "override" : "extra";
 const PROMPT_TEXT = process.env.JOOPO_PROMPT_TEXT?.trim() ?? "";
 const PROMPT_LIST_JSON = process.env.JOOPO_PROMPT_LIST_JSON?.trim() ?? "";
-const USER_PROMPT = process.env.JOOPO_USER_PROMPT?.trim() || "is clawd here?";
+const USER_PROMPT = process.env.JOOPO_USER_PROMPT?.trim() || "is joopo here?";
 const ENABLE_CAPTURE = process.env.JOOPO_PROMPT_CAPTURE === "1";
 const INCLUDE_RAW = process.env.JOOPO_PROMPT_INCLUDE_RAW === "1";
 const CLAUDE_BIN = process.env.CLAUDE_BIN?.trim() || "claude";

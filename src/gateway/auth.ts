@@ -30,7 +30,7 @@ export {
 } from "./auth-resolve.js";
 
 const LEGACY_JOOPO_ENV_NOTE =
-  " Legacy CLAWDBOT_* and MOLTBOT_* environment variables are ignored; use JOOPO_* names.";
+  " Legacy JOOPOBOT_* and MOLTBOT_* environment variables are ignored; use JOOPO_* names.";
 
 export type GatewayAuthResult = {
   ok: boolean;

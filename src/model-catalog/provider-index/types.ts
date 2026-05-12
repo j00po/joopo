@@ -1,9 +1,9 @@
 import type { ModelCatalogProvider } from "../types.js";
 
 export type JoopoProviderIndexPluginInstall = {
-  clawhubSpec?: string;
+  joopohubSpec?: string;
   npmSpec?: string;
-  defaultChoice?: "clawhub" | "npm";
+  defaultChoice?: "joopohub" | "npm";
   minHostVersion?: string;
   expectedIntegrity?: string;
 };

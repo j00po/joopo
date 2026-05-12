@@ -2,8 +2,8 @@ import { html, nothing } from "lit";
 import { ref } from "lit/directives/ref.js";
 import { t } from "../../i18n/index.ts";
 import type {
-  ClawHubSearchResult,
-  ClawHubSkillDetail,
+  JoopoHubSearchResult,
+  JoopoHubSkillDetail,
   SkillMessageMap,
 } from "../controllers/skills.ts";
 import { clampText } from "../format.ts";
@@ -52,16 +52,16 @@ export type SkillsProps = {
   busyKey: string | null;
   messages: SkillMessageMap;
   detailKey: string | null;
-  clawhubQuery: string;
-  clawhubResults: ClawHubSearchResult[] | null;
-  clawhubSearchLoading: boolean;
-  clawhubSearchError: string | null;
-  clawhubDetail: ClawHubSkillDetail | null;
-  clawhubDetailSlug: string | null;
-  clawhubDetailLoading: boolean;
-  clawhubDetailError: string | null;
-  clawhubInstallSlug: string | null;
-  clawhubInstallMessage: { kind: "success" | "error"; text: string } | null;
+  joopohubQuery: string;
+  joopohubResults: JoopoHubSearchResult[] | null;
+  joopohubSearchLoading: boolean;
+  joopohubSearchError: string | null;
+  joopohubDetail: JoopoHubSkillDetail | null;
+  joopohubDetailSlug: string | null;
+  joopohubDetailLoading: boolean;
+  joopohubDetailError: string | null;
+  joopohubInstallSlug: string | null;
+  joopohubInstallMessage: { kind: "success" | "error"; text: string } | null;
   onFilterChange: (next: string) => void;
   onStatusFilterChange: (next: SkillsStatusFilter) => void;
   onRefresh: () => void;
@@ -71,10 +71,10 @@ export type SkillsProps = {
   onInstall: (skillKey: string, name: string, installId: string) => void;
   onDetailOpen: (skillKey: string) => void;
   onDetailClose: () => void;
-  onClawHubQueryChange: (query: string) => void;
-  onClawHubDetailOpen: (slug: string) => void;
-  onClawHubDetailClose: () => void;
-  onClawHubInstall: (slug: string) => void;
+  onJoopoHubQueryChange: (query: string) => void;
+  onJoopoHubDetailOpen: (slug: string) => void;
+  onJoopoHubDetailClose: () => void;
+  onJoopoHubInstall: (slug: string) => void;
 };
 
 type StatusTabDef = { id: SkillsStatusFilter; label: string };
@@ -192,7 +192,7 @@ export function renderSkills(props: SkillsProps) {
 
       <div style="margin-top: 16px; border-top: 1px solid var(--border); padding-top: 16px;">
         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
-          <div style="font-weight: 600;">ClawHub</div>
+          <div style="font-weight: 600;">JoopoHub</div>
           <div class="muted" style="font-size: 13px;">
             Search and install skills from the registry
           </div>
@@ -200,30 +200,32 @@ export function renderSkills(props: SkillsProps) {
         <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
           <label class="field" style="flex: 1; min-width: 180px;">
             <input
-              .value=${props.clawhubQuery}
+              .value=${props.joopohubQuery}
               @input=${(e: Event) =>
-                props.onClawHubQueryChange((e.target as HTMLInputElement).value)}
-              placeholder="Search ClawHub skills…"
+                props.onJoopoHubQueryChange((e.target as HTMLInputElement).value)}
+              placeholder="Search JoopoHub skills…"
               autocomplete="off"
-              name="clawhub-search"
+              name="joopohub-search"
             />
           </label>
-          ${props.clawhubSearchLoading ? html`<span class="muted">Searching…</span>` : nothing}
+          ${props.joopohubSearchLoading ? html`<span class="muted">Searching…</span>` : nothing}
         </div>
-        ${props.clawhubSearchError
+        ${props.joopohubSearchError
           ? html`<div class="callout danger" style="margin-top: 8px;">
-              ${props.clawhubSearchError}
+              ${props.joopohubSearchError}
             </div>`
           : nothing}
-        ${props.clawhubInstallMessage
+        ${props.joopohubInstallMessage
           ? html`<div
-              class="callout ${props.clawhubInstallMessage.kind === "error" ? "danger" : "success"}"
+              class="callout ${props.joopohubInstallMessage.kind === "error"
+                ? "danger"
+                : "success"}"
               style="margin-top: 8px;"
             >
-              ${props.clawhubInstallMessage.text}
+              ${props.joopohubInstallMessage.text}
             </div>`
           : nothing}
-        ${renderClawHubResults(props)}
+        ${renderJoopoHubResults(props)}
       </div>
 
       ${props.error
@@ -257,17 +259,17 @@ export function renderSkills(props: SkillsProps) {
     </section>
 
     ${detailSkill ? renderSkillDetail(detailSkill, props) : nothing}
-    ${props.clawhubDetailSlug ? renderClawHubDetailDialog(props) : nothing}
+    ${props.joopohubDetailSlug ? renderJoopoHubDetailDialog(props) : nothing}
   `;
 }
 
-function renderClawHubResults(props: SkillsProps) {
-  const results = props.clawhubResults;
+function renderJoopoHubResults(props: SkillsProps) {
+  const results = props.joopohubResults;
   if (!results) {
     return nothing;
   }
   if (results.length === 0) {
-    return html`<div class="muted" style="margin-top: 8px;">No skills found on ClawHub.</div>`;
+    return html`<div class="muted" style="margin-top: 8px;">No skills found on JoopoHub.</div>`;
   }
   return html`
     <div class="list" style="margin-top: 8px;">
@@ -275,7 +277,7 @@ function renderClawHubResults(props: SkillsProps) {
         (r) => html`
           <div
             class="list-item list-item-clickable"
-            @click=${() => props.onClawHubDetailOpen(r.slug)}
+            @click=${() => props.onJoopoHubDetailOpen(r.slug)}
           >
             <div class="list-main">
               <div class="list-title">${r.displayName}</div>
@@ -287,13 +289,13 @@ function renderClawHubResults(props: SkillsProps) {
                 : nothing}
               <button
                 class="btn btn--sm"
-                ?disabled=${props.clawhubInstallSlug !== null}
+                ?disabled=${props.joopohubInstallSlug !== null}
                 @click=${(e: Event) => {
                   e.stopPropagation();
-                  props.onClawHubInstall(r.slug);
+                  props.onJoopoHubInstall(r.slug);
                 }}
               >
-                ${props.clawhubInstallSlug === r.slug ? "Installing\u2026" : "Install"}
+                ${props.joopohubInstallSlug === r.slug ? "Installing\u2026" : "Install"}
               </button>
             </div>
           </div>
@@ -303,8 +305,8 @@ function renderClawHubResults(props: SkillsProps) {
   `;
 }
 
-function renderClawHubDetailDialog(props: SkillsProps) {
-  const detail = props.clawhubDetail;
+function renderJoopoHubDetailDialog(props: SkillsProps) {
+  const detail = props.joopohubDetail;
 
   return html`
     <dialog
@@ -316,12 +318,12 @@ function renderClawHubDetailDialog(props: SkillsProps) {
           dialog.close();
         }
       }}
-      @close=${props.onClawHubDetailClose}
+      @close=${props.onJoopoHubDetailClose}
     >
       <div class="md-preview-dialog__panel">
         <div class="md-preview-dialog__header">
           <div class="md-preview-dialog__title">
-            ${detail?.skill?.displayName ?? props.clawhubDetailSlug}
+            ${detail?.skill?.displayName ?? props.joopohubDetailSlug}
           </div>
           <button
             class="btn btn--sm"
@@ -333,10 +335,10 @@ function renderClawHubDetailDialog(props: SkillsProps) {
           </button>
         </div>
         <div class="md-preview-dialog__body" style="display: grid; gap: 16px;">
-          ${props.clawhubDetailLoading
+          ${props.joopohubDetailLoading
             ? html`<div class="muted">${t("common.loading")}</div>`
-            : props.clawhubDetailError
-              ? html`<div class="callout danger">${props.clawhubDetailError}</div>`
+            : props.joopohubDetailError
+              ? html`<div class="callout danger">${props.joopohubDetailError}</div>`
               : detail?.skill
                 ? html`
                     <div style="font-size: 14px; line-height: 1.5;">
@@ -369,14 +371,14 @@ function renderClawHubDetailDialog(props: SkillsProps) {
                       : nothing}
                     <button
                       class="btn primary"
-                      ?disabled=${props.clawhubInstallSlug !== null}
+                      ?disabled=${props.joopohubInstallSlug !== null}
                       @click=${() => {
-                        if (props.clawhubDetailSlug) {
-                          props.onClawHubInstall(props.clawhubDetailSlug);
+                        if (props.joopohubDetailSlug) {
+                          props.onJoopoHubInstall(props.joopohubDetailSlug);
                         }
                       }}
                     >
-                      ${props.clawhubInstallSlug === props.clawhubDetailSlug
+                      ${props.joopohubInstallSlug === props.joopohubDetailSlug
                         ? "Installing\u2026"
                         : `Install ${detail.skill.displayName}`}
                     </button>

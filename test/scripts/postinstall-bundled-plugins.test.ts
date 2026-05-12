@@ -464,7 +464,7 @@ describe("bundled plugin postinstall", () => {
     const stateOverride = path.join(home, "custom-state");
     const systemState = path.join(home, "system-state");
     const defaultLegacyRoot = path.join(home, ".joopo", "plugin-runtime-deps");
-    const oldBrandLegacyRoot = path.join(home, ".clawdbot", "plugin-runtime-deps");
+    const oldBrandLegacyRoot = path.join(home, ".joopobot", "plugin-runtime-deps");
     const overrideLegacyRoot = path.join(stateOverride, "plugin-runtime-deps");
     const systemLegacyRoot = path.join(systemState, "plugin-runtime-deps");
     const thirdPartyNodeModules = path.join(
@@ -598,7 +598,7 @@ describe("bundled plugin postinstall", () => {
         homedir: () => "/users/alice",
       }),
     ).toEqual([
-      "/srv/joopo-home/.clawdbot/plugin-runtime-deps",
+      "/srv/joopo-home/.joopobot/plugin-runtime-deps",
       "/srv/joopo-home/.joopo/plugin-runtime-deps",
       "/srv/joopo-home/profile/plugin-runtime-deps",
       "/srv/joopo-home/state/plugin-runtime-deps",

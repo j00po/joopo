@@ -413,12 +413,12 @@ describe("dedupeBySkillName", () => {
 
   it("matches skillName case-insensitively", () => {
     const input = [
-      { name: "ClawHub", skillName: "ClawHub", description: "ClawHub" },
-      { name: "clawhub_2", skillName: "clawhub", description: "ClawHub" },
+      { name: "JoopoHub", skillName: "JoopoHub", description: "JoopoHub" },
+      { name: "joopohub_2", skillName: "joopohub", description: "JoopoHub" },
     ];
     const output = skillCommandsTesting.dedupeBySkillName(input);
     expect(output).toHaveLength(1);
-    expect(output[0]?.name).toBe("ClawHub");
+    expect(output[0]?.name).toBe("JoopoHub");
   });
 
   it("passes through commands with an empty skillName", () => {

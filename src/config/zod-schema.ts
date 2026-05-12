@@ -524,7 +524,7 @@ export const JoopoSchema = z
                 mcpCommand: z.string().optional(),
                 mcpArgs: z.array(z.string()).optional(),
                 driver: z
-                  .union([z.literal("joopo"), z.literal("clawd"), z.literal("existing-session")])
+                  .union([z.literal("joopo"), z.literal("joopo"), z.literal("existing-session")])
                   .optional(),
                 headless: z.boolean().optional(),
                 executablePath: z.string().optional(),

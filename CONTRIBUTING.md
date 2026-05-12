@@ -6,7 +6,7 @@ Welcome to the lobster tank! 🦞
 
 - **GitHub:** https://github.com/joopo/joopo
 - **Vision:** [`VISION.md`](VISION.md)
-- **Discord:** https://discord.gg/clawd
+- **Discord:** https://discord.gg/joopo
 - **X/Twitter:** [@steipete](https://x.com/steipete) / [@joopo](https://x.com/joopo)
 
 ## Maintainers
@@ -86,7 +86,7 @@ Welcome to the lobster tank! 🦞
 - **Mason Huang** - Stability, Security, Speed
   - GitHub: [@hxy91819](https://github.com/hxy91819) · X: [@chenjingtalk](https://x.com/chenjingtalk)
 
-- **Maurice Niu** - ClawHub, Security, Stability, Data integrity
+- **Maurice Niu** - JoopoHub, Security, Stability, Data integrity
   - GitHub: [@momothemage](https://github.com/momothemage) · X: [@MomoPsicasso](https://x.com/MomoPsicasso)
 
 ## How to Contribute
@@ -101,7 +101,7 @@ Welcome to the lobster tank! 🦞
 
 We cap at **20 open PRs per author**. If you exceed this, the `r: too-many-prs` label is added and your PR is auto-closed. This is a hard limit.
 
-For coordinated change sets that genuinely need more than 20 PRs, join the **#clawtributors** channel in Discord and talk to maintainers first.
+For coordinated change sets that genuinely need more than 20 PRs, join the **#contributors** channel in Discord and talk to maintainers first.
 
 ## Before You PR
 
@@ -181,7 +181,7 @@ We are currently prioritizing:
 
 - **Stability**: Fixing edge cases in channel connections (WhatsApp/Telegram).
 - **UX**: Improving the onboarding wizard and error messages.
-- **Skills**: For skill contributions, head to [ClawHub](https://clawhub.ai/) — the community hub for Joopo skills.
+- **Skills**: For skill contributions, head to [JoopoHub](https://joopohub.ai/) — the community hub for Joopo skills.
 - **Performance**: Optimizing token usage and compaction logic.
 
 Check the [GitHub Issues](https://github.com/joopo/joopo/issues) for
@@ -217,7 +217,7 @@ We take security reports seriously. Report vulnerabilities directly to the repos
 - **macOS desktop app** — [joopo/joopo](https://github.com/joopo/joopo) (apps/macos)
 - **iOS app** — [joopo/joopo](https://github.com/joopo/joopo) (apps/ios)
 - **Android app** — [joopo/joopo](https://github.com/joopo/joopo) (apps/android)
-- **ClawHub** — [joopo/clawhub](https://github.com/joopo/clawhub)
+- **JoopoHub** — [joopo/joopohub](https://github.com/joopo/joopohub)
 - **Trust and threat model** — [joopo/trust](https://github.com/joopo/trust)
 
 For issues that don't fit a specific repo, or if you're unsure, email **security@joopo.ai** and we'll route it.

@@ -1,9 +1,9 @@
 import path from "node:path";
 import type { JoopoConfig } from "../config/types.joopo.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
-import { parseClawHubPluginSpec } from "../infra/clawhub-spec.js";
 import type { NpmSpecResolution } from "../infra/install-source-utils.js";
 import { resolveNpmSpecMetadata } from "../infra/install-source-utils.js";
+import { parseJoopoHubPluginSpec } from "../infra/joopohub-spec.js";
 import {
   compareJoopoReleaseVersions,
   isPrereleaseResolutionAllowed,
@@ -19,12 +19,10 @@ import { compareComparableSemver, parseComparableSemver } from "../infra/semver-
 import type { UpdateChannel } from "../infra/update-channels.js";
 import { resolveUserPath } from "../utils.js";
 import { resolveBundledPluginSources } from "./bundled-sources.js";
-import { buildClawHubPluginInstallRecordFields } from "./clawhub-install-records.js";
-import { CLAWHUB_INSTALL_ERROR_CODE, installPluginFromClawHub } from "./clawhub.js";
 import { normalizePluginsConfig, resolveEffectiveEnableState } from "./config-state.js";
 import {
   getExternalizedBundledPluginLegacyPathSuffix,
-  getExternalizedBundledPluginClawHubSpec,
+  getExternalizedBundledPluginJoopoHubSpec,
   getExternalizedBundledPluginLookupIds,
   getExternalizedBundledPluginNpmSpec,
   getExternalizedBundledPluginPreferredSource,
@@ -33,7 +31,7 @@ import {
 } from "./externalized-bundled-plugins.js";
 import { installPluginFromGitSpec } from "./git-install.js";
 import {
-  resolveClawHubInstallSpecsForUpdateChannel,
+  resolveJoopoHubInstallSpecsForUpdateChannel,
   resolveNpmInstallSpecsForUpdateChannel,
 } from "./install-channel-specs.js";
 import {
@@ -42,6 +40,8 @@ import {
   resolvePluginInstallDir,
 } from "./install.js";
 import { buildNpmResolutionInstallFields, recordPluginInstall } from "./installs.js";
+import { buildJoopoHubPluginInstallRecordFields } from "./joopohub-install-records.js";
+import { JOOPOHUB_INSTALL_ERROR_CODE, installPluginFromJoopoHub } from "./joopohub.js";
 import { installPluginFromMarketplace } from "./marketplace.js";
 import {
   getOfficialExternalPluginCatalogEntry,
@@ -83,7 +83,7 @@ export type PluginUpdateIntegrityDriftParams = {
 
 export type PluginChannelSyncSummary = {
   switchedToBundled: string[];
-  switchedToClawHub: string[];
+  switchedToJoopoHub: string[];
   switchedToNpm: string[];
   warnings: string[];
   errors: string[];
@@ -120,13 +120,13 @@ function formatMarketplaceInstallFailure(params: {
   );
 }
 
-function formatClawHubInstallFailure(params: {
+function formatJoopoHubInstallFailure(params: {
   pluginId: string;
   spec: string;
   phase: "check" | "update";
   error: string;
 }): string {
-  return `Failed to ${params.phase} ${params.pluginId}: ${params.error} (ClawHub ${params.spec}).`;
+  return `Failed to ${params.phase} ${params.pluginId}: ${params.error} (JoopoHub ${params.spec}).`;
 }
 
 function formatGitInstallFailure(params: {
@@ -427,15 +427,15 @@ function isExternalizedBundledPluginEnabled(params: {
   return false;
 }
 
-function shouldFallbackClawHubBridgeToNpm(result: { ok: false; code?: string }): boolean {
+function shouldFallbackJoopoHubBridgeToNpm(result: { ok: false; code?: string }): boolean {
   return (
-    result.code === CLAWHUB_INSTALL_ERROR_CODE.PACKAGE_NOT_FOUND ||
-    result.code === CLAWHUB_INSTALL_ERROR_CODE.VERSION_NOT_FOUND
+    result.code === JOOPOHUB_INSTALL_ERROR_CODE.PACKAGE_NOT_FOUND ||
+    result.code === JOOPOHUB_INSTALL_ERROR_CODE.VERSION_NOT_FOUND
   );
 }
 
-function shouldFallbackBetaClawHubUpdate(result: { ok: false; code?: string }): boolean {
-  return shouldFallbackClawHubBridgeToNpm(result);
+function shouldFallbackBetaJoopoHubUpdate(result: { ok: false; code?: string }): boolean {
+  return shouldFallbackJoopoHubBridgeToNpm(result);
 }
 
 function describeBetaNpmFallback(params: {
@@ -469,8 +469,8 @@ function resolveNpmSpecPackageName(spec: string | undefined): string | undefined
   return spec ? parseRegistryNpmSpec(spec)?.name : undefined;
 }
 
-function resolveClawHubSpecPackageName(spec: string | undefined): string | undefined {
-  return spec ? parseClawHubPluginSpec(spec)?.name : undefined;
+function resolveJoopoHubSpecPackageName(spec: string | undefined): string | undefined {
+  return spec ? parseJoopoHubPluginSpec(spec)?.name : undefined;
 }
 
 export function resolveTrustedSourceLinkedOfficialNpmSpec(params: {
@@ -497,25 +497,25 @@ export function resolveTrustedSourceLinkedOfficialNpmSpec(params: {
   return recordedPackageNames.includes(officialPackageName) ? officialSpec : undefined;
 }
 
-export function resolveTrustedSourceLinkedOfficialClawHubSpec(params: {
+export function resolveTrustedSourceLinkedOfficialJoopoHubSpec(params: {
   pluginId: string;
   record: PluginInstallRecord;
 }): string | undefined {
-  if (params.record.source !== "clawhub") {
+  if (params.record.source !== "joopohub") {
     return undefined;
   }
   const entry = getOfficialExternalPluginCatalogEntry(params.pluginId);
   if (!entry) {
     return undefined;
   }
-  const officialSpec = resolveOfficialExternalPluginInstall(entry)?.clawhubSpec;
-  const officialPackageName = resolveClawHubSpecPackageName(officialSpec);
+  const officialSpec = resolveOfficialExternalPluginInstall(entry)?.joopohubSpec;
+  const officialPackageName = resolveJoopoHubSpecPackageName(officialSpec);
   if (!officialSpec || !officialPackageName) {
     return undefined;
   }
   const recordedPackageNames = [
-    params.record.clawhubPackage,
-    resolveClawHubSpecPackageName(params.record.spec),
+    params.record.joopohubPackage,
+    resolveJoopoHubSpecPackageName(params.record.spec),
   ].filter((value): value is string => Boolean(value));
   return recordedPackageNames.includes(officialPackageName) ? officialSpec : undefined;
 }
@@ -562,18 +562,20 @@ function isBridgeNpmInstall(params: {
   return Boolean(bridgePackageName && recordPackageName === bridgePackageName);
 }
 
-function isBridgeClawHubInstall(params: {
+function isBridgeJoopoHubInstall(params: {
   bridge: ExternalizedBundledPluginBridge;
   record: PluginInstallRecord;
 }): boolean {
-  if (params.record.source !== "clawhub") {
+  if (params.record.source !== "joopohub") {
     return false;
   }
-  const clawhubSpec = getExternalizedBundledPluginClawHubSpec(params.bridge);
-  const bridgeClawHubPackage = clawhubSpec ? parseClawHubPluginSpec(clawhubSpec)?.name : undefined;
-  const recordClawHubPackage =
-    params.record.clawhubPackage ?? parseClawHubPluginSpec(params.record.spec ?? "")?.name;
-  return Boolean(bridgeClawHubPackage && recordClawHubPackage === bridgeClawHubPackage);
+  const joopohubSpec = getExternalizedBundledPluginJoopoHubSpec(params.bridge);
+  const bridgeJoopoHubPackage = joopohubSpec
+    ? parseJoopoHubPluginSpec(joopohubSpec)?.name
+    : undefined;
+  const recordJoopoHubPackage =
+    params.record.joopohubPackage ?? parseJoopoHubPluginSpec(params.record.spec ?? "")?.name;
+  return Boolean(bridgeJoopoHubPackage && recordJoopoHubPackage === bridgeJoopoHubPackage);
 }
 
 function resolveNpmUpdateSpecs(params: {
@@ -603,7 +605,7 @@ function resolveNpmUpdateSpecs(params: {
   });
 }
 
-function resolveClawHubUpdateSpecs(params: {
+function resolveJoopoHubUpdateSpecs(params: {
   record: PluginInstallRecord;
   officialSpecOverride?: string;
   updateChannel?: UpdateChannel;
@@ -613,12 +615,14 @@ function resolveClawHubUpdateSpecs(params: {
   fallbackSpec?: string;
   fallbackLabel?: string;
 } {
-  if (!params.officialSpecOverride && !params.record.clawhubPackage) {
+  if (!params.officialSpecOverride && !params.record.joopohubPackage) {
     return {};
   }
   const recordSpec =
-    params.officialSpecOverride ?? params.record.spec ?? `clawhub:${params.record.clawhubPackage}`;
-  return resolveClawHubInstallSpecsForUpdateChannel({
+    params.officialSpecOverride ??
+    params.record.spec ??
+    `joopohub:${params.record.joopohubPackage}`;
+  return resolveJoopoHubInstallSpecsForUpdateChannel({
     spec: recordSpec,
     updateChannel: params.updateChannel,
   });
@@ -629,8 +633,8 @@ function isBridgeAlreadyInstalledFromPreferredSource(params: {
   record: PluginInstallRecord;
 }): boolean {
   const preferredSource = getExternalizedBundledPluginPreferredSource(params.bridge);
-  return preferredSource === "clawhub"
-    ? isBridgeClawHubInstall(params)
+  return preferredSource === "joopohub"
+    ? isBridgeJoopoHubInstall(params)
     : isBridgeNpmInstall(params);
 }
 
@@ -639,9 +643,9 @@ function isBridgeInstalledFromFallbackSource(params: {
   record: PluginInstallRecord;
 }): boolean {
   const preferredSource = getExternalizedBundledPluginPreferredSource(params.bridge);
-  return preferredSource === "clawhub"
+  return preferredSource === "joopohub"
     ? isBridgeNpmInstall(params)
-    : isBridgeClawHubInstall(params);
+    : isBridgeJoopoHubInstall(params);
 }
 
 function replacePluginIdInList(
@@ -885,8 +889,8 @@ export async function updateNpmInstalledPlugins(params: {
     const officialNpmSpec = params.syncOfficialPluginInstalls
       ? resolveTrustedSourceLinkedOfficialNpmSpec({ pluginId, record })
       : undefined;
-    const officialClawHubSpec = params.syncOfficialPluginInstalls
-      ? resolveTrustedSourceLinkedOfficialClawHubSpec({ pluginId, record })
+    const officialJoopoHubSpec = params.syncOfficialPluginInstalls
+      ? resolveTrustedSourceLinkedOfficialJoopoHubSpec({ pluginId, record })
       : undefined;
 
     if (normalizedPluginConfig) {
@@ -896,7 +900,7 @@ export async function updateNpmInstalledPlugins(params: {
         config: normalizedPluginConfig,
         rootConfig: params.config,
       });
-      if (!enableState.enabled && !officialNpmSpec && !officialClawHubSpec) {
+      if (!enableState.enabled && !officialNpmSpec && !officialJoopoHubSpec) {
         outcomes.push({
           pluginId,
           status: "skipped",
@@ -909,7 +913,7 @@ export async function updateNpmInstalledPlugins(params: {
     if (
       record.source !== "npm" &&
       record.source !== "marketplace" &&
-      record.source !== "clawhub" &&
+      record.source !== "joopohub" &&
       record.source !== "git"
     ) {
       outcomes.push({
@@ -929,25 +933,25 @@ export async function updateNpmInstalledPlugins(params: {
             updateChannel: params.updateChannel,
           })
         : undefined;
-    const clawhubSpecs =
-      record.source === "clawhub"
-        ? resolveClawHubUpdateSpecs({
+    const joopohubSpecs =
+      record.source === "joopohub"
+        ? resolveJoopoHubUpdateSpecs({
             record,
-            officialSpecOverride: officialClawHubSpec,
+            officialSpecOverride: officialJoopoHubSpec,
             updateChannel: params.updateChannel,
           })
         : undefined;
     const effectiveSpec =
       record.source === "npm"
         ? npmSpecs?.installSpec
-        : record.source === "clawhub"
-          ? clawhubSpecs?.installSpec
+        : record.source === "joopohub"
+          ? joopohubSpecs?.installSpec
           : record.spec;
     const recordSpec =
       record.source === "npm"
         ? npmSpecs?.recordSpec
-        : record.source === "clawhub"
-          ? clawhubSpecs?.recordSpec
+        : record.source === "joopohub"
+          ? joopohubSpecs?.recordSpec
           : record.spec;
     const expectedIntegrity =
       record.source === "npm" && effectiveSpec === record.spec
@@ -981,16 +985,16 @@ export async function updateNpmInstalledPlugins(params: {
       continue;
     }
 
-    if (record.source === "clawhub" && !record.clawhubPackage && !officialClawHubSpec) {
+    if (record.source === "joopohub" && !record.joopohubPackage && !officialJoopoHubSpec) {
       outcomes.push({
         pluginId,
         status: "skipped",
-        message: `Skipping "${pluginId}" (missing ClawHub package metadata).`,
+        message: `Skipping "${pluginId}" (missing JoopoHub package metadata).`,
       });
       continue;
     }
 
-    if (record.source === "clawhub" || record.source === "marketplace") {
+    if (record.source === "joopohub" || record.source === "marketplace") {
       const bundledSource = bundled.get(pluginId);
       if (
         bundledSource?.version &&
@@ -1084,7 +1088,7 @@ export async function updateNpmInstalledPlugins(params: {
     if (params.dryRun) {
       let probe:
         | Awaited<ReturnType<typeof installPluginFromNpmSpec>>
-        | Awaited<ReturnType<typeof installPluginFromClawHub>>
+        | Awaited<ReturnType<typeof installPluginFromJoopoHub>>
         | Awaited<ReturnType<typeof installPluginFromGitSpec>>
         | Awaited<ReturnType<typeof installPluginFromMarketplace>>;
       try {
@@ -1108,10 +1112,10 @@ export async function updateNpmInstalledPlugins(params: {
                 }),
                 logger,
               })
-            : record.source === "clawhub"
-              ? await installPluginFromClawHub({
-                  spec: effectiveSpec ?? `clawhub:${record.clawhubPackage!}`,
-                  baseUrl: record.clawhubUrl,
+            : record.source === "joopohub"
+              ? await installPluginFromJoopoHub({
+                  spec: effectiveSpec ?? `joopohub:${record.joopohubPackage!}`,
+                  baseUrl: record.joopohubUrl,
                   mode: "update",
                   extensionsDir,
                   timeoutMs: params.timeoutMs,
@@ -1178,16 +1182,16 @@ export async function updateNpmInstalledPlugins(params: {
       }
       if (
         !probe.ok &&
-        record.source === "clawhub" &&
-        clawhubSpecs?.fallbackSpec &&
-        shouldFallbackBetaClawHubUpdate(probe)
+        record.source === "joopohub" &&
+        joopohubSpecs?.fallbackSpec &&
+        shouldFallbackBetaJoopoHubUpdate(probe)
       ) {
         logger.warn?.(
-          `Plugin "${pluginId}" has no beta ClawHub release for ${clawhubSpecs.fallbackLabel ?? effectiveSpec}; falling back to ${clawhubSpecs.fallbackSpec}.`,
+          `Plugin "${pluginId}" has no beta JoopoHub release for ${joopohubSpecs.fallbackLabel ?? effectiveSpec}; falling back to ${joopohubSpecs.fallbackSpec}.`,
         );
-        probe = await installPluginFromClawHub({
-          spec: clawhubSpecs.fallbackSpec,
-          baseUrl: record.clawhubUrl,
+        probe = await installPluginFromJoopoHub({
+          spec: joopohubSpecs.fallbackSpec,
+          baseUrl: record.joopohubUrl,
           mode: "update",
           extensionsDir,
           timeoutMs: params.timeoutMs,
@@ -1211,10 +1215,10 @@ export async function updateNpmInstalledPlugins(params: {
                 phase: "check",
                 result: probe,
               })
-            : record.source === "clawhub"
-              ? formatClawHubInstallFailure({
+            : record.source === "joopohub"
+              ? formatJoopoHubInstallFailure({
                   pluginId,
-                  spec: effectiveSpec ?? `clawhub:${record.clawhubPackage!}`,
+                  spec: effectiveSpec ?? `joopohub:${record.joopohubPackage!}`,
                   phase: "check",
                   error: probe.error,
                 })
@@ -1269,7 +1273,7 @@ export async function updateNpmInstalledPlugins(params: {
 
     let result:
       | Awaited<ReturnType<typeof installPluginFromNpmSpec>>
-      | Awaited<ReturnType<typeof installPluginFromClawHub>>
+      | Awaited<ReturnType<typeof installPluginFromJoopoHub>>
       | Awaited<ReturnType<typeof installPluginFromGitSpec>>
       | Awaited<ReturnType<typeof installPluginFromMarketplace>>;
     try {
@@ -1292,10 +1296,10 @@ export async function updateNpmInstalledPlugins(params: {
               }),
               logger,
             })
-          : record.source === "clawhub"
-            ? await installPluginFromClawHub({
-                spec: effectiveSpec ?? `clawhub:${record.clawhubPackage!}`,
-                baseUrl: record.clawhubUrl,
+          : record.source === "joopohub"
+            ? await installPluginFromJoopoHub({
+                spec: effectiveSpec ?? `joopohub:${record.joopohubPackage!}`,
+                baseUrl: record.joopohubUrl,
                 mode: "update",
                 extensionsDir,
                 timeoutMs: params.timeoutMs,
@@ -1358,16 +1362,16 @@ export async function updateNpmInstalledPlugins(params: {
     }
     if (
       !result.ok &&
-      record.source === "clawhub" &&
-      clawhubSpecs?.fallbackSpec &&
-      shouldFallbackBetaClawHubUpdate(result)
+      record.source === "joopohub" &&
+      joopohubSpecs?.fallbackSpec &&
+      shouldFallbackBetaJoopoHubUpdate(result)
     ) {
       logger.warn?.(
-        `Plugin "${pluginId}" has no beta ClawHub release for ${clawhubSpecs.fallbackLabel ?? effectiveSpec}; falling back to ${clawhubSpecs.fallbackSpec}.`,
+        `Plugin "${pluginId}" has no beta JoopoHub release for ${joopohubSpecs.fallbackLabel ?? effectiveSpec}; falling back to ${joopohubSpecs.fallbackSpec}.`,
       );
-      result = await installPluginFromClawHub({
-        spec: clawhubSpecs.fallbackSpec,
-        baseUrl: record.clawhubUrl,
+      result = await installPluginFromJoopoHub({
+        spec: joopohubSpecs.fallbackSpec,
+        baseUrl: record.joopohubUrl,
         mode: "update",
         extensionsDir,
         timeoutMs: params.timeoutMs,
@@ -1390,10 +1394,10 @@ export async function updateNpmInstalledPlugins(params: {
               phase: "update",
               result: result,
             })
-          : record.source === "clawhub"
-            ? formatClawHubInstallFailure({
+          : record.source === "joopohub"
+            ? formatJoopoHubInstallFailure({
                 pluginId,
-                spec: effectiveSpec ?? `clawhub:${record.clawhubPackage!}`,
+                spec: effectiveSpec ?? `joopohub:${record.joopohubPackage!}`,
                 phase: "update",
                 error: result.error,
               })
@@ -1430,15 +1434,15 @@ export async function updateNpmInstalledPlugins(params: {
         version: nextVersion,
         ...buildNpmResolutionInstallFields(result.npmResolution),
       });
-    } else if (record.source === "clawhub") {
-      const clawhubResult = result as Extract<
-        Awaited<ReturnType<typeof installPluginFromClawHub>>,
+    } else if (record.source === "joopohub") {
+      const joopohubResult = result as Extract<
+        Awaited<ReturnType<typeof installPluginFromJoopoHub>>,
         { ok: true }
       >;
       next = recordPluginInstall(next, {
         pluginId: resolvedPluginId,
-        ...buildClawHubPluginInstallRecordFields(clawhubResult.clawhub),
-        spec: recordSpec ?? record.spec ?? `clawhub:${record.clawhubPackage!}`,
+        ...buildJoopoHubPluginInstallRecordFields(joopohubResult.joopohub),
+        spec: recordSpec ?? record.spec ?? `joopohub:${record.joopohubPackage!}`,
         installPath: result.targetDir,
         version: nextVersion,
       });
@@ -1519,7 +1523,7 @@ export async function syncPluginsForUpdateChannel(params: {
   const logger = params.logger ?? {};
   const summary: PluginChannelSyncSummary = {
     switchedToBundled: [],
-    switchedToClawHub: [],
+    switchedToJoopoHub: [],
     switchedToNpm: [],
     warnings: [],
     errors: [],
@@ -1621,16 +1625,16 @@ export async function syncPluginsForUpdateChannel(params: {
 
       const preferredSource = getExternalizedBundledPluginPreferredSource(bridge);
       const npmSpec = getExternalizedBundledPluginNpmSpec(bridge);
-      const clawhubSpec = getExternalizedBundledPluginClawHubSpec(bridge);
+      const joopohubSpec = getExternalizedBundledPluginJoopoHubSpec(bridge);
       const trustedSourceLinkedOfficialInstall = isTrustedSourceLinkedOfficialBridgeNpmInstall({
         targetPluginId,
         npmSpec,
       });
       let installSource = preferredSource;
-      let installSpec = preferredSource === "clawhub" ? clawhubSpec : npmSpec;
+      let installSpec = preferredSource === "joopohub" ? joopohubSpec : npmSpec;
       let result:
         | Awaited<ReturnType<typeof installPluginFromNpmSpec>>
-        | Awaited<ReturnType<typeof installPluginFromClawHub>>;
+        | Awaited<ReturnType<typeof installPluginFromJoopoHub>>;
 
       if (!installSpec) {
         const message = `Failed to update ${targetPluginId}: missing ${preferredSource} install spec for externalized bundled plugin.`;
@@ -1639,16 +1643,16 @@ export async function syncPluginsForUpdateChannel(params: {
         continue;
       }
 
-      if (preferredSource === "clawhub") {
-        result = await installPluginFromClawHub({
-          spec: clawhubSpec,
-          ...(bridge.clawhubUrl ? { baseUrl: bridge.clawhubUrl } : {}),
+      if (preferredSource === "joopohub") {
+        result = await installPluginFromJoopoHub({
+          spec: joopohubSpec,
+          ...(bridge.joopohubUrl ? { baseUrl: bridge.joopohubUrl } : {}),
           mode: "update",
           expectedPluginId: targetPluginId,
           logger,
         });
-        if (!result.ok && npmSpec && shouldFallbackClawHubBridgeToNpm(result)) {
-          const warning = `ClawHub ${clawhubSpec} unavailable for ${targetPluginId}; falling back to npm ${npmSpec}.`;
+        if (!result.ok && npmSpec && shouldFallbackJoopoHubBridgeToNpm(result)) {
+          const warning = `JoopoHub ${joopohubSpec} unavailable for ${targetPluginId}; falling back to npm ${npmSpec}.`;
           summary.warnings.push(warning);
           logger.warn?.(warning);
           installSource = "npm";
@@ -1673,8 +1677,8 @@ export async function syncPluginsForUpdateChannel(params: {
 
       if (!result.ok) {
         const message =
-          installSource === "clawhub"
-            ? formatClawHubInstallFailure({
+          installSource === "joopohub"
+            ? formatJoopoHubInstallFailure({
                 pluginId: targetPluginId,
                 spec: installSpec,
                 phase: "update",
@@ -1696,14 +1700,14 @@ export async function syncPluginsForUpdateChannel(params: {
         next = migratePluginConfigId(next, existing.pluginId, resolvedPluginId);
       }
       const nextVersion = result.version ?? (await readInstalledPackageVersion(result.targetDir));
-      if (installSource === "clawhub") {
-        const clawhubResult = result as Extract<
-          Awaited<ReturnType<typeof installPluginFromClawHub>>,
+      if (installSource === "joopohub") {
+        const joopohubResult = result as Extract<
+          Awaited<ReturnType<typeof installPluginFromJoopoHub>>,
           { ok: true }
         >;
         next = recordPluginInstall(next, {
           pluginId: resolvedPluginId,
-          ...buildClawHubPluginInstallRecordFields(clawhubResult.clawhub),
+          ...buildJoopoHubPluginInstallRecordFields(joopohubResult.joopohub),
           spec: installSpec,
           installPath: result.targetDir,
           version: nextVersion,
@@ -1730,8 +1734,8 @@ export async function syncPluginsForUpdateChannel(params: {
         loadHelpers.removePath(existing.record.installPath);
       }
       removeBridgeBundledLoadPaths({ bridge, loadPaths: loadHelpers, env });
-      if (installSource === "clawhub") {
-        summary.switchedToClawHub.push(resolvedPluginId);
+      if (installSource === "joopohub") {
+        summary.switchedToJoopoHub.push(resolvedPluginId);
       } else {
         summary.switchedToNpm.push(resolvedPluginId);
       }

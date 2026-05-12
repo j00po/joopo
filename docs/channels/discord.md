@@ -1369,11 +1369,11 @@ joopo logs --follow
           // Mantis listens to other bots only when they mention her.
           allowBots: "mentions",
         },
-        molty: {
-          // Molty listens to all bot-authored Discord messages.
+        babuli: {
+          // Babuli listens to all bot-authored Discord messages.
           allowBots: true,
           mentionAliases: {
-            // Lets Molty write "@Mantis" and send a real Discord mention.
+            // Lets Babuli write "@Mantis" and send a real Discord mention.
             Mantis: "MANTIS_DISCORD_USER_ID",
           },
         },

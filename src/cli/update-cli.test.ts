@@ -180,7 +180,7 @@ vi.mock("../utils.js", async (importOriginal) => {
 });
 
 vi.mock("../plugins/update.js", () => ({
-  resolveTrustedSourceLinkedOfficialClawHubSpec: vi.fn(() => undefined),
+  resolveTrustedSourceLinkedOfficialJoopoHubSpec: vi.fn(() => undefined),
   resolveTrustedSourceLinkedOfficialNpmSpec: vi.fn(() => undefined),
   syncPluginsForUpdateChannel: (...args: unknown[]) => syncPluginsForUpdateChannel(...args),
   updateNpmInstalledPlugins: (...args: unknown[]) => updateNpmInstalledPlugins(...args),
@@ -2388,14 +2388,7 @@ describe("update-cli", () => {
       "mingw64",
       "bin",
     );
-    const portableGitUsr = path.join(
-      localAppData,
-      "Joopo",
-      "deps",
-      "portable-git",
-      "usr",
-      "bin",
-    );
+    const portableGitUsr = path.join(localAppData, "Joopo", "deps", "portable-git", "usr", "bin");
     await fs.mkdir(portableGitMingw, { recursive: true });
     await fs.mkdir(portableGitUsr, { recursive: true });
     mockPackageInstallStatus(tempDir);

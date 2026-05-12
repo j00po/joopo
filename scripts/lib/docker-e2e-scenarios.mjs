@@ -9,8 +9,7 @@ const LIVE_PROFILE_TIMEOUT_MS = 30 * 60 * 1000;
 const OPENWEBUI_TIMEOUT_MS = 20 * 60 * 1000;
 export const BUNDLED_PLUGIN_INSTALL_UNINSTALL_SHARDS = 24;
 const upgradeSurvivorCommand = "JOOPO_SKIP_DOCKER_BUILD=1 pnpm test:docker:upgrade-survivor";
-const updateRestartAuthCommand =
-  "JOOPO_SKIP_DOCKER_BUILD=1 pnpm test:docker:update-restart-auth";
+const updateRestartAuthCommand = "JOOPO_SKIP_DOCKER_BUILD=1 pnpm test:docker:update-restart-auth";
 
 const LIVE_RETRY_PATTERNS = [
   /529\b/i,
@@ -217,11 +216,11 @@ export const mainLanes = [
   lane("crestodian-planner", "JOOPO_SKIP_DOCKER_BUILD=1 pnpm test:docker:crestodian-planner", {
     stateScenario: "empty",
   }),
-  serviceLane(
-    "cron-mcp-cleanup",
-    "JOOPO_SKIP_DOCKER_BUILD=1 pnpm test:docker:cron-mcp-cleanup",
-    { resources: ["npm"], stateScenario: "empty", weight: 3 },
-  ),
+  serviceLane("cron-mcp-cleanup", "JOOPO_SKIP_DOCKER_BUILD=1 pnpm test:docker:cron-mcp-cleanup", {
+    resources: ["npm"],
+    stateScenario: "empty",
+    weight: 3,
+  }),
   npmLane("doctor-switch", "JOOPO_SKIP_DOCKER_BUILD=1 pnpm test:docker:doctor-switch", {
     stateScenario: "empty",
     weight: 3,
@@ -272,7 +271,7 @@ export const mainLanes = [
   ...bundledPluginInstallUninstallLanes,
   lane(
     "plugins-offline",
-    "JOOPO_PLUGINS_E2E_CLAWHUB=0 JOOPO_SKIP_DOCKER_BUILD=1 pnpm test:docker:plugins",
+    "JOOPO_PLUGINS_E2E_JOOPOHUB=0 JOOPO_SKIP_DOCKER_BUILD=1 pnpm test:docker:plugins",
     {
       resources: ["npm", "service"],
       stateScenario: "empty",
@@ -305,11 +304,9 @@ export const mainLanes = [
   lane("openai-image-auth", "JOOPO_SKIP_DOCKER_BUILD=1 pnpm test:docker:openai-image-auth", {
     stateScenario: "empty",
   }),
-  lane(
-    "crestodian-first-run",
-    "JOOPO_SKIP_DOCKER_BUILD=1 pnpm test:docker:crestodian-first-run",
-    { stateScenario: "empty" },
-  ),
+  lane("crestodian-first-run", "JOOPO_SKIP_DOCKER_BUILD=1 pnpm test:docker:crestodian-first-run", {
+    stateScenario: "empty",
+  }),
   lane(
     "session-runtime-context",
     "JOOPO_SKIP_DOCKER_BUILD=1 pnpm test:docker:session-runtime-context",
@@ -444,15 +441,11 @@ const releasePathPluginRuntimeLanes = [
     weight: 6,
   }),
   ...bundledPluginInstallUninstallLanes,
-  serviceLane(
-    "cron-mcp-cleanup",
-    "JOOPO_SKIP_DOCKER_BUILD=1 pnpm test:docker:cron-mcp-cleanup",
-    {
-      resources: ["npm"],
-      stateScenario: "empty",
-      weight: 3,
-    },
-  ),
+  serviceLane("cron-mcp-cleanup", "JOOPO_SKIP_DOCKER_BUILD=1 pnpm test:docker:cron-mcp-cleanup", {
+    resources: ["npm"],
+    stateScenario: "empty",
+    weight: 3,
+  }),
   serviceLane(
     "openai-web-search-minimal",
     "JOOPO_SKIP_DOCKER_BUILD=1 pnpm test:docker:openai-web-search-minimal",
@@ -469,15 +462,11 @@ const releasePathPluginRuntimePluginLanes = [
 ];
 
 const releasePathPluginRuntimeServiceLanes = [
-  serviceLane(
-    "cron-mcp-cleanup",
-    "JOOPO_SKIP_DOCKER_BUILD=1 pnpm test:docker:cron-mcp-cleanup",
-    {
-      resources: ["npm"],
-      stateScenario: "empty",
-      weight: 3,
-    },
-  ),
+  serviceLane("cron-mcp-cleanup", "JOOPO_SKIP_DOCKER_BUILD=1 pnpm test:docker:cron-mcp-cleanup", {
+    resources: ["npm"],
+    stateScenario: "empty",
+    weight: 3,
+  }),
   serviceLane(
     "openai-web-search-minimal",
     "JOOPO_SKIP_DOCKER_BUILD=1 pnpm test:docker:openai-web-search-minimal",
@@ -586,11 +575,9 @@ const primaryReleasePathChunks = {
     lane("commitments-safety", "JOOPO_SKIP_DOCKER_BUILD=1 pnpm test:docker:commitments-safety", {
       stateScenario: "empty",
     }),
-    lane(
-      "pi-bundle-mcp-tools",
-      "JOOPO_SKIP_DOCKER_BUILD=1 pnpm test:docker:pi-bundle-mcp-tools",
-      { stateScenario: "empty" },
-    ),
+    lane("pi-bundle-mcp-tools", "JOOPO_SKIP_DOCKER_BUILD=1 pnpm test:docker:pi-bundle-mcp-tools", {
+      stateScenario: "empty",
+    }),
     serviceLane("mcp-channels", "JOOPO_SKIP_DOCKER_BUILD=1 pnpm test:docker:mcp-channels", {
       resources: ["npm"],
       stateScenario: "empty",

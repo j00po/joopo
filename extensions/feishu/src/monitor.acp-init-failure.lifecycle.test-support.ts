@@ -1,7 +1,7 @@
 import "./lifecycle.test-support.js";
 import { createRuntimeEnv } from "joopo/plugin-sdk/plugin-test-runtime";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { ClawdbotConfig } from "../runtime-api.js";
+import type { JoopobotConfig } from "../runtime-api.js";
 import {
   getFeishuLifecycleTestMocks,
   resetFeishuLifecycleTestMocks,
@@ -54,7 +54,7 @@ const { cfg: lifecycleConfig, account: lifecycleAccount } = createFeishuLifecycl
     session: { mainKey: "main", scope: "per-sender" },
   },
 }) as {
-  cfg: ClawdbotConfig;
+  cfg: JoopobotConfig;
   account: ResolvedFeishuAccount;
 };
 

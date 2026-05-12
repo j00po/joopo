@@ -1,6 +1,6 @@
 import { importFreshModule } from "joopo/plugin-sdk/test-fixtures";
 import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
-import type { ClawdbotConfig } from "../runtime-api.js";
+import type { JoopobotConfig } from "../runtime-api.js";
 
 const createFeishuClientMock = vi.hoisted(() => vi.fn());
 
@@ -15,7 +15,7 @@ const { listFeishuDirectoryGroups, listFeishuDirectoryPeers } = await importFres
   typeof import("./directory.static.js")
 >(import.meta.url, "./directory.static.js?directory-test");
 
-function makeStaticCfg(): ClawdbotConfig {
+function makeStaticCfg(): JoopobotConfig {
   return {
     channels: {
       feishu: {
@@ -29,10 +29,10 @@ function makeStaticCfg(): ClawdbotConfig {
         groupAllowFrom: ["chat-2"],
       },
     },
-  } as ClawdbotConfig;
+  } as JoopobotConfig;
 }
 
-function makeConfiguredCfg(): ClawdbotConfig {
+function makeConfiguredCfg(): JoopobotConfig {
   return {
     channels: {
       feishu: {
@@ -41,7 +41,7 @@ function makeConfiguredCfg(): ClawdbotConfig {
         appSecret: "cli_test_app_secret",
       },
     },
-  } as ClawdbotConfig;
+  } as JoopobotConfig;
 }
 
 describe("feishu directory (config-backed)", () => {
@@ -74,7 +74,7 @@ describe("feishu directory (config-backed)", () => {
           groupAllowFrom: [],
         },
       },
-    } as ClawdbotConfig;
+    } as JoopobotConfig;
 
     const peers = await listFeishuDirectoryPeers({ cfg });
     expect(peers).toEqual([

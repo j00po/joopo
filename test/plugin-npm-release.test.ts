@@ -2,7 +2,7 @@ import { mkdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { bundledPluginFile, bundledPluginRoot } from "joopo/plugin-sdk/test-fixtures";
 import { afterEach, describe, expect, it } from "vitest";
-import { collectClawHubPublishablePluginPackages } from "../scripts/lib/plugin-clawhub-release.ts";
+import { collectJoopoHubPublishablePluginPackages } from "../scripts/lib/plugin-joopohub-release.ts";
 import {
   collectPublishablePluginPackages,
   collectChangedExtensionIdsFromPaths,
@@ -31,9 +31,10 @@ describe("parsePluginReleaseSelection", () => {
   });
 
   it("dedupes and sorts comma or whitespace separated package names", () => {
-    expect(
-      parsePluginReleaseSelection(" @joopo/zalo, @joopo/feishu  @joopo/zalo "),
-    ).toEqual(["@joopo/feishu", "@joopo/zalo"]);
+    expect(parsePluginReleaseSelection(" @joopo/zalo, @joopo/feishu  @joopo/zalo ")).toEqual([
+      "@joopo/feishu",
+      "@joopo/zalo",
+    ]);
   });
 });
 
@@ -65,12 +66,7 @@ describe("parsePluginReleaseArgs", () => {
 
   it("rejects plugin names when all-publishable mode is selected", () => {
     expect(() =>
-      parsePluginReleaseArgs([
-        "--selection-mode",
-        "all-publishable",
-        "--plugins",
-        "@joopo/zalo",
-      ]),
+      parsePluginReleaseArgs(["--selection-mode", "all-publishable", "--plugins", "@joopo/zalo"]),
     ).toThrowError("`--selection-mode all-publishable` must not be combined with `--plugins`.");
   });
 
@@ -197,7 +193,7 @@ describe("collectPublishablePluginPackages", () => {
     const packageFiles = new Set(Array.isArray(rootPackage.files) ? rootPackage.files : []);
     const publishablePlugins = [
       ...collectPublishablePluginPackages(),
-      ...collectClawHubPublishablePluginPackages(),
+      ...collectJoopoHubPublishablePluginPackages(),
     ];
     const missingExclusions = Array.from(
       new Set(

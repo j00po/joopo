@@ -2305,7 +2305,7 @@ run_bootstrap_onboarding_if_needed() {
     fi
 
     local config_path="${JOOPO_CONFIG_PATH:-$HOME/.joopo/joopo.json}"
-    if [[ -f "${config_path}" || -f "$HOME/.clawdbot/clawdbot.json" ]]; then
+    if [[ -f "${config_path}" || -f "$HOME/.joopobot/joopobot.json" ]]; then
         return
     fi
 
@@ -2735,7 +2735,7 @@ main() {
             ui_info "Skipping onboard (requested); run ${user_claw} onboard later"
         else
             local config_path="${JOOPO_CONFIG_PATH:-$HOME/.joopo/joopo.json}"
-            if [[ -f "${config_path}" || -f "$HOME/.clawdbot/clawdbot.json" ]]; then
+            if [[ -f "${config_path}" || -f "$HOME/.joopobot/joopobot.json" ]]; then
                 ui_info "Config already present; running doctor"
                 run_doctor
                 should_open_dashboard=true

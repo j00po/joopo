@@ -1,4 +1,4 @@
-export type ExternalizedBundledPluginPreferredSource = "npm" | "clawhub";
+export type ExternalizedBundledPluginPreferredSource = "npm" | "joopohub";
 
 export type ExternalizedBundledPluginBridge = {
   /** Plugin id used while the plugin was bundled in core. */
@@ -9,10 +9,10 @@ export type ExternalizedBundledPluginBridge = {
   preferredSource?: ExternalizedBundledPluginPreferredSource;
   /** npm spec Joopo can install when migrating the bundled plugin out. */
   npmSpec?: string;
-  /** ClawHub spec Joopo can install when migrating the bundled plugin out. */
-  clawhubSpec?: string;
-  /** Optional ClawHub base URL for non-default registries. */
-  clawhubUrl?: string;
+  /** JoopoHub spec Joopo can install when migrating the bundled plugin out. */
+  joopohubSpec?: string;
+  /** Optional JoopoHub base URL for non-default registries. */
+  joopohubUrl?: string;
   /** Bundled directory name, when it differs from bundledPluginId. */
   bundledDirName?: string;
   /** Previous bundled manifest default enablement from the persisted registry. */
@@ -36,14 +36,14 @@ function normalizeOptionalSpec(value: string | undefined): string {
 export function getExternalizedBundledPluginPreferredSource(
   bridge: ExternalizedBundledPluginBridge,
 ): ExternalizedBundledPluginPreferredSource {
-  if (bridge.preferredSource === "clawhub") {
-    return "clawhub";
+  if (bridge.preferredSource === "joopohub") {
+    return "joopohub";
   }
   if (bridge.preferredSource === "npm") {
     return "npm";
   }
-  return normalizeOptionalSpec(bridge.clawhubSpec) && !normalizeOptionalSpec(bridge.npmSpec)
-    ? "clawhub"
+  return normalizeOptionalSpec(bridge.joopohubSpec) && !normalizeOptionalSpec(bridge.npmSpec)
+    ? "joopohub"
     : "npm";
 }
 
@@ -53,10 +53,10 @@ export function getExternalizedBundledPluginNpmSpec(
   return normalizeOptionalSpec(bridge.npmSpec);
 }
 
-export function getExternalizedBundledPluginClawHubSpec(
+export function getExternalizedBundledPluginJoopoHubSpec(
   bridge: ExternalizedBundledPluginBridge,
 ): string {
-  return normalizeOptionalSpec(bridge.clawhubSpec);
+  return normalizeOptionalSpec(bridge.joopohubSpec);
 }
 
 export function getExternalizedBundledPluginTargetId(

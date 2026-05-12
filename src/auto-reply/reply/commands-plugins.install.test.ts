@@ -9,13 +9,13 @@ import { buildPluginsCommandParams } from "./commands.test-harness.js";
 const {
   installPluginFromNpmSpecMock,
   installPluginFromPathMock,
-  installPluginFromClawHubMock,
+  installPluginFromJoopoHubMock,
   installPluginFromGitSpecMock,
   persistPluginInstallMock,
 } = vi.hoisted(() => ({
   installPluginFromNpmSpecMock: vi.fn(),
   installPluginFromPathMock: vi.fn(),
-  installPluginFromClawHubMock: vi.fn(),
+  installPluginFromJoopoHubMock: vi.fn(),
   installPluginFromGitSpecMock: vi.fn(),
   persistPluginInstallMock: vi.fn(),
 }));
@@ -31,13 +31,13 @@ vi.mock("../../plugins/install.js", async () => {
   };
 });
 
-vi.mock("../../plugins/clawhub.js", async () => {
-  const actual = await vi.importActual<typeof import("../../plugins/clawhub.js")>(
-    "../../plugins/clawhub.js",
+vi.mock("../../plugins/joopohub.js", async () => {
+  const actual = await vi.importActual<typeof import("../../plugins/joopohub.js")>(
+    "../../plugins/joopohub.js",
   );
   return {
     ...actual,
-    installPluginFromClawHub: installPluginFromClawHubMock,
+    installPluginFromJoopoHub: installPluginFromJoopoHubMock,
   };
 });
 
@@ -69,7 +69,7 @@ describe("handleCommands /plugins install", () => {
   afterEach(async () => {
     installPluginFromNpmSpecMock.mockReset();
     installPluginFromPathMock.mockReset();
-    installPluginFromClawHubMock.mockReset();
+    installPluginFromJoopoHubMock.mockReset();
     installPluginFromGitSpecMock.mockReset();
     persistPluginInstallMock.mockReset();
     await workspaceHarness.cleanupWorkspaces();
@@ -115,20 +115,20 @@ describe("handleCommands /plugins install", () => {
     });
   });
 
-  it("installs from an explicit clawhub: spec", async () => {
-    installPluginFromClawHubMock.mockResolvedValue({
+  it("installs from an explicit joopohub: spec", async () => {
+    installPluginFromJoopoHubMock.mockResolvedValue({
       ok: true,
-      pluginId: "clawhub-demo",
-      targetDir: "/tmp/clawhub-demo",
+      pluginId: "joopohub-demo",
+      targetDir: "/tmp/joopohub-demo",
       version: "1.2.3",
       extensions: ["index.js"],
-      packageName: "@joopo/clawhub-demo",
-      clawhub: {
-        source: "clawhub",
-        clawhubUrl: "https://clawhub.ai",
-        clawhubPackage: "@joopo/clawhub-demo",
-        clawhubFamily: "code-plugin",
-        clawhubChannel: "official",
+      packageName: "@joopo/joopohub-demo",
+      joopohub: {
+        source: "joopohub",
+        joopohubUrl: "https://joopohub.ai",
+        joopohubPackage: "@joopo/joopohub-demo",
+        joopohubFamily: "code-plugin",
+        joopohubChannel: "official",
         version: "1.2.3",
         integrity: "sha512-demo",
         resolvedAt: "2026-03-22T12:00:00.000Z",
@@ -139,30 +139,30 @@ describe("handleCommands /plugins install", () => {
     await withTempHome("joopo-command-plugins-home-", async () => {
       const workspaceDir = await workspaceHarness.createWorkspace();
       const params = buildPluginsParams(
-        "/plugins install clawhub:@joopo/clawhub-demo@1.2.3",
+        "/plugins install joopohub:@joopo/joopohub-demo@1.2.3",
         workspaceDir,
       );
       const result = await handlePluginsCommand(params, true);
       if (result === null) {
         throw new Error("expected plugin install result");
       }
-      expect(result.reply?.text).toContain('Installed plugin "clawhub-demo"');
-      expect(installPluginFromClawHubMock).toHaveBeenCalledWith(
+      expect(result.reply?.text).toContain('Installed plugin "joopohub-demo"');
+      expect(installPluginFromJoopoHubMock).toHaveBeenCalledWith(
         expect.objectContaining({
-          spec: "clawhub:@joopo/clawhub-demo@1.2.3",
+          spec: "joopohub:@joopo/joopohub-demo@1.2.3",
         }),
       );
       expect(persistPluginInstallMock).toHaveBeenCalledWith(
         expect.objectContaining({
-          pluginId: "clawhub-demo",
+          pluginId: "joopohub-demo",
           install: expect.objectContaining({
-            source: "clawhub",
-            spec: "clawhub:@joopo/clawhub-demo@1.2.3",
-            installPath: "/tmp/clawhub-demo",
+            source: "joopohub",
+            spec: "joopohub:@joopo/joopohub-demo@1.2.3",
+            installPath: "/tmp/joopohub-demo",
             version: "1.2.3",
             integrity: "sha512-demo",
-            clawhubPackage: "@joopo/clawhub-demo",
-            clawhubChannel: "official",
+            joopohubPackage: "@joopo/joopohub-demo",
+            joopohubChannel: "official",
           }),
         }),
       );
@@ -185,7 +185,7 @@ describe("handleCommands /plugins install", () => {
         expect(result.reply?.text).toContain("nix-joopo#quick-start");
         expect(installPluginFromNpmSpecMock).not.toHaveBeenCalled();
         expect(installPluginFromPathMock).not.toHaveBeenCalled();
-        expect(installPluginFromClawHubMock).not.toHaveBeenCalled();
+        expect(installPluginFromJoopoHubMock).not.toHaveBeenCalled();
         expect(installPluginFromGitSpecMock).not.toHaveBeenCalled();
         expect(persistPluginInstallMock).not.toHaveBeenCalled();
       });
@@ -248,19 +248,19 @@ describe("handleCommands /plugins install", () => {
   });
 
   it("treats /plugin add as an install alias", async () => {
-    installPluginFromClawHubMock.mockResolvedValue({
+    installPluginFromJoopoHubMock.mockResolvedValue({
       ok: true,
       pluginId: "alias-demo",
       targetDir: "/tmp/alias-demo",
       version: "1.0.0",
       extensions: ["index.js"],
       packageName: "@joopo/alias-demo",
-      clawhub: {
-        source: "clawhub",
-        clawhubUrl: "https://clawhub.ai",
-        clawhubPackage: "@joopo/alias-demo",
-        clawhubFamily: "code-plugin",
-        clawhubChannel: "official",
+      joopohub: {
+        source: "joopohub",
+        joopohubUrl: "https://joopohub.ai",
+        joopohubPackage: "@joopo/alias-demo",
+        joopohubFamily: "code-plugin",
+        joopohubChannel: "official",
         version: "1.0.0",
         integrity: "sha512-alias",
         resolvedAt: "2026-03-23T12:00:00.000Z",
@@ -271,7 +271,7 @@ describe("handleCommands /plugins install", () => {
     await withTempHome("joopo-command-plugins-home-", async () => {
       const workspaceDir = await workspaceHarness.createWorkspace();
       const params = buildPluginsParams(
-        "/plugin add clawhub:@joopo/alias-demo@1.0.0",
+        "/plugin add joopohub:@joopo/alias-demo@1.0.0",
         workspaceDir,
       );
       const result = await handlePluginsCommand(params, true);
@@ -279,9 +279,9 @@ describe("handleCommands /plugins install", () => {
         throw new Error("expected plugin install result");
       }
       expect(result.reply?.text).toContain('Installed plugin "alias-demo"');
-      expect(installPluginFromClawHubMock).toHaveBeenCalledWith(
+      expect(installPluginFromJoopoHubMock).toHaveBeenCalledWith(
         expect.objectContaining({
-          spec: "clawhub:@joopo/alias-demo@1.0.0",
+          spec: "joopohub:@joopo/alias-demo@1.0.0",
         }),
       );
     });

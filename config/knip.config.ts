@@ -33,7 +33,7 @@ const bundledPluginIgnoredRuntimeDependencies = [
   "@agentclientprotocol/claude-agent-acp",
   "@a2ui/lit",
   "@azure/identity",
-  "@clawdbot/lobster",
+  "@joopobot/lobster",
   "@discordjs/opus",
   "@homebridge/ciao",
   "@lit/context",

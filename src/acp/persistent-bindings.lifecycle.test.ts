@@ -142,11 +142,11 @@ describe("ensureConfiguredAcpBindingSession", () => {
 
   it("reinitializes a matching session when the stored ACP session is in error state", async () => {
     const spec = createPersistentSpec({
-      cwd: "/home/bob/clawd",
+      cwd: "/home/bob/joopo",
     });
     const sessionKey = mockReadySession({
       spec,
-      cwd: "/home/bob/clawd",
+      cwd: "/home/bob/joopo",
       state: "error",
     });
 
@@ -190,7 +190,7 @@ describe("resetAcpSessionInPlace", () => {
       agentId: "claude",
       mode: "persistent",
       backend: "acpx",
-      cwd: "/home/bob/clawd",
+      cwd: "/home/bob/joopo",
     } as const;
     const sessionKey = buildConfiguredAcpSessionKey(spec);
     resolveMocks.resolveConfiguredAcpBindingSpecBySessionKey.mockReturnValue(spec);
@@ -199,7 +199,7 @@ describe("resetAcpSessionInPlace", () => {
         agent: "claude",
         mode: "persistent",
         backend: "acpx",
-        runtimeOptions: { cwd: "/home/bob/clawd" },
+        runtimeOptions: { cwd: "/home/bob/joopo" },
       },
     });
 
@@ -284,7 +284,7 @@ describe("resetAcpSessionInPlace", () => {
       agentId: "claude",
       mode: "persistent",
       backend: "acpx",
-      cwd: "/home/bob/clawd",
+      cwd: "/home/bob/joopo",
     } as const;
     const sessionKey = buildConfiguredAcpSessionKey(spec);
     resolveMocks.resolveConfiguredAcpBindingSpecBySessionKey.mockReturnValue(spec);

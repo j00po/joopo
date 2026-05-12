@@ -122,19 +122,19 @@ Expected output:
 Joopo runs in Docker, but Docker is not the source of truth.
 All long-lived state must survive restarts, rebuilds, and reboots.
 
-| Component           | Location                                               | Persistence mechanism  | Notes                                                         |
-| ------------------- | ------------------------------------------------------ | ---------------------- | ------------------------------------------------------------- |
-| Gateway config      | `/home/node/.joopo/`                                | Host volume mount      | Includes `joopo.json`, `.env`                              |
-| Model auth profiles | `/home/node/.joopo/agents/`                         | Host volume mount      | `agents/<agentId>/agent/auth-profiles.json` (OAuth, API keys) |
-| Skill configs       | `/home/node/.joopo/skills/`                         | Host volume mount      | Skill-level state                                             |
-| Agent workspace     | `/home/node/.joopo/workspace/`                      | Host volume mount      | Code and agent artifacts                                      |
-| WhatsApp session    | `/home/node/.joopo/`                                | Host volume mount      | Preserves QR login                                            |
-| Gmail keyring       | `/home/node/.joopo/`                                | Host volume + password | Requires `GOG_KEYRING_PASSWORD`                               |
+| Component           | Location                                         | Persistence mechanism  | Notes                                                         |
+| ------------------- | ------------------------------------------------ | ---------------------- | ------------------------------------------------------------- |
+| Gateway config      | `/home/node/.joopo/`                             | Host volume mount      | Includes `joopo.json`, `.env`                                 |
+| Model auth profiles | `/home/node/.joopo/agents/`                      | Host volume mount      | `agents/<agentId>/agent/auth-profiles.json` (OAuth, API keys) |
+| Skill configs       | `/home/node/.joopo/skills/`                      | Host volume mount      | Skill-level state                                             |
+| Agent workspace     | `/home/node/.joopo/workspace/`                   | Host volume mount      | Code and agent artifacts                                      |
+| WhatsApp session    | `/home/node/.joopo/`                             | Host volume mount      | Preserves QR login                                            |
+| Gmail keyring       | `/home/node/.joopo/`                             | Host volume + password | Requires `GOG_KEYRING_PASSWORD`                               |
 | Plugin packages     | `/home/node/.joopo/npm`, `/home/node/.joopo/git` | Host volume mount      | Downloadable plugin package roots                             |
-| External binaries   | `/usr/local/bin/`                                      | Docker image           | Must be baked at build time                                   |
-| Node runtime        | Container filesystem                                   | Docker image           | Rebuilt every image build                                     |
-| OS packages         | Container filesystem                                   | Docker image           | Do not install at runtime                                     |
-| Docker container    | Ephemeral                                              | Restartable            | Safe to destroy                                               |
+| External binaries   | `/usr/local/bin/`                                | Docker image           | Must be baked at build time                                   |
+| Node runtime        | Container filesystem                             | Docker image           | Rebuilt every image build                                     |
+| OS packages         | Container filesystem                             | Docker image           | Do not install at runtime                                     |
+| Docker container    | Ephemeral                                        | Restartable            | Safe to destroy                                               |
 
 ## Updates
 
@@ -150,4 +150,4 @@ docker compose up -d
 
 - [Docker](/install/docker)
 - [Podman](/install/podman)
-- [ClawDock](/install/clawdock)
+- [ClawDock](/install/joopoock)

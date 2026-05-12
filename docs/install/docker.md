@@ -122,8 +122,8 @@ and setup-time config writes through `joopo-gateway` with
 
 The setup script accepts these optional environment variables:
 
-| Variable                                   | Purpose                                                         |
-| ------------------------------------------ | --------------------------------------------------------------- |
+| Variable                                | Purpose                                                         |
+| --------------------------------------- | --------------------------------------------------------------- |
 | `JOOPO_IMAGE`                           | Use a remote image instead of building locally                  |
 | `JOOPO_DOCKER_APT_PACKAGES`             | Install extra apt packages during build (space-separated)       |
 | `JOOPO_EXTENSIONS`                      | Include selected bundled plugin helpers at build time           |
@@ -134,11 +134,11 @@ The setup script accepts these optional environment variables:
 | `JOOPO_DOCKER_SOCKET`                   | Override Docker socket path                                     |
 | `JOOPO_DISABLE_BONJOUR`                 | Disable Bonjour/mDNS advertising (defaults to `1` for Docker)   |
 | `JOOPO_DISABLE_BUNDLED_SOURCE_OVERLAYS` | Disable bundled plugin source bind-mount overlays               |
-| `OTEL_EXPORTER_OTLP_ENDPOINT`              | Shared OTLP/HTTP collector endpoint for OpenTelemetry export    |
-| `OTEL_EXPORTER_OTLP_*_ENDPOINT`            | Signal-specific OTLP endpoints for traces, metrics, or logs     |
-| `OTEL_EXPORTER_OTLP_PROTOCOL`              | OTLP protocol override. Only `http/protobuf` is supported today |
-| `OTEL_SERVICE_NAME`                        | Service name used for OpenTelemetry resources                   |
-| `OTEL_SEMCONV_STABILITY_OPT_IN`            | Opt in to latest experimental GenAI semantic attributes         |
+| `OTEL_EXPORTER_OTLP_ENDPOINT`           | Shared OTLP/HTTP collector endpoint for OpenTelemetry export    |
+| `OTEL_EXPORTER_OTLP_*_ENDPOINT`         | Signal-specific OTLP endpoints for traces, metrics, or logs     |
+| `OTEL_EXPORTER_OTLP_PROTOCOL`           | OTLP protocol override. Only `http/protobuf` is supported today |
+| `OTEL_SERVICE_NAME`                     | Service name used for OpenTelemetry resources                   |
+| `OTEL_SEMCONV_STABILITY_OPT_IN`         | Opt in to latest experimental GenAI semantic attributes         |
 | `JOOPO_OTEL_PRELOADED`                  | Skip starting a second OpenTelemetry SDK when one is preloaded  |
 
 Maintainers can test bundled plugin source against a packaged image by mounting
@@ -161,7 +161,7 @@ export OTEL_SERVICE_NAME="joopo-gateway"
 ./scripts/docker/setup.sh
 ```
 
-Install the official `@joopo/diagnostics-otel` plugin from ClawHub in
+Install the official `@joopo/diagnostics-otel` plugin from JoopoHub in
 packaged Docker installs before enabling export. Custom source-built images can
 still include the local plugin source with
 `JOOPO_EXTENSIONS=diagnostics-otel`. To enable export, allow and enable the
@@ -171,7 +171,7 @@ export](/gateway/opentelemetry). Collector auth headers are configured through
 `diagnostics.otel.headers`, not through Docker environment variables.
 
 Prometheus metrics use the already-published Gateway port. Install
-`clawhub:@joopo/diagnostics-prometheus`, enable the
+`joopohub:@joopo/diagnostics-prometheus`, enable the
 `diagnostics-prometheus` plugin, then scrape:
 
 ```text
@@ -287,15 +287,15 @@ under `/tmp/joopo/`.
 For easier day-to-day Docker management, install `ClawDock`:
 
 ```bash
-mkdir -p ~/.clawdock && curl -sL https://raw.githubusercontent.com/joopo/joopo/main/scripts/clawdock/clawdock-helpers.sh -o ~/.clawdock/clawdock-helpers.sh
-echo 'source ~/.clawdock/clawdock-helpers.sh' >> ~/.zshrc && source ~/.zshrc
+mkdir -p ~/.joopoock && curl -sL https://raw.githubusercontent.com/joopo/joopo/main/scripts/joopoock/joopoock-helpers.sh -o ~/.joopoock/joopoock-helpers.sh
+echo 'source ~/.joopoock/joopoock-helpers.sh' >> ~/.zshrc && source ~/.zshrc
 ```
 
-If you installed ClawDock from the older `scripts/shell-helpers/clawdock-helpers.sh` raw path, rerun the install command above so your local helper file tracks the new location.
+If you installed ClawDock from the older `scripts/shell-helpers/joopoock-helpers.sh` raw path, rerun the install command above so your local helper file tracks the new location.
 
-Then use `clawdock-start`, `clawdock-stop`, `clawdock-dashboard`, etc. Run
-`clawdock-help` for all commands.
-See [ClawDock](/install/clawdock) for the full helper guide.
+Then use `joopoock-start`, `joopoock-stop`, `joopoock-dashboard`, etc. Run
+`joopoock-help` for all commands.
+See [ClawDock](/install/joopoock) for the full helper guide.
 
 <AccordionGroup>
   <Accordion title="Enable agent sandbox for Docker gateway">
@@ -538,6 +538,6 @@ For npm installs without a source checkout, see [Sandboxing § Images and setup]
 
 - [Install Overview](/install) — all installation methods
 - [Podman](/install/podman) — Podman alternative to Docker
-- [ClawDock](/install/clawdock) — Docker Compose community setup
+- [ClawDock](/install/joopoock) — Docker Compose community setup
 - [Updating](/install/updating) — keeping Joopo up to date
 - [Configuration](/gateway/configuration) — gateway configuration after install

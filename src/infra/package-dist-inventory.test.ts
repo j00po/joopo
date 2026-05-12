@@ -236,7 +236,7 @@ describe("package dist inventory", () => {
           name: "@joopo/external-chat",
           joopo: {
             release: {
-              publishToClawHub: true,
+              publishToJoopoHub: true,
               publishToNpm: true,
             },
           },
@@ -272,7 +272,7 @@ describe("package dist inventory", () => {
           name: "@joopo/core-chat",
           joopo: {
             release: {
-              publishToClawHub: true,
+              publishToJoopoHub: true,
               publishToNpm: true,
             },
           },
@@ -348,9 +348,9 @@ describe("package dist inventory", () => {
         "dist/extensions/browser/.joopo-runtime-deps-copy-AbC123/package.json",
       ),
     ).toBe(false);
-    expect(
-      isLegacyPluginDependencyInstallStagePath("dist/extensions/.joopo-install-stage"),
-    ).toBe(false);
+    expect(isLegacyPluginDependencyInstallStagePath("dist/extensions/.joopo-install-stage")).toBe(
+      false,
+    );
   });
 
   it("rejects pre-populated install-stage debris at publish time", async () => {
@@ -415,28 +415,25 @@ describe("package dist inventory", () => {
       },
     );
 
-    await withTempDir(
-      { prefix: "joopo-dist-inventory-stage-root-case-" },
-      async (packageRoot) => {
-        const mixedCaseStage = path.join(
-          packageRoot,
-          "Dist",
-          "Extensions",
-          "browser",
-          ".JOOPO-INSTALL-STAGE-AbC123",
-          "package.json",
-        );
-        await fs.mkdir(path.dirname(mixedCaseStage), { recursive: true });
-        await fs.writeFile(mixedCaseStage, "{}", "utf8");
+    await withTempDir({ prefix: "joopo-dist-inventory-stage-root-case-" }, async (packageRoot) => {
+      const mixedCaseStage = path.join(
+        packageRoot,
+        "Dist",
+        "Extensions",
+        "browser",
+        ".JOOPO-INSTALL-STAGE-AbC123",
+        "package.json",
+      );
+      await fs.mkdir(path.dirname(mixedCaseStage), { recursive: true });
+      await fs.writeFile(mixedCaseStage, "{}", "utf8");
 
-        await expect(collectLegacyPluginDependencyStagingDebrisPaths(packageRoot)).resolves.toEqual(
-          ["Dist/Extensions/browser/.JOOPO-INSTALL-STAGE-AbC123"],
-        );
-        await expect(writePackageDistInventory(packageRoot)).rejects.toThrow(
-          /unexpected legacy plugin dependency staging debris/,
-        );
-      },
-    );
+      await expect(collectLegacyPluginDependencyStagingDebrisPaths(packageRoot)).resolves.toEqual([
+        "Dist/Extensions/browser/.JOOPO-INSTALL-STAGE-AbC123",
+      ]);
+      await expect(writePackageDistInventory(packageRoot)).rejects.toThrow(
+        /unexpected legacy plugin dependency staging debris/,
+      );
+    });
   });
 
   it("treats a missing dist/extensions tree as no staging debris", async () => {

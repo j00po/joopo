@@ -1,5 +1,5 @@
 import { formatErrorMessage } from "joopo/plugin-sdk/error-runtime";
-import type { ClawdbotConfig } from "../runtime-api.js";
+import type { JoopobotConfig } from "../runtime-api.js";
 import { raceWithTimeoutAndAbort } from "./async.js";
 import { createFeishuClient } from "./client.js";
 import {
@@ -49,7 +49,7 @@ export type FeishuDriveCommentNoticeEvent = {
 };
 
 type ResolveDriveCommentEventParams = {
-  cfg: ClawdbotConfig;
+  cfg: JoopobotConfig;
   accountId: string;
   event: FeishuDriveCommentNoticeEvent;
   account?: ResolvedFeishuAccount;

@@ -168,8 +168,8 @@ describe("buildOfficialChannelCatalog", () => {
     expect(installSource.warnings).toEqual(["npm-spec-floating", "npm-spec-missing-integrity"]);
   });
 
-  it("preserves ClawHub specs when generating publishable channel catalog entries", () => {
-    const repoRoot = makeRepoRoot("joopo-official-channel-catalog-clawhub-");
+  it("preserves JoopoHub specs when generating publishable channel catalog entries", () => {
+    const repoRoot = makeRepoRoot("joopo-official-channel-catalog-joopohub-");
     writeJson(path.join(repoRoot, "extensions", "storepack-chat", "package.json"), {
       name: "@joopo/storepack-chat",
       joopo: {
@@ -181,9 +181,9 @@ describe("buildOfficialChannelCatalog", () => {
           blurb: "storepack-first channel",
         },
         install: {
-          clawhubSpec: "clawhub:@joopo/storepack-chat",
+          joopohubSpec: "joopohub:@joopo/storepack-chat",
           npmSpec: "@joopo/storepack-chat",
-          defaultChoice: "clawhub",
+          defaultChoice: "joopohub",
         },
         release: {
           publishToNpm: true,
@@ -196,9 +196,9 @@ describe("buildOfficialChannelCatalog", () => {
     );
 
     expect(entry?.joopo?.install).toEqual({
-      clawhubSpec: "clawhub:@joopo/storepack-chat",
+      joopohubSpec: "joopohub:@joopo/storepack-chat",
       npmSpec: "@joopo/storepack-chat",
-      defaultChoice: "clawhub",
+      defaultChoice: "joopohub",
     });
   });
 
@@ -254,8 +254,7 @@ describe("buildOfficialChannelCatalog", () => {
       ]),
     );
     const whatsappEntries = JSON.parse(fs.readFileSync(outputPath, "utf8")).entries.filter(
-      (entry: { joopo?: { channel?: { id?: string } } }) =>
-        entry.joopo?.channel?.id === "whatsapp",
+      (entry: { joopo?: { channel?: { id?: string } } }) => entry.joopo?.channel?.id === "whatsapp",
     );
     expect(whatsappEntries).toHaveLength(1);
   });

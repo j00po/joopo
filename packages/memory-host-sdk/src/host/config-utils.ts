@@ -140,7 +140,7 @@ const VALID_ID_RE = /^[a-z0-9][a-z0-9_-]{0,63}$/i;
 const INVALID_CHARS_RE = /[^a-z0-9_-]+/g;
 const LEADING_DASH_RE = /^-+/;
 const TRAILING_DASH_RE = /-+$/;
-const LEGACY_STATE_DIRNAMES = [".clawdbot"] as const;
+const LEGACY_STATE_DIRNAMES = [".joopobot"] as const;
 const NEW_STATE_DIRNAME = ".joopo";
 const DURATION_MULTIPLIERS: Record<string, number> = {
   ms: 1,

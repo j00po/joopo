@@ -64,7 +64,7 @@ In the active Joopo config file (`$JOOPO_CONFIG_PATH`, default `~/.joopo/joopo.j
   "canvasHost": {
     "enabled": true,
     "port": 18793,
-    "root": "/Users/you/clawd/canvas",
+    "root": "/Users/you/joopo/canvas",
     "liveReload": true
   },
   "gateway": {
@@ -87,10 +87,10 @@ Great for development!
 
 ### 1. Create HTML content
 
-Place files in the canvas root directory (default `~/clawd/canvas/`):
+Place files in the canvas root directory (default `~/joopo/canvas/`):
 
 ```bash
-cat > ~/clawd/canvas/my-game.html << 'HTML'
+cat > ~/joopo/canvas/my-game.html << 'HTML'
 <!DOCTYPE html>
 <html>
 <head><title>My Game</title></head>
@@ -184,8 +184,8 @@ If live reload isn't working:
 The canvas host serves from `/__joopo__/canvas/` prefix:
 
 ```
-http://<host>:18793/__joopo__/canvas/index.html  → ~/clawd/canvas/index.html
-http://<host>:18793/__joopo__/canvas/games/snake.html → ~/clawd/canvas/games/snake.html
+http://<host>:18793/__joopo__/canvas/index.html  → ~/joopo/canvas/index.html
+http://<host>:18793/__joopo__/canvas/games/snake.html → ~/joopo/canvas/games/snake.html
 ```
 
 The `/__joopo__/canvas/` prefix is defined by `CANVAS_HOST_PATH` constant.

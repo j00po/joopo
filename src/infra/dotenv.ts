@@ -18,10 +18,10 @@ const BLOCKED_WORKSPACE_DOTENV_KEYS = new Set([
   "ANTHROPIC_API_KEY",
   "ANTHROPIC_OAUTH_TOKEN",
   "BROWSER_EXECUTABLE_PATH",
-  "CLAWHUB_AUTH_TOKEN",
-  "CLAWHUB_CONFIG_PATH",
-  "CLAWHUB_TOKEN",
-  "CLAWHUB_URL",
+  "JOOPOHUB_AUTH_TOKEN",
+  "JOOPOHUB_CONFIG_PATH",
+  "JOOPOHUB_TOKEN",
+  "JOOPOHUB_URL",
   "CLOUDSDK_PYTHON",
   "COMSPEC",
   "HTTP_PROXY",
@@ -94,12 +94,12 @@ const BLOCKED_WORKSPACE_DOTENV_KEYS = new Set([
 const BLOCKED_WORKSPACE_DOTENV_SUFFIXES = ["_API_HOST", "_BASE_URL", "_HOMESERVER"];
 const BLOCKED_WORKSPACE_DOTENV_PREFIXES = [
   "ANTHROPIC_API_KEY_",
-  "CLAWHUB_",
+  "JOOPOHUB_",
   "OPENAI_API_KEY_",
   // Workspace .env is untrusted; reserve the full Joopo runtime namespace
   // for shell/global config so new JOOPO_* controls are fail-closed by default.
   "JOOPO_",
-  "JOOPO_CLAWHUB_",
+  "JOOPO_JOOPOHUB_",
   "JOOPO_DISABLE_",
   "JOOPO_SKIP_",
   "JOOPO_UPDATE_",

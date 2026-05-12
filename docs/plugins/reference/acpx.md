@@ -12,7 +12,7 @@ Embedded ACP runtime backend with plugin-owned session and transport management.
 ## Distribution
 
 - Package: `@joopo/acpx`
-- Install route: npm; ClawHub
+- Install route: npm; JoopoHub
 
 ## Surface
 

@@ -12,7 +12,7 @@ Joopo diagnostics Prometheus exporter.
 ## Distribution
 
 - Package: `@joopo/diagnostics-prometheus`
-- Install route: npm; ClawHub: `clawhub:@joopo/diagnostics-prometheus`
+- Install route: npm; JoopoHub: `joopohub:@joopo/diagnostics-prometheus`
 
 ## Surface
 

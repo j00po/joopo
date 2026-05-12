@@ -25,7 +25,7 @@ const LEGACY_MAP: Record<string, ThemeSelection> = {
   light: { theme: "claw", mode: "light" },
   openknot: { theme: "knot", mode: "dark" },
   fieldmanual: { theme: "dash", mode: "dark" },
-  clawdash: { theme: "dash", mode: "light" },
+  joopoash: { theme: "dash", mode: "light" },
   system: { theme: "claw", mode: "system" },
 };
 

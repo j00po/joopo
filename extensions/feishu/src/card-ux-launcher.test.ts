@@ -1,6 +1,6 @@
 import { createRuntimeEnv } from "joopo/plugin-sdk/plugin-test-runtime";
 import { afterAll, describe, expect, it, vi, beforeEach } from "vitest";
-import type { ClawdbotConfig, RuntimeEnv } from "../runtime-api.js";
+import type { JoopobotConfig, RuntimeEnv } from "../runtime-api.js";
 import {
   expectFirstSentCardUsesFillWidthOnly,
   expectSentCardHasP2pAction,
@@ -18,7 +18,7 @@ vi.mock("./send.js", () => ({
 }));
 
 describe("feishu quick-action launcher", () => {
-  const cfg: ClawdbotConfig = {};
+  const cfg: JoopobotConfig = {};
 
   afterAll(() => {
     vi.doUnmock("./send.js");

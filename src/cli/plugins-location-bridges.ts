@@ -24,8 +24,8 @@ function buildBridgeFromPersistedBundledRecord(
     ? resolveOfficialExternalPluginInstall(officialEntry)
     : null;
   const npmSpec = officialInstall?.npmSpec?.trim() ?? record.packageInstall?.npm?.spec;
-  const clawhubSpec = officialInstall?.clawhubSpec?.trim();
-  if (!npmSpec && !clawhubSpec) {
+  const joopohubSpec = officialInstall?.joopohubSpec?.trim();
+  if (!npmSpec && !joopohubSpec) {
     return null;
   }
   const officialChannelId = officialEntry
@@ -40,9 +40,9 @@ function buildBridgeFromPersistedBundledRecord(
     bundledPluginId: record.pluginId,
     pluginId: record.pluginId,
     preferredSource:
-      officialInstall?.defaultChoice === "clawhub" && clawhubSpec ? "clawhub" : "npm",
+      officialInstall?.defaultChoice === "joopohub" && joopohubSpec ? "joopohub" : "npm",
     ...(npmSpec ? { npmSpec } : {}),
-    ...(clawhubSpec ? { clawhubSpec } : {}),
+    ...(joopohubSpec ? { joopohubSpec } : {}),
     ...(record.enabledByDefault ? { enabledByDefault: true } : {}),
     ...(channelIds.length ? { channelIds } : {}),
   };

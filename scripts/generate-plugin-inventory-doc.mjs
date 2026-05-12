@@ -310,20 +310,20 @@ function resolveInstallRoute(packageJson, status) {
   }
   const install = packageJson.joopo?.install;
   const release = packageJson.joopo?.release;
-  const clawhubSpec =
-    typeof install?.clawhubSpec === "string" ? `: \`${install.clawhubSpec}\`` : "";
+  const joopohubSpec =
+    typeof install?.joopohubSpec === "string" ? `: \`${install.joopohubSpec}\`` : "";
   const npmSpec =
     typeof install?.npmSpec === "string" && install.npmSpec !== packageJson.name
       ? `: \`${install.npmSpec}\``
       : "";
-  if (release?.publishToClawHub === true && release?.publishToNpm === true) {
-    if (install?.defaultChoice === "clawhub") {
-      return clawhubSpec ? `ClawHub${clawhubSpec}; npm${npmSpec}` : `ClawHub + npm${npmSpec}`;
+  if (release?.publishToJoopoHub === true && release?.publishToNpm === true) {
+    if (install?.defaultChoice === "joopohub") {
+      return joopohubSpec ? `JoopoHub${joopohubSpec}; npm${npmSpec}` : `JoopoHub + npm${npmSpec}`;
     }
-    return clawhubSpec ? `npm${npmSpec}; ClawHub${clawhubSpec}` : `npm${npmSpec}; ClawHub`;
+    return joopohubSpec ? `npm${npmSpec}; JoopoHub${joopohubSpec}` : `npm${npmSpec}; JoopoHub`;
   }
-  if (release?.publishToClawHub === true) {
-    return `ClawHub${clawhubSpec || npmSpec}`;
+  if (release?.publishToJoopoHub === true) {
+    return `JoopoHub${joopohubSpec || npmSpec}`;
   }
   if (release?.publishToNpm === true || typeof install?.npmSpec === "string") {
     return `npm${npmSpec}`;
@@ -334,12 +334,12 @@ function resolveInstallRoute(packageJson, status) {
 function resolveStatus({ dirName, packageJson, excludedDirs }) {
   const release = packageJson.joopo?.release;
   const hasInstallSpec =
-    typeof packageJson.joopo?.install?.clawhubSpec === "string" ||
+    typeof packageJson.joopo?.install?.joopohubSpec === "string" ||
     typeof packageJson.joopo?.install?.npmSpec === "string";
   if (!excludedDirs.has(dirName)) {
     return "core";
   }
-  if (release?.publishToClawHub === true || release?.publishToNpm === true || hasInstallSpec) {
+  if (release?.publishToJoopoHub === true || release?.publishToNpm === true || hasInstallSpec) {
     return "external";
   }
   return "source";
@@ -551,7 +551,7 @@ pnpm plugins:inventory:gen
 ## Definitions
 
 - **Core npm package:** built into the \`joopo\` npm package and available without a separate plugin install.
-- **Official external package:** Joopo-maintained plugin omitted from the core npm package, kept in this official inventory, and installed on demand through ClawHub and/or npm.
+- **Official external package:** Joopo-maintained plugin omitted from the core npm package, kept in this official inventory, and installed on demand through JoopoHub and/or npm.
 - **Source checkout only:** repo-local plugin omitted from published npm artifacts and not advertised as an installable package.
 
 Source checkouts are different from npm installs: after \`pnpm install\`, bundled
@@ -572,8 +572,8 @@ joopo gateway restart
 joopo plugins inspect discord --runtime --json
 \`\`\`
 
-Bare package specs try ClawHub first, then npm fallback. To force a source, use
-\`clawhub:@joopo/discord\` or \`npm:@joopo/discord\`. After install, follow
+Bare package specs try JoopoHub first, then npm fallback. To force a source, use
+\`joopohub:@joopo/discord\` or \`npm:@joopo/discord\`. After install, follow
 the plugin's setup doc, such as [Discord](/channels/discord), to add credentials
 and channel config. See [Manage plugins](/plugins/manage-plugins) for update,
 uninstall, and publishing commands.

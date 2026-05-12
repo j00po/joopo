@@ -53,7 +53,7 @@ describe("shared/frontmatter", () => {
     expect(
       resolveJoopoManifestBlock({
         frontmatter: {
-          metadata: "{ clawdbot: { requires: { bins: ['op'] }, install: [] } }",
+          metadata: "{ joopobot: { requires: { bins: ['op'] }, install: [] } }",
         },
       }),
     ).toEqual({ requires: { bins: ["op"] }, install: [] });
@@ -64,7 +64,7 @@ describe("shared/frontmatter", () => {
       resolveJoopoManifestBlock({
         frontmatter: {
           metadata:
-            "{ joopo: { requires: { bins: ['current'] } }, clawdbot: { requires: { bins: ['legacy'] } } }",
+            "{ joopo: { requires: { bins: ['current'] } }, joopobot: { requires: { bins: ['legacy'] } } }",
         },
       }),
     ).toEqual({ requires: { bins: ["current"] } });
@@ -72,9 +72,7 @@ describe("shared/frontmatter", () => {
 
   test("resolveJoopoManifestBlock returns undefined for invalid input", () => {
     expect(resolveJoopoManifestBlock({ frontmatter: {} })).toBeUndefined();
-    expect(
-      resolveJoopoManifestBlock({ frontmatter: { metadata: "not-json5" } }),
-    ).toBeUndefined();
+    expect(resolveJoopoManifestBlock({ frontmatter: { metadata: "not-json5" } })).toBeUndefined();
     expect(resolveJoopoManifestBlock({ frontmatter: { metadata: "123" } })).toBeUndefined();
     expect(resolveJoopoManifestBlock({ frontmatter: { metadata: "[]" } })).toBeUndefined();
     expect(
@@ -99,10 +97,7 @@ describe("shared/frontmatter", () => {
       config: [],
     });
     expect(resolveJoopoManifestRequires({})).toBeUndefined();
-    expect(resolveJoopoManifestOs({ os: [" darwin ", "linux", ""] })).toEqual([
-      "darwin",
-      "linux",
-    ]);
+    expect(resolveJoopoManifestOs({ os: [" darwin ", "linux", ""] })).toEqual(["darwin", "linux"]);
   });
 
   it("parses and applies install common fields", () => {
@@ -167,10 +162,7 @@ describe("shared/frontmatter", () => {
       kind: "npm",
     });
     expect(
-      applyJoopoManifestInstallCommonFields(
-        { id: "keep", label: "Keep", bins: ["bun"] },
-        parsed!,
-      ),
+      applyJoopoManifestInstallCommonFields({ id: "keep", label: "Keep", bins: ["bun"] }, parsed!),
     ).toEqual({
       id: "keep",
       label: "Keep",

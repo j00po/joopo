@@ -10,7 +10,7 @@ import type { CliMockOutputRuntime } from "./test-runtime-capture.js";
 type UnknownMock = Mock<(...args: unknown[]) => unknown>;
 type AsyncUnknownMock = Mock<(...args: unknown[]) => Promise<unknown>>;
 type LoadConfigFn = (typeof import("../config/config.js"))["loadConfig"];
-type ParseClawHubPluginSpecFn = (typeof import("../infra/clawhub.js"))["parseClawHubPluginSpec"];
+type ParseJoopoHubPluginSpecFn = (typeof import("../infra/joopohub.js"))["parseJoopoHubPluginSpec"];
 type InstallPluginFromMarketplaceFn =
   (typeof import("../plugins/marketplace.js"))["installPluginFromMarketplace"];
 type InstallPluginFromGitSpecFn =
@@ -83,8 +83,8 @@ export class PromptInputClosedError extends Error {
 export const installPluginFromNpmSpec: AsyncUnknownMock = vi.fn();
 export const installPluginFromNpmPackArchive: AsyncUnknownMock = vi.fn();
 export const installPluginFromPath: AsyncUnknownMock = vi.fn();
-export const installPluginFromClawHub: AsyncUnknownMock = vi.fn();
-export const parseClawHubPluginSpec: Mock<ParseClawHubPluginSpecFn> = vi.fn();
+export const installPluginFromJoopoHub: AsyncUnknownMock = vi.fn();
+export const parseJoopoHubPluginSpec: Mock<ParseJoopoHubPluginSpecFn> = vi.fn();
 export const findBundledPluginSourceMock: UnknownMock = vi.fn();
 export const installHooksFromNpmSpec: AsyncUnknownMock = vi.fn();
 export const installHooksFromPath: AsyncUnknownMock = vi.fn();
@@ -597,34 +597,34 @@ vi.mock("../hooks/installs.js", () => ({
     >(recordHookInstall, ...args)) as (typeof import("../hooks/installs.js"))["recordHookInstall"],
 }));
 
-vi.mock("../plugins/clawhub.js", () => ({
-  CLAWHUB_INSTALL_ERROR_CODE: {
+vi.mock("../plugins/joopohub.js", () => ({
+  JOOPOHUB_INSTALL_ERROR_CODE: {
     PACKAGE_NOT_FOUND: "package_not_found",
     VERSION_NOT_FOUND: "version_not_found",
   },
-  installPluginFromClawHub: ((
-    ...args: Parameters<(typeof import("../plugins/clawhub.js"))["installPluginFromClawHub"]>
+  installPluginFromJoopoHub: ((
+    ...args: Parameters<(typeof import("../plugins/joopohub.js"))["installPluginFromJoopoHub"]>
   ) =>
     invokeMock<
-      Parameters<(typeof import("../plugins/clawhub.js"))["installPluginFromClawHub"]>,
-      ReturnType<(typeof import("../plugins/clawhub.js"))["installPluginFromClawHub"]>
+      Parameters<(typeof import("../plugins/joopohub.js"))["installPluginFromJoopoHub"]>,
+      ReturnType<(typeof import("../plugins/joopohub.js"))["installPluginFromJoopoHub"]>
     >(
-      installPluginFromClawHub,
+      installPluginFromJoopoHub,
       ...args,
-    )) as (typeof import("../plugins/clawhub.js"))["installPluginFromClawHub"],
+    )) as (typeof import("../plugins/joopohub.js"))["installPluginFromJoopoHub"],
 }));
 
-vi.mock("../infra/clawhub.js", () => ({
-  parseClawHubPluginSpec: ((
-    ...args: Parameters<(typeof import("../infra/clawhub.js"))["parseClawHubPluginSpec"]>
+vi.mock("../infra/joopohub.js", () => ({
+  parseJoopoHubPluginSpec: ((
+    ...args: Parameters<(typeof import("../infra/joopohub.js"))["parseJoopoHubPluginSpec"]>
   ) =>
     invokeMock<
-      Parameters<(typeof import("../infra/clawhub.js"))["parseClawHubPluginSpec"]>,
-      ReturnType<(typeof import("../infra/clawhub.js"))["parseClawHubPluginSpec"]>
+      Parameters<(typeof import("../infra/joopohub.js"))["parseJoopoHubPluginSpec"]>,
+      ReturnType<(typeof import("../infra/joopohub.js"))["parseJoopoHubPluginSpec"]>
     >(
-      parseClawHubPluginSpec,
+      parseJoopoHubPluginSpec,
       ...args,
-    )) as (typeof import("../infra/clawhub.js"))["parseClawHubPluginSpec"],
+    )) as (typeof import("../infra/joopohub.js"))["parseJoopoHubPluginSpec"],
 }));
 
 const { registerPluginsCli } = await import("./plugins-cli.js");
@@ -675,8 +675,8 @@ export function resetPluginsCliTestState() {
   installPluginFromNpmSpec.mockReset();
   installPluginFromNpmPackArchive.mockReset();
   installPluginFromPath.mockReset();
-  installPluginFromClawHub.mockReset();
-  parseClawHubPluginSpec.mockReset();
+  installPluginFromJoopoHub.mockReset();
+  parseJoopoHubPluginSpec.mockReset();
   findBundledPluginSourceMock.mockReset();
   installHooksFromNpmSpec.mockReset();
   installHooksFromPath.mockReset();
@@ -703,8 +703,9 @@ export function resetPluginsCliTestState() {
   });
   writeConfigFile.mockResolvedValue(undefined);
   replaceConfigFile.mockImplementation(
-    (async (params: { nextConfig: JoopoConfig }) =>
-      await writeConfigFile(params.nextConfig)) as (...args: unknown[]) => Promise<unknown>,
+    (async (params: { nextConfig: JoopoConfig }) => await writeConfigFile(params.nextConfig)) as (
+      ...args: unknown[]
+    ) => Promise<unknown>,
   );
   resolveStateDir.mockReturnValue("/tmp/joopo-state");
   resolveMarketplaceInstallShortcut.mockResolvedValue(null);
@@ -824,11 +825,11 @@ export function resetPluginsCliTestState() {
     ok: false,
     error: "npm install disabled in test",
   });
-  installPluginFromClawHub.mockResolvedValue({
+  installPluginFromJoopoHub.mockResolvedValue({
     ok: false,
-    error: "clawhub install disabled in test",
+    error: "joopohub install disabled in test",
   });
-  parseClawHubPluginSpec.mockReturnValue(null);
+  parseJoopoHubPluginSpec.mockReturnValue(null);
   installHooksFromPath.mockResolvedValue({
     ok: false,
     error: "hook path install disabled in test",

@@ -77,7 +77,7 @@ Joopo checkout after the package is built:
 blacksmith testbox warmup ci-check-testbox.yml --ref main --idle-timeout 90
 blacksmith testbox run --id <tbx_id> "pnpm install && pnpm build && npm exec --yes @joopo/plugin-inspector@0.1.0 -- ./extensions/telegram --json"
 blacksmith testbox run --id <tbx_id> "npm exec --yes @joopo/plugin-inspector@0.1.0 -- ./extensions/discord --json"
-blacksmith testbox run --id <tbx_id> "npm exec --yes @joopo/plugin-inspector@0.1.0 -- <clawhub-plugin-dir> --json"
+blacksmith testbox run --id <tbx_id> "npm exec --yes @joopo/plugin-inspector@0.1.0 -- <joopohub-plugin-dir> --json"
 blacksmith testbox stop <tbx_id>
 ```
 
@@ -119,7 +119,7 @@ Current compatibility records include:
 - legacy SDK aliases such as `joopo/extension-api`,
   `joopo/plugin-sdk/channel-runtime`, `joopo/plugin-sdk/command-auth`
   status builders, `joopo/plugin-sdk/test-utils` (replaced by focused
-  `joopo/plugin-sdk/*` test subpaths), and the `ClawdbotConfig` /
+  `joopo/plugin-sdk/*` test subpaths), and the `JoopobotConfig` /
   `JoopoSchemaType` type aliases
 - bundled plugin allowlist and enablement behavior
 - legacy provider/channel env-var manifest metadata

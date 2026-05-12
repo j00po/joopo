@@ -1746,10 +1746,10 @@ export type PluginPackageChannelCliOption = {
 };
 
 export type PluginPackageInstall = {
-  clawhubSpec?: string;
+  joopohubSpec?: string;
   npmSpec?: string;
   localPath?: string;
-  defaultChoice?: "clawhub" | "npm" | "local";
+  defaultChoice?: "joopohub" | "npm" | "local";
   minHostVersion?: string;
   expectedIntegrity?: string;
   allowInvalidConfigRecovery?: boolean;

@@ -5,7 +5,7 @@ import {
 import { hasControlCommand } from "joopo/plugin-sdk/command-detection";
 import { createNonExitingRuntimeEnv } from "joopo/plugin-sdk/plugin-test-runtime";
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { ClawdbotConfig, PluginRuntime } from "../runtime-api.js";
+import type { JoopobotConfig, PluginRuntime } from "../runtime-api.js";
 import { parseFeishuMessageEvent, type FeishuMessageEvent } from "./bot.js";
 import * as dedup from "./dedup.js";
 import {
@@ -53,7 +53,7 @@ afterAll(() => {
   vi.resetModules();
 });
 
-const cfg = {} as ClawdbotConfig;
+const cfg = {} as JoopobotConfig;
 
 function makeReactionEvent(
   overrides: Partial<FeishuReactionCreatedEvent> = {},
@@ -94,7 +94,7 @@ async function resolveReactionWithLookup(params: {
   });
 }
 
-async function resolveNonBotReaction(params?: { cfg?: ClawdbotConfig; uuid?: () => string }) {
+async function resolveNonBotReaction(params?: { cfg?: JoopobotConfig; uuid?: () => string }) {
   return await resolveReactionSyntheticEvent({
     cfg: params?.cfg ?? cfg,
     accountId: "default",
@@ -115,7 +115,7 @@ async function resolveNonBotReaction(params?: { cfg?: ClawdbotConfig; uuid?: () 
 
 type FeishuMention = NonNullable<FeishuMessageEvent["message"]["mentions"]>[number];
 
-function buildDebounceConfig(): ClawdbotConfig {
+function buildDebounceConfig(): JoopobotConfig {
   return {
     messages: {
       inbound: {
@@ -130,7 +130,7 @@ function buildDebounceConfig(): ClawdbotConfig {
         enabled: true,
       },
     },
-  } as ClawdbotConfig;
+  } as JoopobotConfig;
 }
 
 function buildDebounceAccount(): ResolvedFeishuAccount {
@@ -312,7 +312,7 @@ describe("resolveReactionSyntheticEvent", () => {
             reactionNotifications: "off",
           },
         },
-      } as ClawdbotConfig,
+      } as JoopobotConfig,
       accountId: "default",
       event,
       botOpenId: "ou_bot",
@@ -341,7 +341,7 @@ describe("resolveReactionSyntheticEvent", () => {
             reactionNotifications: "all",
           },
         },
-      } as ClawdbotConfig,
+      } as JoopobotConfig,
       uuid: () => "fixed-uuid",
     });
     expect(result?.message.message_id).toBe("om_msg1:reaction:THUMBSUP:fixed-uuid");

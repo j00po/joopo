@@ -206,7 +206,7 @@ describe("Crestodian rescue message", () => {
     };
 
     await expect(
-      runRescue("/crestodian plugin install clawhub:joopo-demo", cfg, commandContext(), deps),
+      runRescue("/crestodian plugin install joopohub:joopo-demo", cfg, commandContext(), deps),
     ).resolves.toContain("cannot install plugins from a message channel");
     expect(deps.runPluginInstall).not.toHaveBeenCalled();
   });

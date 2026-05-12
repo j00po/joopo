@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const searchSkillsFromClawHubMock = vi.fn();
-const fetchClawHubSkillDetailMock = vi.fn();
+const searchSkillsFromJoopoHubMock = vi.fn();
+const fetchJoopoHubSkillDetailMock = vi.fn();
 
 vi.mock("../../config/config.js", () => ({
   getRuntimeConfig: vi.fn(() => ({})),
@@ -14,17 +14,17 @@ vi.mock("../../agents/agent-scope.js", () => ({
   resolveAgentWorkspaceDir: vi.fn(() => "/tmp/workspace"),
 }));
 
-vi.mock("../../agents/skills-clawhub.js", () => ({
-  installSkillFromClawHub: vi.fn(),
-  updateSkillsFromClawHub: vi.fn(),
-  searchSkillsFromClawHub: (...args: unknown[]) => searchSkillsFromClawHubMock(...args),
+vi.mock("../../agents/skills-joopohub.js", () => ({
+  installSkillFromJoopoHub: vi.fn(),
+  updateSkillsFromJoopoHub: vi.fn(),
+  searchSkillsFromJoopoHub: (...args: unknown[]) => searchSkillsFromJoopoHubMock(...args),
 }));
 
-vi.mock("../../infra/clawhub.js", () => ({
-  fetchClawHubSkillDetail: (...args: unknown[]) => fetchClawHubSkillDetailMock(...args),
-  resolveClawHubBaseUrl: vi.fn(() => "https://clawhub.ai"),
-  searchClawHubSkills: vi.fn(),
-  downloadClawHubSkillArchive: vi.fn(),
+vi.mock("../../infra/joopohub.js", () => ({
+  fetchJoopoHubSkillDetail: (...args: unknown[]) => fetchJoopoHubSkillDetailMock(...args),
+  resolveJoopoHubBaseUrl: vi.fn(() => "https://joopohub.ai"),
+  searchJoopoHubSkills: vi.fn(),
+  downloadJoopoHubSkillArchive: vi.fn(),
 }));
 
 vi.mock("../../agents/skills-install.js", () => ({
@@ -54,12 +54,12 @@ function callHandler(method: string, params: Record<string, unknown>) {
 
 describe("skills.search handler", () => {
   beforeEach(() => {
-    searchSkillsFromClawHubMock.mockReset();
-    fetchClawHubSkillDetailMock.mockReset();
+    searchSkillsFromJoopoHubMock.mockReset();
+    fetchJoopoHubSkillDetailMock.mockReset();
   });
 
-  it("searches ClawHub with query and limit", async () => {
-    searchSkillsFromClawHubMock.mockResolvedValue([
+  it("searches JoopoHub with query and limit", async () => {
+    searchSkillsFromJoopoHubMock.mockResolvedValue([
       {
         score: 0.95,
         slug: "github",
@@ -75,7 +75,7 @@ describe("skills.search handler", () => {
       limit: 10,
     });
 
-    expect(searchSkillsFromClawHubMock).toHaveBeenCalledWith({
+    expect(searchSkillsFromJoopoHubMock).toHaveBeenCalledWith({
       query: "github",
       limit: 10,
     });
@@ -96,11 +96,11 @@ describe("skills.search handler", () => {
   });
 
   it("searches without query (browse all)", async () => {
-    searchSkillsFromClawHubMock.mockResolvedValue([]);
+    searchSkillsFromJoopoHubMock.mockResolvedValue([]);
 
     const { ok, response } = await callHandler("skills.search", {});
 
-    expect(searchSkillsFromClawHubMock).toHaveBeenCalledWith({
+    expect(searchSkillsFromJoopoHubMock).toHaveBeenCalledWith({
       query: undefined,
       limit: undefined,
     });
@@ -108,8 +108,8 @@ describe("skills.search handler", () => {
     expect(response).toEqual({ results: [] });
   });
 
-  it("returns error when ClawHub is unreachable", async () => {
-    searchSkillsFromClawHubMock.mockRejectedValue(new Error("connection refused"));
+  it("returns error when JoopoHub is unreachable", async () => {
+    searchSkillsFromJoopoHubMock.mockRejectedValue(new Error("connection refused"));
 
     const { ok, error } = await callHandler("skills.search", { query: "test" });
 
@@ -125,7 +125,7 @@ describe("skills.search handler", () => {
 
     expect(ok).toBe(false);
     expect(error).toMatchObject({ code: "INVALID_REQUEST" });
-    expect(searchSkillsFromClawHubMock).not.toHaveBeenCalled();
+    expect(searchSkillsFromJoopoHubMock).not.toHaveBeenCalled();
   });
 
   it("rejects limit above maximum", async () => {
@@ -136,14 +136,14 @@ describe("skills.search handler", () => {
 
     expect(ok).toBe(false);
     expect(error).toMatchObject({ code: "INVALID_REQUEST" });
-    expect(searchSkillsFromClawHubMock).not.toHaveBeenCalled();
+    expect(searchSkillsFromJoopoHubMock).not.toHaveBeenCalled();
   });
 });
 
 describe("skills.detail handler", () => {
   beforeEach(() => {
-    searchSkillsFromClawHubMock.mockReset();
-    fetchClawHubSkillDetailMock.mockReset();
+    searchSkillsFromJoopoHubMock.mockReset();
+    fetchJoopoHubSkillDetailMock.mockReset();
   });
 
   it("fetches detail for a valid slug", async () => {
@@ -164,20 +164,20 @@ describe("skills.detail handler", () => {
         displayName: "Joopo",
       },
     };
-    fetchClawHubSkillDetailMock.mockResolvedValue(detail);
+    fetchJoopoHubSkillDetailMock.mockResolvedValue(detail);
 
     const { ok, response, error } = await callHandler("skills.detail", {
       slug: "github",
     });
 
-    expect(fetchClawHubSkillDetailMock).toHaveBeenCalledWith({ slug: "github" });
+    expect(fetchJoopoHubSkillDetailMock).toHaveBeenCalledWith({ slug: "github" });
     expect(ok).toBe(true);
     expect(error).toBeUndefined();
     expect(response).toEqual(detail);
   });
 
   it("returns error when slug is not found", async () => {
-    fetchClawHubSkillDetailMock.mockRejectedValue(new Error("not found"));
+    fetchJoopoHubSkillDetailMock.mockRejectedValue(new Error("not found"));
 
     const { ok, error } = await callHandler("skills.detail", { slug: "nonexistent" });
 
@@ -190,7 +190,7 @@ describe("skills.detail handler", () => {
 
     expect(ok).toBe(false);
     expect(error).toMatchObject({ code: "INVALID_REQUEST" });
-    expect(fetchClawHubSkillDetailMock).not.toHaveBeenCalled();
+    expect(fetchJoopoHubSkillDetailMock).not.toHaveBeenCalled();
   });
 
   it("rejects empty slug", async () => {
@@ -198,6 +198,6 @@ describe("skills.detail handler", () => {
 
     expect(ok).toBe(false);
     expect(error).toMatchObject({ code: "INVALID_REQUEST" });
-    expect(fetchClawHubSkillDetailMock).not.toHaveBeenCalled();
+    expect(fetchJoopoHubSkillDetailMock).not.toHaveBeenCalled();
   });
 });

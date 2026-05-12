@@ -1,4 +1,4 @@
-# 🦞 Joopo — Personal AI Assistant
+# Joopo — Personal AI Assistant
 
 <p align="center">
     <picture>
@@ -8,13 +8,13 @@
 </p>
 
 <p align="center">
-  <strong>EXFOLIATE! EXFOLIATE!</strong>
+  <strong>Ready when you are.</strong>
 </p>
 
 <p align="center">
   <a href="https://github.com/joopo/joopo/actions/workflows/ci.yml?branch=main"><img src="https://img.shields.io/github/actions/workflow/status/joopo/joopo/ci.yml?branch=main&style=for-the-badge" alt="CI status"></a>
   <a href="https://github.com/joopo/joopo/releases"><img src="https://img.shields.io/github/v/release/joopo/joopo?include_prereleases&style=for-the-badge" alt="GitHub release"></a>
-  <a href="https://discord.gg/clawd"><img src="https://img.shields.io/discord/1456350064065904867?label=Discord&logo=discord&logoColor=white&color=5865F2&style=for-the-badge" alt="Discord"></a>
+  <a href="https://discord.gg/joopo"><img src="https://img.shields.io/discord/1456350064065904867?label=Discord&logo=discord&logoColor=white&color=5865F2&style=for-the-badge" alt="Discord"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge" alt="MIT License"></a>
 </p>
 
@@ -25,68 +25,13 @@ If you want a personal, single-user assistant that feels local, fast, and always
 
 Supported channels include: WhatsApp, Telegram, Slack, Discord, Google Chat, Signal, iMessage, IRC, Microsoft Teams, Matrix, Feishu, LINE, Mattermost, Nextcloud Talk, Nostr, Synology Chat, Tlon, Twitch, Zalo, Zalo Personal, WeChat, QQ, WebChat.
 
-[Website](https://joopo.ai) · [Docs](https://docs.joopo.ai) · [Vision](VISION.md) · [DeepWiki](https://deepwiki.com/joopo/joopo) · [Getting Started](https://docs.joopo.ai/start/getting-started) · [Updating](https://docs.joopo.ai/install/updating) · [Showcase](https://docs.joopo.ai/start/showcase) · [FAQ](https://docs.joopo.ai/help/faq) · [Onboarding](https://docs.joopo.ai/start/wizard) · [Nix](https://github.com/joopo/nix-joopo) · [Docker](https://docs.joopo.ai/install/docker) · [Discord](https://discord.gg/clawd)
+[Website](https://joopo.ai) · [Docs](https://docs.joopo.ai) · [Vision](VISION.md) · [DeepWiki](https://deepwiki.com/joopo/joopo) · [Getting Started](https://docs.joopo.ai/start/getting-started) · [Updating](https://docs.joopo.ai/install/updating) · [Showcase](https://docs.joopo.ai/start/showcase) · [FAQ](https://docs.joopo.ai/help/faq) · [Onboarding](https://docs.joopo.ai/start/wizard) · [Nix](https://github.com/joopo/nix-joopo) · [Docker](https://docs.joopo.ai/install/docker) · [Discord](https://discord.gg/joopo)
 
 New install? Start here: [Getting started](https://docs.joopo.ai/start/getting-started)
 
 Preferred setup: run `joopo onboard` in your terminal.
 Joopo Onboard guides you step by step through setting up the gateway, workspace, channels, and skills. It is the recommended CLI setup path and works on **macOS, Linux, and Windows (via WSL2; strongly recommended)**.
 Works with npm, pnpm, or bun.
-
-## Sponsors
-
-<table>
-  <tr>
-    <td align="center" width="16.66%">
-      <a href="https://openai.com/">
-        <picture>
-          <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/joopo/joopo/main/docs/assets/sponsors/openai-light.svg">
-          <img src="https://raw.githubusercontent.com/joopo/joopo/main/docs/assets/sponsors/openai.svg" alt="OpenAI" height="28">
-        </picture>
-      </a>
-    </td>
-    <td align="center" width="16.66%">
-      <a href="https://github.com/">
-        <picture>
-          <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/joopo/joopo/main/docs/assets/sponsors/github-light.svg">
-          <img src="https://raw.githubusercontent.com/joopo/joopo/main/docs/assets/sponsors/github.svg" alt="GitHub" height="28">
-        </picture>
-      </a>
-    </td>
-    <td align="center" width="16.66%">
-      <a href="https://www.nvidia.com/">
-        <picture>
-          <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/joopo/joopo/main/docs/assets/sponsors/nvidia.svg">
-          <img src="https://raw.githubusercontent.com/joopo/joopo/main/docs/assets/sponsors/nvidia-dark.svg" alt="NVIDIA" height="28">
-        </picture>
-      </a>
-    </td>
-    <td align="center" width="16.66%">
-      <a href="https://vercel.com/">
-        <picture>
-          <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/joopo/joopo/main/docs/assets/sponsors/vercel-light.svg">
-          <img src="https://raw.githubusercontent.com/joopo/joopo/main/docs/assets/sponsors/vercel.svg" alt="Vercel" height="24">
-        </picture>
-      </a>
-    </td>
-    <td align="center" width="16.66%">
-      <a href="https://blacksmith.sh/">
-        <picture>
-          <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/joopo/joopo/main/docs/assets/sponsors/blacksmith-light.svg">
-          <img src="https://raw.githubusercontent.com/joopo/joopo/main/docs/assets/sponsors/blacksmith.svg" alt="Blacksmith" height="28">
-        </picture>
-      </a>
-    </td>
-    <td align="center" width="16.66%">
-      <a href="https://www.convex.dev/">
-        <picture>
-          <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/joopo/joopo/main/docs/assets/sponsors/convex-light.svg">
-          <img src="https://raw.githubusercontent.com/joopo/joopo/main/docs/assets/sponsors/convex.svg" alt="Convex" height="24">
-        </picture>
-      </a>
-    </td>
-  </tr>
-</table>
 
 **Subscriptions (OAuth):**
 
@@ -165,7 +110,7 @@ Run `joopo doctor` to surface risky/misconfigured DM policies.
 
 - Chat commands: `/status`, `/new`, `/reset`, `/compact`, `/think <level>`, `/verbose on|off`, `/trace on|off`, `/usage off|tokens|full`, `/restart`, `/activation mention|always`
 - Session tools: `sessions_list`, `sessions_history`, `sessions_send`
-- Skills registry: [ClawHub](https://clawhub.ai)
+- Skills registry: [JoopoHub](https://joopohub.ai)
 - Architecture overview: [Architecture](https://docs.joopo.ai/concepts/architecture)
 
 ## Docs by goal
@@ -277,9 +222,9 @@ Minimal `~/.joopo/joopo.json` (model + defaults):
 
 [![Star History Chart](https://api.star-history.com/svg?repos=joopo/joopo&type=date&legend=top-left)](https://www.star-history.com/#joopo/joopo&type=date&legend=top-left)
 
-## Molty
+## Babuli
 
-Joopo was built for **Molty**, a space lobster AI assistant. 🦞
+Joopo was built for **Babuli**, a space lobster AI assistant. 🦞
 by Peter Steinberger and the community.
 
 - [joopo.ai](https://joopo.ai)
@@ -296,9 +241,9 @@ Special thanks to [Mario Zechner](https://mariozechner.at/) for his support and 
 [pi-mono](https://github.com/badlogic/pi-mono).
 Special thanks to Adam Doppelt for the lobster.bot domain.
 
-Thanks to all clawtributors:
+Thanks to all contributors:
 
-<!-- clawtributors:start -->
+<!-- contributors:start -->
 
 [![steipete](https://avatars.githubusercontent.com/u/58493?v=4&s=48)](https://github.com/steipete) [![vincentkoc](https://avatars.githubusercontent.com/u/25068?v=4&s=48)](https://github.com/vincentkoc) [![Takhoffman](https://avatars.githubusercontent.com/u/781889?v=4&s=48)](https://github.com/Takhoffman) [![obviyus](https://avatars.githubusercontent.com/u/22031114?v=4&s=48)](https://github.com/obviyus) [![gumadeiras](https://avatars.githubusercontent.com/u/5599352?v=4&s=48)](https://github.com/gumadeiras) [![Mariano Belinky](https://avatars.githubusercontent.com/u/132747814?v=4&s=48)](https://github.com/mbelinky) [![vignesh07](https://avatars.githubusercontent.com/u/1436853?v=4&s=48)](https://github.com/vignesh07) [![joshavant](https://avatars.githubusercontent.com/u/830519?v=4&s=48)](https://github.com/joshavant) [![scoootscooob](https://avatars.githubusercontent.com/u/167050519?v=4&s=48)](https://github.com/scoootscooob) [![jacobtomlinson](https://avatars.githubusercontent.com/u/1610850?v=4&s=48)](https://github.com/jacobtomlinson)
 [![shakkernerd](https://avatars.githubusercontent.com/u/165377636?v=4&s=48)](https://github.com/shakkernerd) [![sebslight](https://avatars.githubusercontent.com/u/19554889?v=4&s=48)](https://github.com/sebslight) [![tyler6204](https://avatars.githubusercontent.com/u/64381258?v=4&s=48)](https://github.com/tyler6204) [![ngutman](https://avatars.githubusercontent.com/u/1540134?v=4&s=48)](https://github.com/ngutman) [![thewilloftheshadow](https://avatars.githubusercontent.com/u/35580099?v=4&s=48)](https://github.com/thewilloftheshadow) [![Sid-Qin](https://avatars.githubusercontent.com/u/201593046?v=4&s=48)](https://github.com/Sid-Qin) [![mcaxtr](https://avatars.githubusercontent.com/u/7562095?v=4&s=48)](https://github.com/mcaxtr) [![eleqtrizit](https://avatars.githubusercontent.com/u/31522568?v=4&s=48)](https://github.com/eleqtrizit) [![BunsDev](https://avatars.githubusercontent.com/u/68980965?v=4&s=48)](https://github.com/BunsDev) [![cpojer](https://avatars.githubusercontent.com/u/13352?v=4&s=48)](https://github.com/cpojer)
@@ -343,7 +288,7 @@ Thanks to all clawtributors:
 [![julianengel](https://avatars.githubusercontent.com/u/10634231?v=4&s=48)](https://github.com/julianengel) [![markfietje](https://avatars.githubusercontent.com/u/4325889?v=4&s=48)](https://github.com/markfietje) [![Dakshay Mehta](https://avatars.githubusercontent.com/u/50276213?v=4&s=48)](https://github.com/dakshaymehta) [![TheRipper](https://avatars.githubusercontent.com/u/144421782?v=4&s=48)](https://github.com/DavidNitZ) [![Dominic](https://avatars.githubusercontent.com/u/43616264?v=4&s=48)](https://github.com/dominicnunez) [![danielwanwx](https://avatars.githubusercontent.com/u/144515713?v=4&s=48)](https://github.com/danielwanwx) [![Seungwoo hong](https://avatars.githubusercontent.com/u/1100974?v=4&s=48)](https://github.com/hongsw) [![Youyou972](https://avatars.githubusercontent.com/u/50808411?v=4&s=48)](https://github.com/Youyou972) [![boris721](https://avatars.githubusercontent.com/u/257853888?v=4&s=48)](https://github.com/boris721) [![damoahdominic](https://avatars.githubusercontent.com/u/4623434?v=4&s=48)](https://github.com/damoahdominic)
 [![dan-dr](https://avatars.githubusercontent.com/u/6669808?v=4&s=48)](https://github.com/dan-dr) [![doodlewind](https://avatars.githubusercontent.com/u/7312949?v=4&s=48)](https://github.com/doodlewind) [![kkarimi](https://avatars.githubusercontent.com/u/875218?v=4&s=48)](https://github.com/kkarimi) [![brokemac79](https://avatars.githubusercontent.com/u/255583030?v=4&s=48)](https://github.com/brokemac79) [![ozbillwang](https://avatars.githubusercontent.com/u/8954908?v=4&s=48)](https://github.com/ozbillwang) [![Ravish Gupta](https://avatars.githubusercontent.com/u/1249023?v=4&s=48)](https://github.com/ravyg) [![Jason Hargrove](https://avatars.githubusercontent.com/u/285708?v=4&s=48)](https://github.com/jasonhargrove) [![BrianWang1990](https://avatars.githubusercontent.com/u/20699847?v=4&s=48)](https://github.com/BrianWang1990) [![Joshua McKiddy](https://avatars.githubusercontent.com/u/43189238?v=4&s=48)](https://github.com/hackersifu) [![Fologan](https://avatars.githubusercontent.com/u/164580328?v=4&s=48)](https://github.com/Fologan)
 [![Anonymous Amit](https://avatars.githubusercontent.com/u/134582556?v=4&s=48)](https://github.com/AnonAmit) [![v1p0r](https://avatars.githubusercontent.com/u/25909990?v=4&s=48)](https://github.com/v1p0r) [![Ajay Elika](https://avatars.githubusercontent.com/u/73169130?v=4&s=48)](https://github.com/ajay99511) [![Iranb](https://avatars.githubusercontent.com/u/49674669?v=4&s=48)](https://github.com/Iranb) [![Yonatan](https://avatars.githubusercontent.com/u/10474956?v=4&s=48)](https://github.com/yhyatt) [![codexGW](https://avatars.githubusercontent.com/u/9350182?v=4&s=48)](https://github.com/codexGW) [![Shaun Tsai](https://avatars.githubusercontent.com/u/13811075?v=4&s=48)](https://github.com/ShaunTsai) [![TideFinder](https://avatars.githubusercontent.com/u/68721273?v=4&s=48)](https://github.com/papago2355) [![Chase Dorsey](https://avatars.githubusercontent.com/u/12650570?v=4&s=48)](https://github.com/cdorsey) [![tda](https://avatars.githubusercontent.com/u/95275462?v=4&s=48)](https://github.com/tda1017)
-[![0xJonHoldsCrypto](https://avatars.githubusercontent.com/u/81202085?v=4&s=48)](https://github.com/0xJonHoldsCrypto) [![akyourowngames](https://avatars.githubusercontent.com/u/123736861?v=4&s=48)](https://github.com/akyourowngames) [![clawdinator[bot]](https://avatars.githubusercontent.com/in/2607181?v=4&s=48)](https://github.com/apps/clawdinator) [![koala73](https://avatars.githubusercontent.com/u/996596?v=4&s=48)](https://github.com/koala73) [![sircrumpet](https://avatars.githubusercontent.com/u/4436535?v=4&s=48)](https://github.com/sircrumpet) [![thesomewhatyou](https://avatars.githubusercontent.com/u/162917831?v=4&s=48)](https://github.com/thesomewhatyou) [![zats](https://avatars.githubusercontent.com/u/2688806?v=4&s=48)](https://github.com/zats) [![Accunza](https://avatars.githubusercontent.com/u/12242811?v=4&s=48)](https://github.com/duqaXxX) [![Joly0](https://avatars.githubusercontent.com/u/13993216?v=4&s=48)](https://github.com/Joly0) [![Hanna](https://avatars.githubusercontent.com/u/4538260?v=4&s=48)](https://github.com/hannasdev)
+[![0xJonHoldsCrypto](https://avatars.githubusercontent.com/u/81202085?v=4&s=48)](https://github.com/0xJonHoldsCrypto) [![akyourowngames](https://avatars.githubusercontent.com/u/123736861?v=4&s=48)](https://github.com/akyourowngames) [![joopoinator[bot]](https://avatars.githubusercontent.com/in/2607181?v=4&s=48)](https://github.com/apps/joopoinator) [![koala73](https://avatars.githubusercontent.com/u/996596?v=4&s=48)](https://github.com/koala73) [![sircrumpet](https://avatars.githubusercontent.com/u/4436535?v=4&s=48)](https://github.com/sircrumpet) [![thesomewhatyou](https://avatars.githubusercontent.com/u/162917831?v=4&s=48)](https://github.com/thesomewhatyou) [![zats](https://avatars.githubusercontent.com/u/2688806?v=4&s=48)](https://github.com/zats) [![Accunza](https://avatars.githubusercontent.com/u/12242811?v=4&s=48)](https://github.com/duqaXxX) [![Joly0](https://avatars.githubusercontent.com/u/13993216?v=4&s=48)](https://github.com/Joly0) [![Hanna](https://avatars.githubusercontent.com/u/4538260?v=4&s=48)](https://github.com/hannasdev)
 [![Jeremiah Lowin](https://avatars.githubusercontent.com/u/153965?v=4&s=48)](https://github.com/jlowin) [![peetzweg/](https://avatars.githubusercontent.com/u/839848?v=4&s=48)](https://github.com/peetzweg) [![Skyler Miao](https://avatars.githubusercontent.com/u/153898832?v=4&s=48)](https://github.com/adao-max) [![tumf](https://avatars.githubusercontent.com/u/69994?v=4&s=48)](https://github.com/tumf) [![Hiago Silva](https://avatars.githubusercontent.com/u/97215740?v=4&s=48)](https://github.com/Huntterxx) [![Nate](https://avatars.githubusercontent.com/u/12980165?v=4&s=48)](https://github.com/nk1tz) [![lidamao633](https://avatars.githubusercontent.com/u/94925404?v=4&s=48)](https://github.com/lidamao633) [![Cklee](https://avatars.githubusercontent.com/u/99405438?v=4&s=48)](https://github.com/liebertar) [![CornBrother0x](https://avatars.githubusercontent.com/u/101160087?v=4&s=48)](https://github.com/CornBrother0x) [![DukeDeSouth](https://avatars.githubusercontent.com/u/51200688?v=4&s=48)](https://github.com/DukeDeSouth)
 [![Sahan](https://avatars.githubusercontent.com/u/57447079?v=4&s=48)](https://github.com/sahancava) [![CashWilliams](https://avatars.githubusercontent.com/u/613573?v=4&s=48)](https://github.com/CashWilliams) [![Felix Lu](https://avatars.githubusercontent.com/u/58391009?v=4&s=48)](https://github.com/lumpinif) [![AdeboyeDN](https://avatars.githubusercontent.com/u/65312338?v=4&s=48)](https://github.com/AdeboyeDN) [![Rohan Santhosh Kumar](https://avatars.githubusercontent.com/u/181558744?v=4&s=48)](https://github.com/Rohan5commit) [![Srinivas Pavan](https://avatars.githubusercontent.com/u/34889400?v=4&s=48)](https://github.com/srinivaspavan9) [![h0tp](https://avatars.githubusercontent.com/u/141889580?v=4&s=48)](https://github.com/h0tp-ftw) [![Neo](https://avatars.githubusercontent.com/u/54811660?v=4&s=48)](https://github.com/neooriginal) [![Tianworld](https://avatars.githubusercontent.com/u/40754565?v=4&s=48)](https://github.com/Tianworld) [![neverland](https://avatars.githubusercontent.com/u/10937319?v=4&s=48)](https://github.com/Bermudarat)
 [![asklee-klawd](https://avatars.githubusercontent.com/u/105007315?v=4&s=48)](https://github.com/asklee-klawd) [![Yuting Lin](https://avatars.githubusercontent.com/u/32728916?v=4&s=48)](https://github.com/yuting0624) [![constansino](https://avatars.githubusercontent.com/u/65108260?v=4&s=48)](https://github.com/constansino) [![ghsmc](https://avatars.githubusercontent.com/u/68118719?v=4&s=48)](https://github.com/ghsmc) [![ibrahimq21](https://avatars.githubusercontent.com/u/8392472?v=4&s=48)](https://github.com/ibrahimq21) [![irtiq7](https://avatars.githubusercontent.com/u/3823029?v=4&s=48)](https://github.com/irtiq7) [![kelvinCB](https://avatars.githubusercontent.com/u/50544379?v=4&s=48)](https://github.com/kelvinCB) [![mitsuhiko](https://avatars.githubusercontent.com/u/7396?v=4&s=48)](https://github.com/mitsuhiko) [![nohat](https://avatars.githubusercontent.com/u/838027?v=4&s=48)](https://github.com/nohat) [![santiagomed](https://avatars.githubusercontent.com/u/30184543?v=4&s=48)](https://github.com/santiagomed)
@@ -366,8 +311,8 @@ Thanks to all clawtributors:
 [![gtsifrikas](https://avatars.githubusercontent.com/u/8904378?v=4&s=48)](https://github.com/gtsifrikas) [![hrdwdmrbl](https://avatars.githubusercontent.com/u/554881?v=4&s=48)](https://github.com/hrdwdmrbl) [![hugobarauna](https://avatars.githubusercontent.com/u/2719?v=4&s=48)](https://github.com/hugobarauna) [![jayhickey](https://avatars.githubusercontent.com/u/1676460?v=4&s=48)](https://github.com/jayhickey) [![jiulingyun](https://avatars.githubusercontent.com/u/126459548?v=4&s=48)](https://github.com/jiulingyun) [![Jonathan D. Rhyne (DJ-D)](https://avatars.githubusercontent.com/u/7828464?v=4&s=48)](https://github.com/jdrhyne) [![jverdi](https://avatars.githubusercontent.com/u/345050?v=4&s=48)](https://github.com/jverdi) [![kitze](https://avatars.githubusercontent.com/u/1160594?v=4&s=48)](https://github.com/kitze) [![loukotal](https://avatars.githubusercontent.com/u/18210858?v=4&s=48)](https://github.com/loukotal) [![minghinmatthewlam](https://avatars.githubusercontent.com/u/14224566?v=4&s=48)](https://github.com/minghinmatthewlam)
 [![MSch](https://avatars.githubusercontent.com/u/7475?v=4&s=48)](https://github.com/MSch) [![odrobnik](https://avatars.githubusercontent.com/u/333270?v=4&s=48)](https://github.com/odrobnik) [![oswalpalash](https://avatars.githubusercontent.com/u/6431196?v=4&s=48)](https://github.com/oswalpalash) [![ratulsarna](https://avatars.githubusercontent.com/u/105903728?v=4&s=48)](https://github.com/ratulsarna) [![reeltimeapps](https://avatars.githubusercontent.com/u/637338?v=4&s=48)](https://github.com/reeltimeapps) [![snopoke](https://avatars.githubusercontent.com/u/249606?v=4&s=48)](https://github.com/snopoke) [![sreekaransrinath](https://avatars.githubusercontent.com/u/50989977?v=4&s=48)](https://github.com/sreekaransrinath) [![timkrase](https://avatars.githubusercontent.com/u/38947626?v=4&s=48)](https://github.com/timkrase)
 
-<!-- clawtributors:end -->
-<!-- clawtributors:hidden:start
+<!-- contributors:end -->
+<!-- contributors:hidden:start
 default-avatar-cache: hidden from the rendered wall because these users still use GitHub's default avatar
 13otkmdr
 aaronveklabs
@@ -483,6 +428,8 @@ yuna78
 yuweuii
 yxjsxy
 zijiess
-clawtributors:hidden:end -->
+contributors:hidden:end -->
+
 # joopo
+
 # joopo

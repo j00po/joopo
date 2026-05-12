@@ -1,6 +1,6 @@
 import {
   DEFAULT_ACCOUNT_ID,
-  type JoopoConfig as ClawdbotConfig,
+  type JoopoConfig as JoopobotConfig,
   createAccountListHelpers,
   normalizeAccountId,
   normalizeOptionalAccountId,
@@ -141,7 +141,7 @@ function resolveFeishuEventSecrets(
 /**
  * Resolve the default account selection and its source.
  */
-export function resolveDefaultFeishuAccountSelection(cfg: ClawdbotConfig): {
+export function resolveDefaultFeishuAccountSelection(cfg: JoopobotConfig): {
   accountId: string;
   source: FeishuDefaultAccountSelectionSource;
 } {
@@ -170,7 +170,7 @@ export function resolveDefaultFeishuAccountSelection(cfg: ClawdbotConfig): {
 /**
  * Resolve the default account ID.
  */
-export function resolveDefaultFeishuAccountId(cfg: ClawdbotConfig): string {
+export function resolveDefaultFeishuAccountId(cfg: JoopobotConfig): string {
   return resolveDefaultAccountId(cfg);
 }
 
@@ -178,7 +178,7 @@ export function resolveDefaultFeishuAccountId(cfg: ClawdbotConfig): string {
  * Merge top-level config with account-specific config.
  * Account-specific fields override top-level fields.
  */
-function mergeFeishuAccountConfig(cfg: ClawdbotConfig, accountId: string): FeishuConfig {
+function mergeFeishuAccountConfig(cfg: JoopobotConfig, accountId: string): FeishuConfig {
   const feishuCfg = cfg.channels?.feishu as FeishuConfig | undefined;
   return resolveMergedAccountConfig<FeishuConfig>({
     channelConfig: feishuCfg,
@@ -242,7 +242,7 @@ export function inspectFeishuCredentials(cfg?: FeishuConfig) {
 }
 
 function buildResolvedFeishuAccount(params: {
-  cfg: ClawdbotConfig;
+  cfg: JoopobotConfig;
   accountId?: string | null;
   baseMode: FeishuCredentialResolutionMode;
   eventSecretMode: FeishuCredentialResolutionMode;
@@ -288,7 +288,7 @@ function buildResolvedFeishuAccount(params: {
  * Unresolved SecretRefs are treated as unavailable instead of throwing.
  */
 export function resolveFeishuAccount(params: {
-  cfg: ClawdbotConfig;
+  cfg: JoopobotConfig;
   accountId?: string | null;
 }): ResolvedFeishuAccount {
   return buildResolvedFeishuAccount({
@@ -304,7 +304,7 @@ export function resolveFeishuAccount(params: {
  */
 export function resolveFeishuRuntimeAccount(
   params: {
-    cfg: ClawdbotConfig;
+    cfg: JoopobotConfig;
     accountId?: string | null;
   },
   options?: { requireEventSecrets?: boolean },
@@ -319,7 +319,7 @@ export function resolveFeishuRuntimeAccount(
 /**
  * List all enabled and configured accounts.
  */
-export function listEnabledFeishuAccounts(cfg: ClawdbotConfig): ResolvedFeishuAccount[] {
+export function listEnabledFeishuAccounts(cfg: JoopobotConfig): ResolvedFeishuAccount[] {
   return listFeishuAccountIds(cfg)
     .map((accountId) => resolveFeishuAccount({ cfg, accountId }))
     .filter((account) => account.enabled && account.configured);

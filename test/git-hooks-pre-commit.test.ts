@@ -108,23 +108,23 @@ describe("git-hooks/pre-commit (integration)", () => {
     run(dir, "git", ["init", "-q", "--initial-branch=main"]);
 
     const fakeBinDir = installPreCommitFixture(dir);
-    mkdirSync(path.join(dir, ".agents", "skills", "discord-clawd"), { recursive: true });
-    writeFileSync(path.join(dir, ".gitignore"), ".agents/skills/discord-clawd/\n", "utf8");
+    mkdirSync(path.join(dir, ".agents", "skills", "discord-joopo"), { recursive: true });
+    writeFileSync(path.join(dir, ".gitignore"), ".agents/skills/discord-joopo/\n", "utf8");
     writeFileSync(
-      path.join(dir, ".agents", "skills", "discord-clawd", "SKILL.md"),
-      "# Discord Clawd\n",
+      path.join(dir, ".agents", "skills", "discord-joopo", "SKILL.md"),
+      "# Discord Joopo\n",
       "utf8",
     );
 
     run(dir, "git", ["add", "--", ".gitignore"]);
-    run(dir, "git", ["add", "-f", "--", ".agents/skills/discord-clawd/SKILL.md"]);
+    run(dir, "git", ["add", "-f", "--", ".agents/skills/discord-joopo/SKILL.md"]);
 
     run(dir, "bash", ["git-hooks/pre-commit"], {
       PATH: `${fakeBinDir}:${process.env.PATH ?? ""}`,
     });
 
     const staged = run(dir, "git", ["diff", "--cached", "--name-only"]).split("\n").filter(Boolean);
-    expect(staged).toEqual([".agents/skills/discord-clawd/SKILL.md", ".gitignore"]);
+    expect(staged).toEqual([".agents/skills/discord-joopo/SKILL.md", ".gitignore"]);
   });
 
   it("ignores FAST_COMMIT because the hook is already formatting-only", () => {

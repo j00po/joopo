@@ -62,7 +62,7 @@ import {
   withPluginInstallRecords,
 } from "../../plugins/installed-plugin-index-records.js";
 import {
-  resolveTrustedSourceLinkedOfficialClawHubSpec,
+  resolveTrustedSourceLinkedOfficialJoopoHubSpec,
   resolveTrustedSourceLinkedOfficialNpmSpec,
   syncPluginsForUpdateChannel,
   updateNpmInstalledPlugins,
@@ -178,7 +178,7 @@ function isPackageManagerUpdateMode(mode: UpdateRunResult["mode"]): mode is "npm
 function isTrackedPackageInstallRecord(record: PluginInstallRecord): boolean {
   return (
     record.source === "npm" ||
-    record.source === "clawhub" ||
+    record.source === "joopohub" ||
     record.source === "git" ||
     record.source === "marketplace"
   );
@@ -225,8 +225,8 @@ export async function collectMissingPluginInstallPayloads(params: {
     const officialNpmSpec = params.syncOfficialPluginInstalls
       ? resolveTrustedSourceLinkedOfficialNpmSpec({ pluginId, record })
       : undefined;
-    const officialClawHubSpec = params.syncOfficialPluginInstalls
-      ? resolveTrustedSourceLinkedOfficialClawHubSpec({ pluginId, record })
+    const officialJoopoHubSpec = params.syncOfficialPluginInstalls
+      ? resolveTrustedSourceLinkedOfficialJoopoHubSpec({ pluginId, record })
       : undefined;
     if (normalizedPluginConfig && params.config) {
       const enableState = resolveEffectiveEnableState({
@@ -235,7 +235,7 @@ export async function collectMissingPluginInstallPayloads(params: {
         config: normalizedPluginConfig,
         rootConfig: params.config,
       });
-      if (!enableState.enabled && !officialNpmSpec && !officialClawHubSpec) {
+      if (!enableState.enabled && !officialNpmSpec && !officialJoopoHubSpec) {
         continue;
       }
     }

@@ -15,7 +15,7 @@ JOOPO_PLUGIN_HOME="$HOME/.joopo/$BUNDLED_PLUGIN_ROOT_DIR"
 
 source scripts/e2e/lib/plugins/fixtures.sh
 source scripts/e2e/lib/plugins/marketplace.sh
-source scripts/e2e/lib/plugins/clawhub.sh
+source scripts/e2e/lib/plugins/joopohub.sh
 demo_plugin_id="demo-plugin"
 demo_plugin_root="$JOOPO_PLUGIN_HOME/$demo_plugin_id"
 write_demo_fixture_plugin "$demo_plugin_root"
@@ -178,4 +178,4 @@ node scripts/e2e/lib/plugins/assertions.mjs slash-install
 
 run_plugins_marketplace_scenario
 
-run_plugins_clawhub_scenario
+run_plugins_joopohub_scenario

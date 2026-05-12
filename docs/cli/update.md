@@ -171,7 +171,7 @@ manually.
   </Step>
 </Steps>
 
-On the beta update channel, tracked npm and ClawHub plugin installs that follow
+On the beta update channel, tracked npm and JoopoHub plugin installs that follow
 the default/latest line try a plugin `@beta` release first. If the plugin has no
 beta release, Joopo falls back to the recorded default/latest spec. For npm
 plugins, Joopo also falls back when the beta package exists but fails install

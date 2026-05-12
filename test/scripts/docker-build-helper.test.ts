@@ -24,7 +24,7 @@ const BUNDLED_PLUGIN_INSTALL_UNINSTALL_RUNTIME_SMOKE_PATH =
 const PLUGINS_DOCKER_E2E_PATH = "scripts/e2e/plugins-docker.sh";
 const PLUGINS_DOCKER_SWEEP_PATH = "scripts/e2e/lib/plugins/sweep.sh";
 const PLUGINS_DOCKER_MARKETPLACE_PATH = "scripts/e2e/lib/plugins/marketplace.sh";
-const PLUGINS_DOCKER_CLAWHUB_PATH = "scripts/e2e/lib/plugins/clawhub.sh";
+const PLUGINS_DOCKER_JOOPOHUB_PATH = "scripts/e2e/lib/plugins/joopohub.sh";
 const PLUGINS_DOCKER_ASSERTIONS_PATH = "scripts/e2e/lib/plugins/assertions.mjs";
 const PLUGINS_DOCKER_NPM_REGISTRY_PATH = "scripts/e2e/lib/plugins/npm-registry-server.mjs";
 const PLUGIN_UPDATE_DOCKER_E2E_PATH = "scripts/e2e/plugin-update-unchanged-docker.sh";
@@ -129,9 +129,7 @@ describe("docker build helper", () => {
     const runner = readFileSync(INSTALL_E2E_RUNNER_PATH, "utf8");
     const wrapper = readFileSync("scripts/test-install-sh-e2e-docker.sh", "utf8");
 
-    expect(runner).toContain(
-      'AGENT_TURNS_PARALLEL="${JOOPO_INSTALL_E2E_AGENT_TURNS_PARALLEL:-1}"',
-    );
+    expect(runner).toContain('AGENT_TURNS_PARALLEL="${JOOPO_INSTALL_E2E_AGENT_TURNS_PARALLEL:-1}"');
     expect(runner).toContain("time_phase");
     expect(runner).toContain("phase_mark_start");
     expect(runner).toContain("run_agent_turn_bg");
@@ -148,7 +146,7 @@ describe("docker build helper", () => {
     expect(scenarios).toContain('"plugins-offline"');
     expect(scenarios).toContain("`bundled-plugin-install-uninstall-${index}`");
     expect(scenarios).toContain("pnpm test:docker:bundled-plugin-install-uninstall");
-    expect(scenarios).toContain("JOOPO_PLUGINS_E2E_CLAWHUB=0");
+    expect(scenarios).toContain("JOOPO_PLUGINS_E2E_JOOPOHUB=0");
   });
 
   it("allows plugin update smoke to tolerate config metadata migrations", () => {
@@ -168,7 +166,7 @@ describe("docker build helper", () => {
     const updateChannel = readFileSync(UPDATE_CHANNEL_SWITCH_DOCKER_E2E_PATH, "utf8");
     const pluginsSweep = readFileSync(PLUGINS_DOCKER_SWEEP_PATH, "utf8");
     const pluginsMarketplace = readFileSync(PLUGINS_DOCKER_MARKETPLACE_PATH, "utf8");
-    const pluginsClawhub = readFileSync(PLUGINS_DOCKER_CLAWHUB_PATH, "utf8");
+    const pluginsClawhub = readFileSync(PLUGINS_DOCKER_JOOPOHUB_PATH, "utf8");
     const pluginsAssertions = readFileSync(PLUGINS_DOCKER_ASSERTIONS_PATH, "utf8");
     const pluginUpdateScenario = readFileSync(PLUGIN_UPDATE_SCENARIO_PATH, "utf8");
     const pluginUpdateProbe = readFileSync(PLUGIN_UPDATE_PROBE_PATH, "utf8");
@@ -234,9 +232,7 @@ describe("docker build helper", () => {
     expect(runner).toContain('curl -fsSL "$INSTALL_URL" | JOOPO_BETA=1 bash');
     expect(runner).toContain('curl -fsSL "$INSTALL_URL" | JOOPO_VERSION="$INSTALL_TAG" bash');
     expect(runner).not.toContain('JOOPO_BETA=1 curl -fsSL "$INSTALL_URL" | bash');
-    expect(runner).not.toContain(
-      'JOOPO_VERSION="$INSTALL_TAG" curl -fsSL "$INSTALL_URL" | bash',
-    );
+    expect(runner).not.toContain('JOOPO_VERSION="$INSTALL_TAG" curl -fsSL "$INSTALL_URL" | bash');
   });
 
   it("keeps installer E2E agent turns out of the interactive bootstrap ritual", () => {
@@ -271,27 +267,27 @@ describe("docker build helper", () => {
     expect(client).not.toContain('"agent.wait"');
   });
 
-  it("keeps ClawHub plugin Docker smoke hermetic by default", () => {
+  it("keeps JoopoHub plugin Docker smoke hermetic by default", () => {
     const runner = readFileSync(PLUGINS_DOCKER_E2E_PATH, "utf8");
     const sweep = readFileSync(PLUGINS_DOCKER_SWEEP_PATH, "utf8");
-    const clawhub = readFileSync(PLUGINS_DOCKER_CLAWHUB_PATH, "utf8");
+    const joopohub = readFileSync(PLUGINS_DOCKER_JOOPOHUB_PATH, "utf8");
 
     expect(runner).toContain("scripts/e2e/lib/plugins/sweep.sh");
-    expect(runner).toContain("JOOPO_PLUGINS_E2E_LIVE_CLAWHUB");
-    expect(sweep).toContain("scripts/e2e/lib/plugins/clawhub.sh");
-    expect(clawhub).toContain("start_clawhub_fixture_server()");
-    expect(clawhub).toContain('JOOPO_CLAWHUB_URL="http://127.0.0.1:');
-    expect(clawhub).toContain("JOOPO_PLUGINS_E2E_LIVE_CLAWHUB");
-    expect(clawhub).toContain("JOOPO_PLUGINS_E2E_LIVE_NPM_REGISTRY");
-    expect(clawhub).toContain("live ClawHub can rate-limit CI");
-    expect(clawhub).toContain('[[ -n "${JOOPO_CLAWHUB_URL:-}" || -n "${CLAWHUB_URL:-}" ]]');
-    expect(clawhub).toContain("Ignoring ambient ClawHub URL for fixture-mode plugin E2E");
-    expect(clawhub).toContain("unset JOOPO_CLAWHUB_URL CLAWHUB_URL");
+    expect(runner).toContain("JOOPO_PLUGINS_E2E_LIVE_JOOPOHUB");
+    expect(sweep).toContain("scripts/e2e/lib/plugins/joopohub.sh");
+    expect(joopohub).toContain("start_joopohub_fixture_server()");
+    expect(joopohub).toContain('JOOPO_JOOPOHUB_URL="http://127.0.0.1:');
+    expect(joopohub).toContain("JOOPO_PLUGINS_E2E_LIVE_JOOPOHUB");
+    expect(joopohub).toContain("JOOPO_PLUGINS_E2E_LIVE_NPM_REGISTRY");
+    expect(joopohub).toContain("live JoopoHub can rate-limit CI");
+    expect(joopohub).toContain('[[ -n "${JOOPO_JOOPOHUB_URL:-}" || -n "${JOOPOHUB_URL:-}" ]]');
+    expect(joopohub).toContain("Ignoring ambient JoopoHub URL for fixture-mode plugin E2E");
+    expect(joopohub).toContain("unset JOOPO_JOOPOHUB_URL JOOPOHUB_URL");
   });
 
   it("covers plugin install/update sources in the Docker plugin sweep", () => {
     const sweep = readFileSync(PLUGINS_DOCKER_SWEEP_PATH, "utf8");
-    const clawhub = readFileSync(PLUGINS_DOCKER_CLAWHUB_PATH, "utf8");
+    const joopohub = readFileSync(PLUGINS_DOCKER_JOOPOHUB_PATH, "utf8");
     const assertions = readFileSync(PLUGINS_DOCKER_ASSERTIONS_PATH, "utf8");
     const npmRegistry = readFileSync(PLUGINS_DOCKER_NPM_REGISTRY_PATH, "utf8");
 
@@ -311,10 +307,10 @@ describe("docker build helper", () => {
     expect(sweep).toContain("plugins update demo-plugin-git-update");
     expect(assertions).toContain("demo.git.update.v2");
 
-    expect(clawhub).toContain('plugins install "$CLAWHUB_PLUGIN_SPEC"');
-    expect(clawhub).toContain('plugins update "$CLAWHUB_PLUGIN_ID"');
-    expect(clawhub).toContain("clawhub:@joopo/kitchen-sink");
-    expect(assertions).toContain("clawhub-updated");
+    expect(joopohub).toContain('plugins install "$JOOPOHUB_PLUGIN_SPEC"');
+    expect(joopohub).toContain('plugins update "$JOOPOHUB_PLUGIN_ID"');
+    expect(joopohub).toContain("joopohub:@joopo/kitchen-sink");
+    expect(assertions).toContain("joopohub-updated");
     expect(assertions).toContain("record.clawpackSha256");
     expect(assertions).toContain("record.artifactKind");
     expect(assertions).toContain("record.npmIntegrity");

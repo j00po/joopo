@@ -37,8 +37,8 @@ Your `package.json` needs an `joopo` field that tells the plugin system what you
     }
     ```
   </Tab>
-  <Tab title="Provider plugin / ClawHub baseline">
-    ```json joopo-clawhub-package.json
+  <Tab title="Provider plugin / JoopoHub baseline">
+    ```json joopo-joopohub-package.json
     {
       "name": "@myorg/joopo-my-plugin",
       "version": "1.0.0",
@@ -60,7 +60,7 @@ Your `package.json` needs an `joopo` field that tells the plugin system what you
 </Tabs>
 
 <Note>
-If you publish the plugin externally on ClawHub, those `compat` and `build` fields are required. The canonical publish snippets live in `docs/snippets/plugin-publish/`.
+If you publish the plugin externally on JoopoHub, those `compat` and `build` fields are required. The canonical publish snippets live in `docs/snippets/plugin-publish/`.
 </Note>
 
 ### `joopo` fields
@@ -154,19 +154,19 @@ Example:
 
 `joopo.install` is package metadata, not manifest metadata.
 
-| Field                        | Type                                | What it means                                                                     |
-| ---------------------------- | ----------------------------------- | --------------------------------------------------------------------------------- |
-| `clawhubSpec`                | `string`                            | Canonical ClawHub spec for install/update and onboarding install-on-demand flows. |
-| `npmSpec`                    | `string`                            | Canonical npm spec for install/update fallback flows.                             |
-| `localPath`                  | `string`                            | Local development or bundled install path.                                        |
-| `defaultChoice`              | `"clawhub"` \| `"npm"` \| `"local"` | Preferred install source when multiple sources are available.                     |
-| `minHostVersion`             | `string`                            | Minimum supported Joopo version in the form `>=x.y.z` or `>=x.y.z-prerelease`. |
-| `expectedIntegrity`          | `string`                            | Expected npm dist integrity string, usually `sha512-...`, for pinned installs.    |
-| `allowInvalidConfigRecovery` | `boolean`                           | Lets bundled-plugin reinstall flows recover from specific stale-config failures.  |
+| Field                        | Type                                 | What it means                                                                      |
+| ---------------------------- | ------------------------------------ | ---------------------------------------------------------------------------------- |
+| `joopohubSpec`               | `string`                             | Canonical JoopoHub spec for install/update and onboarding install-on-demand flows. |
+| `npmSpec`                    | `string`                             | Canonical npm spec for install/update fallback flows.                              |
+| `localPath`                  | `string`                             | Local development or bundled install path.                                         |
+| `defaultChoice`              | `"joopohub"` \| `"npm"` \| `"local"` | Preferred install source when multiple sources are available.                      |
+| `minHostVersion`             | `string`                             | Minimum supported Joopo version in the form `>=x.y.z` or `>=x.y.z-prerelease`.     |
+| `expectedIntegrity`          | `string`                             | Expected npm dist integrity string, usually `sha512-...`, for pinned installs.     |
+| `allowInvalidConfigRecovery` | `boolean`                            | Lets bundled-plugin reinstall flows recover from specific stale-config failures.   |
 
 <AccordionGroup>
   <Accordion title="Onboarding behavior">
-    Interactive onboarding also uses `joopo.install` for install-on-demand surfaces. If your plugin exposes provider auth choices or channel setup/catalog metadata before runtime loads, onboarding can show that choice, prompt for ClawHub, npm, or local install, install or enable the plugin, then continue the selected flow. ClawHub onboarding choices use `clawhubSpec` and are preferred when present; npm choices require trusted catalog metadata with a registry `npmSpec`; exact versions and `expectedIntegrity` are optional npm pins. If `expectedIntegrity` is present, install/update flows enforce it for npm. Keep the "what to show" metadata in `joopo.plugin.json` and the "how to install it" metadata in `package.json`.
+    Interactive onboarding also uses `joopo.install` for install-on-demand surfaces. If your plugin exposes provider auth choices or channel setup/catalog metadata before runtime loads, onboarding can show that choice, prompt for JoopoHub, npm, or local install, install or enable the plugin, then continue the selected flow. JoopoHub onboarding choices use `joopohubSpec` and are preferred when present; npm choices require trusted catalog metadata with a registry `npmSpec`; exact versions and `expectedIntegrity` are optional npm pins. If `expectedIntegrity` is present, install/update flows enforce it for npm. Keep the "what to show" metadata in `joopo.plugin.json` and the "how to install it" metadata in `package.json`.
   </Accordion>
   <Accordion title="minHostVersion enforcement">
     If `minHostVersion` is set, install and non-bundled manifest-registry loading both enforce it. Older hosts skip external plugins; invalid version strings are rejected. Bundled source plugins are assumed to be co-versioned with the host checkout.
@@ -267,17 +267,17 @@ Even plugins with no config must ship a schema. An empty schema is valid:
 
 See [Plugin manifest](/plugins/manifest) for the full schema reference.
 
-## ClawHub publishing
+## JoopoHub publishing
 
-For plugin packages, use the package-specific ClawHub command:
+For plugin packages, use the package-specific JoopoHub command:
 
 ```bash
-clawhub package publish your-org/your-plugin --dry-run
-clawhub package publish your-org/your-plugin
+joopohub package publish your-org/your-plugin --dry-run
+joopohub package publish your-org/your-plugin
 ```
 
 <Note>
-The legacy skill-only publish alias is for skills. Plugin packages should always use `clawhub package publish`.
+The legacy skill-only publish alias is for skills. Plugin packages should always use `joopohub package publish`.
 </Note>
 
 ## Setup entry
@@ -492,7 +492,7 @@ The `ChannelSetupWizard` type supports `credentials`, `textInputs`, `dmPolicy`, 
 
 ## Publishing and installing
 
-**External plugins:** publish to [ClawHub](/clawhub), then install:
+**External plugins:** publish to [JoopoHub](/joopohub), then install:
 
 <Tabs>
   <Tab title="npm">
@@ -503,13 +503,13 @@ The `ChannelSetupWizard` type supports `credentials`, `textInputs`, `dmPolicy`, 
     Bare package specs install from npm during the launch cutover.
 
   </Tab>
-  <Tab title="ClawHub only">
+  <Tab title="JoopoHub only">
     ```bash
-    joopo plugins install clawhub:@myorg/joopo-my-plugin
+    joopo plugins install joopohub:@myorg/joopo-my-plugin
     ```
   </Tab>
   <Tab title="npm package spec">
-    Use npm when a package has not moved to ClawHub yet, or when you need a
+    Use npm when a package has not moved to JoopoHub yet, or when you need a
     direct npm install path during migration:
 
     ```bash
@@ -532,7 +532,7 @@ For npm-sourced installs, `joopo plugins install` installs the package under `~/
 </Info>
 
 <Note>
-Gateway startup does not install plugin dependencies. npm/git/ClawHub install flows own dependency convergence; local plugins must already have their dependencies installed.
+Gateway startup does not install plugin dependencies. npm/git/JoopoHub install flows own dependency convergence; local plugins must already have their dependencies installed.
 </Note>
 
 Bundled package metadata is explicit, not inferred from built JavaScript at gateway startup. Runtime dependencies belong in the plugin package that owns them; packaged Joopo startup never repairs or mirrors plugin dependencies.

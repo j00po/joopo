@@ -184,12 +184,12 @@ describe("plugins cli list", () => {
   it("keeps inspect on the static snapshot by default", async () => {
     setInstalledPluginIndexInstallRecords({
       "joopo-mem0": {
-        source: "clawhub",
-        spec: "clawhub:joopo-mem0",
+        source: "joopohub",
+        spec: "joopohub:joopo-mem0",
         installPath: "/plugins/joopo-mem0",
         version: "2026.5.1",
-        clawhubPackage: "joopo-mem0",
-        clawhubChannel: "official",
+        joopohubPackage: "joopo-mem0",
+        joopohubChannel: "official",
         artifactKind: "npm-pack",
         artifactFormat: "tgz",
         npmIntegrity: "sha512-clawpack",
@@ -239,7 +239,7 @@ describe("plugins cli list", () => {
     expect(buildPluginDiagnosticsReport).not.toHaveBeenCalled();
     expect(runtimeLogs.join("\n")).toContain("Policy");
     expect(runtimeLogs.join("\n")).toContain("allowConversationAccess: true");
-    expect(runtimeLogs.join("\n")).toContain("ClawHub package: joopo-mem0");
+    expect(runtimeLogs.join("\n")).toContain("JoopoHub package: joopo-mem0");
     expect(runtimeLogs.join("\n")).toContain("Artifact kind: npm-pack");
     expect(runtimeLogs.join("\n")).toContain("Npm integrity: sha512-clawpack");
     expect(runtimeLogs.join("\n")).toContain(

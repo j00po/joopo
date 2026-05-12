@@ -91,7 +91,7 @@ export const forcedUnitFastTestFiles = [
   "src/flows/provider-flow.test.ts",
   "src/context-engine/context-engine.test.ts",
   "extensions/canvas/src/host/server.state-dir.test.ts",
-  "src/docs/clawhub-plugin-docs.test.ts",
+  "src/docs/joopohub-plugin-docs.test.ts",
   "src/docs/channel-config-examples.test.ts",
   "src/docs/plugin-doc-examples.test.ts",
   "src/docs/install-cloud-secrets.test.ts",

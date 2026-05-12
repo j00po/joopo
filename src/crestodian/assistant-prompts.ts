@@ -25,7 +25,7 @@ export const CRESTODIAN_ASSISTANT_SYSTEM_PROMPT = [
   "- models",
   "- plugins list",
   "- plugins search <query>",
-  "- plugin install <npm-or-clawhub-spec>",
+  "- plugin install <npm-or-joopohub-spec>",
   "- plugin uninstall <id>",
   "- audit",
   "- validate config",

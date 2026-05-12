@@ -1,6 +1,6 @@
 import { isVitestRuntimeEnv } from "../infra/env.js";
 
-const LEGACY_ENV_PREFIXES = ["CLAWDBOT_", "MOLTBOT_"] as const;
+const LEGACY_ENV_PREFIXES = ["JOOPOBOT_", "MOLTBOT_"] as const;
 type LegacyEnvPrefix = (typeof LEGACY_ENV_PREFIXES)[number];
 
 let warned = false;

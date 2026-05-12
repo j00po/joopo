@@ -223,13 +223,13 @@ function barnacleGithub(
 }
 
 describe("barnacle-auto-response", () => {
-  it("keeps Barnacle-owned labels documented and ClawHub spelled correctly", () => {
-    expect(managedLabelSpecs["r: skill"].description).toContain("ClawHub");
-    expect(managedLabelSpecs["r: skill"].description).not.toContain("Clawdhub");
+  it("keeps Barnacle-owned labels documented and JoopoHub spelled correctly", () => {
+    expect(managedLabelSpecs["r: skill"].description).toContain("JoopoHub");
+    expect(managedLabelSpecs["r: skill"].description).not.toContain("Joopohub");
     expect(managedLabelSpecs.dirty.description).toContain("dirty/unrelated");
     expect(managedLabelSpecs["r: support"].description).toContain("support requests");
     expect(managedLabelSpecs["r: false-positive"].description).toContain("false positive");
-    expect(managedLabelSpecs["r: third-party-extension"].description).toContain("ClawHub");
+    expect(managedLabelSpecs["r: third-party-extension"].description).toContain("JoopoHub");
     expect(managedLabelSpecs["r: bluebubbles"].description).toContain("deprecated");
     expect(managedLabelSpecs["r: too-many-prs"].description).toContain("twenty active PRs");
     expect(managedLabelSpecs[PROOF_SUPPLIED_LABEL].color).toBe("C2E0C6");
@@ -812,7 +812,7 @@ describe("barnacle-auto-response", () => {
 
     expect(calls.createComment).toContainEqual(
       expect.objectContaining({
-        body: expect.stringContaining("ClawHub"),
+        body: expect.stringContaining("JoopoHub"),
       }),
     );
     expect(calls.update).toContainEqual(expect.objectContaining({ state: "closed" }));

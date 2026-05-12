@@ -117,7 +117,7 @@ describe("agentLogoUrl", () => {
 });
 
 describe("assistantAvatarFallbackUrl", () => {
-  it("uses the bundled Molty png for assistant profile fallbacks", () => {
+  it("uses the bundled Babuli png for assistant profile fallbacks", () => {
     expect(assistantAvatarFallbackUrl("/ui")).toBe("/ui/apple-touch-icon.png");
     expect(assistantAvatarFallbackUrl("")).toBe("apple-touch-icon.png");
   });

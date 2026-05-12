@@ -1,4 +1,4 @@
-import type { ClawdbotConfig, HistoryEntry, PluginRuntime, RuntimeEnv } from "../runtime-api.js";
+import type { JoopobotConfig, HistoryEntry, PluginRuntime, RuntimeEnv } from "../runtime-api.js";
 import { resolveFeishuMessageDedupeKey } from "./dedupe-key.js";
 import type { FeishuMessageEvent } from "./event-types.js";
 import { isMentionForwardRequest } from "./mention.js";
@@ -18,14 +18,14 @@ function readString(value: unknown): string | undefined {
 }
 
 type FeishuMessageReceiveHandlerContext = {
-  cfg: ClawdbotConfig;
+  cfg: JoopobotConfig;
   core: PluginRuntime;
   accountId: string;
   runtime?: RuntimeEnv;
   chatHistories: Map<string, HistoryEntry[]>;
   fireAndForget?: boolean;
   handleMessage: (params: {
-    cfg: ClawdbotConfig;
+    cfg: JoopobotConfig;
     event: FeishuMessageEvent;
     botOpenId?: string;
     botName?: string;

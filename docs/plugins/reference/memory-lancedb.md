@@ -12,7 +12,7 @@ Adds agent-callable tools.
 ## Distribution
 
 - Package: `@joopo/memory-lancedb`
-- Install route: npm; ClawHub
+- Install route: npm; JoopoHub
 
 ## Surface
 

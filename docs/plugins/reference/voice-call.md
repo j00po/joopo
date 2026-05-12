@@ -12,7 +12,7 @@ Adds agent-callable tools.
 ## Distribution
 
 - Package: `@joopo/voice-call`
-- Install route: npm; ClawHub
+- Install route: npm; JoopoHub
 
 ## Surface
 

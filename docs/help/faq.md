@@ -172,7 +172,7 @@ lives on the [First-run FAQ](/help/faq-first-run).
   </Accordion>
 
   <Accordion title="Can I load skills from a custom folder?">
-    Yes. Add extra directories via `skills.load.extraDirs` in `~/.joopo/joopo.json` (lowest precedence). Default precedence is `<workspace>/skills` → `<workspace>/.agents/skills` → `~/.agents/skills` → `~/.joopo/skills` → bundled → `skills.load.extraDirs`. `clawhub` installs into `./skills` by default, which Joopo treats as `<workspace>/skills` on the next session. If the skill should only be visible to certain agents, pair that with `agents.defaults.skills` or `agents.list[].skills`.
+    Yes. Add extra directories via `skills.load.extraDirs` in `~/.joopo/joopo.json` (lowest precedence). Default precedence is `<workspace>/skills` → `<workspace>/.agents/skills` → `~/.agents/skills` → `~/.joopo/skills` → bundled → `skills.load.extraDirs`. `joopohub` installs into `./skills` by default, which Joopo treats as `<workspace>/skills` on the next session. If the skill should only be visible to certain agents, pair that with `agents.defaults.skills` or `agents.list[].skills`.
   </Accordion>
 
   <Accordion title="How can I use different models for different tasks?">
@@ -316,7 +316,7 @@ lives on the [First-run FAQ](/help/faq-first-run).
 
   <Accordion title="How do I install skills on Linux?">
     Use native `joopo skills` commands or drop skills into your workspace. The macOS Skills UI isn't available on Linux.
-    Browse skills at [https://clawhub.ai](https://clawhub.ai).
+    Browse skills at [https://joopohub.ai](https://joopohub.ai).
 
     ```bash
     joopo skills search "calendar"
@@ -330,7 +330,7 @@ lives on the [First-run FAQ](/help/faq-first-run).
     ```
 
     Native `joopo skills install` writes into the active workspace `skills/`
-    directory. Install the separate `clawhub` CLI only if you want to publish or
+    directory. Install the separate `joopohub` CLI only if you want to publish or
     sync your own skills. For shared installs across agents, put the skill under
     `~/.joopo/skills` and use `agents.defaults.skills` or
     `agents.list[].skills` if you want to narrow which agents can see it.
@@ -409,7 +409,7 @@ lives on the [First-run FAQ](/help/faq-first-run).
     joopo skills update --all
     ```
 
-    Native installs land in the active workspace `skills/` directory. For shared skills across agents, place them in `~/.joopo/skills/<name>/SKILL.md`. If only some agents should see a shared install, configure `agents.defaults.skills` or `agents.list[].skills`. Some skills expect binaries installed via Homebrew; on Linux that means Linuxbrew (see the Homebrew Linux FAQ entry above). See [Skills](/tools/skills), [Skills config](/tools/skills-config), and [ClawHub](/clawhub).
+    Native installs land in the active workspace `skills/` directory. For shared skills across agents, place them in `~/.joopo/skills/<name>/SKILL.md`. If only some agents should see a shared install, configure `agents.defaults.skills` or `agents.list[].skills`. Some skills expect binaries installed via Homebrew; on Linux that means Linuxbrew (see the Homebrew Linux FAQ entry above). See [Skills](/tools/skills), [Skills config](/tools/skills-config), and [JoopoHub](/joopohub).
 
   </Accordion>
 
@@ -1965,7 +1965,7 @@ lives on the [Models FAQ](/help/faq-models).
 
 ---
 
-Still stuck? Ask in [Discord](https://discord.com/invite/clawd) or open a [GitHub discussion](https://github.com/joopo/joopo/discussions).
+Still stuck? Ask in [Discord](https://discord.com/invite/joopo) or open a [GitHub discussion](https://github.com/joopo/joopo/discussions).
 
 ## Related
 

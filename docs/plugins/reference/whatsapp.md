@@ -12,7 +12,7 @@ Adds the WhatsApp channel surface for sending and receiving Joopo messages.
 ## Distribution
 
 - Package: `@joopo/whatsapp`
-- Install route: npm; ClawHub
+- Install route: npm; JoopoHub
 
 ## Surface
 

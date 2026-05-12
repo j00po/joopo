@@ -12,7 +12,7 @@ Adds the Zalo channel surface for sending and receiving Joopo messages.
 ## Distribution
 
 - Package: `@joopo/zalo`
-- Install route: npm; ClawHub
+- Install route: npm; JoopoHub
 
 ## Surface
 

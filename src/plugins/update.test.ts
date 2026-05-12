@@ -14,7 +14,7 @@ function appBundledPluginRoot(pluginId: string): string {
 
 const installPluginFromNpmSpecMock = vi.fn();
 const installPluginFromMarketplaceMock = vi.fn();
-const installPluginFromClawHubMock = vi.fn();
+const installPluginFromJoopoHubMock = vi.fn();
 const installPluginFromGitSpecMock = vi.fn();
 const resolveBundledPluginSourcesMock = vi.fn();
 const runCommandWithTimeoutMock = vi.fn();
@@ -37,13 +37,13 @@ vi.mock("./marketplace.js", () => ({
   installPluginFromMarketplace: (...args: unknown[]) => installPluginFromMarketplaceMock(...args),
 }));
 
-vi.mock("./clawhub.js", () => ({
-  CLAWHUB_INSTALL_ERROR_CODE: {
+vi.mock("./joopohub.js", () => ({
+  JOOPOHUB_INSTALL_ERROR_CODE: {
     PACKAGE_NOT_FOUND: "package_not_found",
     VERSION_NOT_FOUND: "version_not_found",
     ARCHIVE_INTEGRITY_MISMATCH: "archive_integrity_mismatch",
   },
-  installPluginFromClawHub: (...args: unknown[]) => installPluginFromClawHubMock(...args),
+  installPluginFromJoopoHub: (...args: unknown[]) => installPluginFromJoopoHubMock(...args),
 }));
 
 vi.mock("./bundled-sources.js", () => ({
@@ -78,11 +78,11 @@ function createSuccessfulNpmUpdateResult(params?: {
   };
 }
 
-function createSuccessfulClawHubUpdateResult(params?: {
+function createSuccessfulJoopoHubUpdateResult(params?: {
   pluginId?: string;
   targetDir?: string;
   version?: string;
-  clawhubPackage?: string;
+  joopohubPackage?: string;
 }) {
   return {
     ok: true,
@@ -90,13 +90,13 @@ function createSuccessfulClawHubUpdateResult(params?: {
     targetDir: params?.targetDir ?? "/tmp/joopo-plugins/legacy-chat",
     version: params?.version ?? "2026.5.1-beta.2",
     extensions: ["index.ts"],
-    packageName: params?.clawhubPackage ?? "legacy-chat",
-    clawhub: {
-      source: "clawhub" as const,
-      clawhubUrl: "https://clawhub.ai",
-      clawhubPackage: params?.clawhubPackage ?? "legacy-chat",
-      clawhubFamily: "code-plugin" as const,
-      clawhubChannel: "official" as const,
+    packageName: params?.joopohubPackage ?? "legacy-chat",
+    joopohub: {
+      source: "joopohub" as const,
+      joopohubUrl: "https://joopohub.ai",
+      joopohubPackage: params?.joopohubPackage ?? "legacy-chat",
+      joopohubFamily: "code-plugin" as const,
+      joopohubChannel: "official" as const,
       version: params?.version ?? "2026.5.1-beta.2",
       integrity: "sha256-clawpack",
       resolvedAt: "2026-05-01T00:00:00.000Z",
@@ -104,7 +104,7 @@ function createSuccessfulClawHubUpdateResult(params?: {
       artifactFormat: "tgz" as const,
       npmIntegrity: "sha512-clawpack",
       npmShasum: "2".repeat(40),
-      npmTarballName: `${params?.clawhubPackage ?? "legacy-chat"}-${params?.version ?? "2026.5.1-beta.2"}.tgz`,
+      npmTarballName: `${params?.joopohubPackage ?? "legacy-chat"}-${params?.version ?? "2026.5.1-beta.2"}.tgz`,
       clawpackSha256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       clawpackSpecVersion: 1,
       clawpackManifestSha256: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
@@ -163,26 +163,26 @@ function createMarketplaceInstallConfig(params: {
   };
 }
 
-function createClawHubInstallConfig(params: {
+function createJoopoHubInstallConfig(params: {
   pluginId: string;
   installPath: string;
-  clawhubUrl: string;
-  clawhubPackage: string;
-  clawhubFamily: "bundle-plugin" | "code-plugin";
-  clawhubChannel: "community" | "official" | "private";
+  joopohubUrl: string;
+  joopohubPackage: string;
+  joopohubFamily: "bundle-plugin" | "code-plugin";
+  joopohubChannel: "community" | "official" | "private";
   spec?: string;
 }): JoopoConfig {
   return {
     plugins: {
       installs: {
         [params.pluginId]: {
-          source: "clawhub" as const,
-          spec: params.spec ?? `clawhub:${params.clawhubPackage}`,
+          source: "joopohub" as const,
+          spec: params.spec ?? `joopohub:${params.joopohubPackage}`,
           installPath: params.installPath,
-          clawhubUrl: params.clawhubUrl,
-          clawhubPackage: params.clawhubPackage,
-          clawhubFamily: params.clawhubFamily,
-          clawhubChannel: params.clawhubChannel,
+          joopohubUrl: params.joopohubUrl,
+          joopohubPackage: params.joopohubPackage,
+          joopohubFamily: params.joopohubFamily,
+          joopohubChannel: params.joopohubChannel,
         },
       },
     },
@@ -376,7 +376,7 @@ describe("updateNpmInstalledPlugins", () => {
   beforeEach(() => {
     installPluginFromNpmSpecMock.mockReset();
     installPluginFromMarketplaceMock.mockReset();
-    installPluginFromClawHubMock.mockReset();
+    installPluginFromJoopoHubMock.mockReset();
     installPluginFromGitSpecMock.mockReset();
     resolveBundledPluginSourcesMock.mockReset();
     resolveBundledPluginSourcesMock.mockReturnValue(new Map());
@@ -1277,7 +1277,7 @@ describe("updateNpmInstalledPlugins", () => {
       } satisfies JoopoConfig,
     },
     {
-      source: "ClawHub",
+      source: "JoopoHub",
       config: {
         plugins: {
           entries: {
@@ -1288,13 +1288,13 @@ describe("updateNpmInstalledPlugins", () => {
           },
           installs: {
             demo: {
-              source: "clawhub" as const,
-              spec: "clawhub:demo",
+              source: "joopohub" as const,
+              spec: "joopohub:demo",
               installPath: "/tmp/demo",
-              clawhubUrl: "https://clawhub.ai",
-              clawhubPackage: "demo",
-              clawhubFamily: "code-plugin",
-              clawhubChannel: "official",
+              joopohubUrl: "https://joopohub.ai",
+              joopohubPackage: "demo",
+              joopohubFamily: "code-plugin",
+              joopohubChannel: "official",
             },
           },
         },
@@ -1323,7 +1323,7 @@ describe("updateNpmInstalledPlugins", () => {
     },
   ])("skips disabled $source installs before update network calls", async ({ config }) => {
     installPluginFromNpmSpecMock.mockRejectedValue(new Error("npm installer should not run"));
-    installPluginFromClawHubMock.mockRejectedValue(new Error("ClawHub installer should not run"));
+    installPluginFromJoopoHubMock.mockRejectedValue(new Error("JoopoHub installer should not run"));
     installPluginFromMarketplaceMock.mockRejectedValue(
       new Error("marketplace installer should not run"),
     );
@@ -1335,7 +1335,7 @@ describe("updateNpmInstalledPlugins", () => {
 
     expect(runCommandWithTimeoutMock).not.toHaveBeenCalled();
     expect(installPluginFromNpmSpecMock).not.toHaveBeenCalled();
-    expect(installPluginFromClawHubMock).not.toHaveBeenCalled();
+    expect(installPluginFromJoopoHubMock).not.toHaveBeenCalled();
     expect(installPluginFromMarketplaceMock).not.toHaveBeenCalled();
     expect(result.changed).toBe(false);
     expect(result.config).toBe(config);
@@ -1459,24 +1459,24 @@ describe("updateNpmInstalledPlugins", () => {
     );
   });
 
-  it("updates disabled trusted official ClawHub installs through the catalog spec", async () => {
-    installPluginFromClawHubMock.mockResolvedValue(
-      createSuccessfulClawHubUpdateResult({
+  it("updates disabled trusted official JoopoHub installs through the catalog spec", async () => {
+    installPluginFromJoopoHubMock.mockResolvedValue(
+      createSuccessfulJoopoHubUpdateResult({
         pluginId: "diagnostics-otel",
         targetDir: "/tmp/diagnostics-otel",
         version: "2026.5.4",
-        clawhubPackage: "@joopo/diagnostics-otel",
+        joopohubPackage: "@joopo/diagnostics-otel",
       }),
     );
 
-    const config = createClawHubInstallConfig({
+    const config = createJoopoHubInstallConfig({
       pluginId: "diagnostics-otel",
       installPath: "/tmp/diagnostics-otel",
-      clawhubUrl: "https://clawhub.ai",
-      clawhubPackage: "@joopo/diagnostics-otel",
-      clawhubFamily: "code-plugin",
-      clawhubChannel: "official",
-      spec: "clawhub:@joopo/diagnostics-otel@2026.5.3",
+      joopohubUrl: "https://joopohub.ai",
+      joopohubPackage: "@joopo/diagnostics-otel",
+      joopohubFamily: "code-plugin",
+      joopohubChannel: "official",
+      spec: "joopohub:@joopo/diagnostics-otel@2026.5.3",
     });
     const result = await updateNpmInstalledPlugins({
       config: {
@@ -1495,18 +1495,18 @@ describe("updateNpmInstalledPlugins", () => {
       syncOfficialPluginInstalls: true,
     });
 
-    expect(installPluginFromClawHubMock).toHaveBeenCalledWith(
+    expect(installPluginFromJoopoHubMock).toHaveBeenCalledWith(
       expect.objectContaining({
-        spec: "clawhub:@joopo/diagnostics-otel",
+        spec: "joopohub:@joopo/diagnostics-otel",
         expectedPluginId: "diagnostics-otel",
       }),
     );
     expect(result.config.plugins?.installs?.["diagnostics-otel"]).toMatchObject({
-      source: "clawhub",
-      spec: "clawhub:@joopo/diagnostics-otel",
+      source: "joopohub",
+      spec: "joopohub:@joopo/diagnostics-otel",
       version: "2026.5.4",
-      clawhubPackage: "@joopo/diagnostics-otel",
-      clawhubChannel: "official",
+      joopohubPackage: "@joopo/diagnostics-otel",
+      joopohubChannel: "official",
     });
     expect(result.config.plugins?.entries?.["diagnostics-otel"]).toEqual({
       enabled: false,
@@ -1514,13 +1514,13 @@ describe("updateNpmInstalledPlugins", () => {
     });
   });
 
-  it("updates bare trusted official ClawHub installs through the catalog spec", async () => {
-    installPluginFromClawHubMock.mockResolvedValue(
-      createSuccessfulClawHubUpdateResult({
+  it("updates bare trusted official JoopoHub installs through the catalog spec", async () => {
+    installPluginFromJoopoHubMock.mockResolvedValue(
+      createSuccessfulJoopoHubUpdateResult({
         pluginId: "diagnostics-prometheus",
         targetDir: "/tmp/diagnostics-prometheus",
         version: "2026.5.4",
-        clawhubPackage: "@joopo/diagnostics-prometheus",
+        joopohubPackage: "@joopo/diagnostics-prometheus",
       }),
     );
 
@@ -1529,8 +1529,8 @@ describe("updateNpmInstalledPlugins", () => {
         plugins: {
           installs: {
             "diagnostics-prometheus": {
-              source: "clawhub",
-              spec: "clawhub:@joopo/diagnostics-prometheus@2026.5.3",
+              source: "joopohub",
+              spec: "joopohub:@joopo/diagnostics-prometheus@2026.5.3",
               installPath: "/tmp/diagnostics-prometheus",
             },
           },
@@ -1539,18 +1539,18 @@ describe("updateNpmInstalledPlugins", () => {
       syncOfficialPluginInstalls: true,
     });
 
-    expect(installPluginFromClawHubMock).toHaveBeenCalledWith(
+    expect(installPluginFromJoopoHubMock).toHaveBeenCalledWith(
       expect.objectContaining({
-        spec: "clawhub:@joopo/diagnostics-prometheus",
+        spec: "joopohub:@joopo/diagnostics-prometheus",
         expectedPluginId: "diagnostics-prometheus",
       }),
     );
     expect(result.config.plugins?.installs?.["diagnostics-prometheus"]).toMatchObject({
-      source: "clawhub",
-      spec: "clawhub:@joopo/diagnostics-prometheus",
+      source: "joopohub",
+      spec: "joopohub:@joopo/diagnostics-prometheus",
       version: "2026.5.4",
-      clawhubPackage: "@joopo/diagnostics-prometheus",
-      clawhubChannel: "official",
+      joopohubPackage: "@joopo/diagnostics-prometheus",
+      joopohubChannel: "official",
     });
   });
 
@@ -2021,18 +2021,18 @@ describe("updateNpmInstalledPlugins", () => {
     });
   });
 
-  it("updates ClawHub-installed plugins via recorded package metadata", async () => {
-    installPluginFromClawHubMock.mockResolvedValue({
+  it("updates JoopoHub-installed plugins via recorded package metadata", async () => {
+    installPluginFromJoopoHubMock.mockResolvedValue({
       ok: true,
       pluginId: "demo",
       targetDir: "/tmp/demo",
       version: "1.2.4",
-      clawhub: {
-        source: "clawhub",
-        clawhubUrl: "https://clawhub.ai",
-        clawhubPackage: "demo",
-        clawhubFamily: "code-plugin",
-        clawhubChannel: "official",
+      joopohub: {
+        source: "joopohub",
+        joopohubUrl: "https://joopohub.ai",
+        joopohubPackage: "demo",
+        joopohubFamily: "code-plugin",
+        joopohubChannel: "official",
         artifactKind: "npm-pack",
         artifactFormat: "tgz",
         npmIntegrity: "sha512-next",
@@ -2048,35 +2048,35 @@ describe("updateNpmInstalledPlugins", () => {
     });
 
     const result = await updateNpmInstalledPlugins({
-      config: createClawHubInstallConfig({
+      config: createJoopoHubInstallConfig({
         pluginId: "demo",
         installPath: "/tmp/demo",
-        clawhubUrl: "https://clawhub.ai",
-        clawhubPackage: "demo",
-        clawhubFamily: "code-plugin",
-        clawhubChannel: "official",
+        joopohubUrl: "https://joopohub.ai",
+        joopohubPackage: "demo",
+        joopohubFamily: "code-plugin",
+        joopohubChannel: "official",
       }),
       pluginIds: ["demo"],
       timeoutMs: 1_800_000,
     });
 
-    expect(installPluginFromClawHubMock).toHaveBeenCalledWith(
+    expect(installPluginFromJoopoHubMock).toHaveBeenCalledWith(
       expect.objectContaining({
-        spec: "clawhub:demo",
-        baseUrl: "https://clawhub.ai",
+        spec: "joopohub:demo",
+        baseUrl: "https://joopohub.ai",
         expectedPluginId: "demo",
         mode: "update",
         timeoutMs: 1_800_000,
       }),
     );
     expect(result.config.plugins?.installs?.demo).toMatchObject({
-      source: "clawhub",
-      spec: "clawhub:demo",
+      source: "joopohub",
+      spec: "joopohub:demo",
       installPath: "/tmp/demo",
       version: "1.2.4",
-      clawhubPackage: "demo",
-      clawhubFamily: "code-plugin",
-      clawhubChannel: "official",
+      joopohubPackage: "demo",
+      joopohubFamily: "code-plugin",
+      joopohubChannel: "official",
       artifactKind: "npm-pack",
       artifactFormat: "tgz",
       npmIntegrity: "sha512-next",
@@ -2090,131 +2090,131 @@ describe("updateNpmInstalledPlugins", () => {
     });
   });
 
-  it("tries ClawHub beta for default ClawHub specs on beta channel without persisting the beta tag", async () => {
-    installPluginFromClawHubMock.mockResolvedValue(
-      createSuccessfulClawHubUpdateResult({
+  it("tries JoopoHub beta for default JoopoHub specs on beta channel without persisting the beta tag", async () => {
+    installPluginFromJoopoHubMock.mockResolvedValue(
+      createSuccessfulJoopoHubUpdateResult({
         pluginId: "demo",
         targetDir: "/tmp/demo",
         version: "1.3.0-beta.1",
-        clawhubPackage: "demo",
+        joopohubPackage: "demo",
       }),
     );
 
     const result = await updateNpmInstalledPlugins({
-      config: createClawHubInstallConfig({
+      config: createJoopoHubInstallConfig({
         pluginId: "demo",
         installPath: "/tmp/demo",
-        clawhubUrl: "https://clawhub.ai",
-        clawhubPackage: "demo",
-        clawhubFamily: "code-plugin",
-        clawhubChannel: "official",
+        joopohubUrl: "https://joopohub.ai",
+        joopohubPackage: "demo",
+        joopohubFamily: "code-plugin",
+        joopohubChannel: "official",
       }),
       pluginIds: ["demo"],
       updateChannel: "beta",
     });
 
-    expect(installPluginFromClawHubMock).toHaveBeenCalledWith(
+    expect(installPluginFromJoopoHubMock).toHaveBeenCalledWith(
       expect.objectContaining({
-        spec: "clawhub:demo@beta",
-        baseUrl: "https://clawhub.ai",
+        spec: "joopohub:demo@beta",
+        baseUrl: "https://joopohub.ai",
         expectedPluginId: "demo",
       }),
     );
     expect(result.config.plugins?.installs?.demo).toMatchObject({
-      source: "clawhub",
-      spec: "clawhub:demo",
+      source: "joopohub",
+      spec: "joopohub:demo",
       installPath: "/tmp/demo",
       version: "1.3.0-beta.1",
-      clawhubPackage: "demo",
+      joopohubPackage: "demo",
     });
   });
 
-  it("falls back to the default ClawHub spec when a beta release is unavailable", async () => {
-    installPluginFromClawHubMock
+  it("falls back to the default JoopoHub spec when a beta release is unavailable", async () => {
+    installPluginFromJoopoHubMock
       .mockResolvedValueOnce({
         ok: false,
         code: "version_not_found",
         error: "version not found: beta",
       })
       .mockResolvedValueOnce(
-        createSuccessfulClawHubUpdateResult({
+        createSuccessfulJoopoHubUpdateResult({
           pluginId: "demo",
           targetDir: "/tmp/demo",
           version: "1.2.4",
-          clawhubPackage: "demo",
+          joopohubPackage: "demo",
         }),
       );
 
     const warnMessages: string[] = [];
     const result = await updateNpmInstalledPlugins({
-      config: createClawHubInstallConfig({
+      config: createJoopoHubInstallConfig({
         pluginId: "demo",
         installPath: "/tmp/demo",
-        clawhubUrl: "https://clawhub.ai",
-        clawhubPackage: "demo",
-        clawhubFamily: "code-plugin",
-        clawhubChannel: "official",
+        joopohubUrl: "https://joopohub.ai",
+        joopohubPackage: "demo",
+        joopohubFamily: "code-plugin",
+        joopohubChannel: "official",
       }),
       pluginIds: ["demo"],
       updateChannel: "beta",
       logger: { warn: (msg) => warnMessages.push(msg) },
     });
 
-    expect(installPluginFromClawHubMock).toHaveBeenNthCalledWith(
+    expect(installPluginFromJoopoHubMock).toHaveBeenNthCalledWith(
       1,
       expect.objectContaining({
-        spec: "clawhub:demo@beta",
+        spec: "joopohub:demo@beta",
       }),
     );
-    expect(installPluginFromClawHubMock).toHaveBeenNthCalledWith(
+    expect(installPluginFromJoopoHubMock).toHaveBeenNthCalledWith(
       2,
       expect.objectContaining({
-        spec: "clawhub:demo",
+        spec: "joopohub:demo",
       }),
     );
-    expect(warnMessages).toEqual([expect.stringContaining("has no beta ClawHub release")]);
+    expect(warnMessages).toEqual([expect.stringContaining("has no beta JoopoHub release")]);
     expect(result.config.plugins?.installs?.demo).toMatchObject({
-      source: "clawhub",
-      spec: "clawhub:demo",
+      source: "joopohub",
+      spec: "joopohub:demo",
       installPath: "/tmp/demo",
       version: "1.2.4",
-      clawhubPackage: "demo",
+      joopohubPackage: "demo",
     });
   });
 
-  it("preserves explicit ClawHub tags when updating on the beta channel", async () => {
-    installPluginFromClawHubMock.mockResolvedValue(
-      createSuccessfulClawHubUpdateResult({
+  it("preserves explicit JoopoHub tags when updating on the beta channel", async () => {
+    installPluginFromJoopoHubMock.mockResolvedValue(
+      createSuccessfulJoopoHubUpdateResult({
         pluginId: "demo",
         targetDir: "/tmp/demo",
         version: "1.3.0-rc.1",
-        clawhubPackage: "demo",
+        joopohubPackage: "demo",
       }),
     );
 
     await updateNpmInstalledPlugins({
-      config: createClawHubInstallConfig({
+      config: createJoopoHubInstallConfig({
         pluginId: "demo",
         installPath: "/tmp/demo",
-        clawhubUrl: "https://clawhub.ai",
-        clawhubPackage: "demo",
-        clawhubFamily: "code-plugin",
-        clawhubChannel: "official",
-        spec: "clawhub:demo@rc",
+        joopohubUrl: "https://joopohub.ai",
+        joopohubPackage: "demo",
+        joopohubFamily: "code-plugin",
+        joopohubChannel: "official",
+        spec: "joopohub:demo@rc",
       }),
       pluginIds: ["demo"],
       updateChannel: "beta",
       dryRun: true,
     });
 
-    expect(installPluginFromClawHubMock).toHaveBeenCalledWith(
+    expect(installPluginFromJoopoHubMock).toHaveBeenCalledWith(
       expect.objectContaining({
-        spec: "clawhub:demo@rc",
+        spec: "joopohub:demo@rc",
       }),
     );
   });
 
-  it("skips ClawHub plugin update when bundled version is newer", async () => {
+  it("skips JoopoHub plugin update when bundled version is newer", async () => {
     resolveBundledPluginSourcesMock.mockReturnValue(
       new Map([
         [
@@ -2228,13 +2228,13 @@ describe("updateNpmInstalledPlugins", () => {
       ]),
     );
 
-    const config = createClawHubInstallConfig({
+    const config = createJoopoHubInstallConfig({
       pluginId: "whatsapp",
       installPath: "/tmp/whatsapp",
-      clawhubUrl: "https://clawhub.ai",
-      clawhubPackage: "whatsapp",
-      clawhubFamily: "bundle-plugin",
-      clawhubChannel: "community",
+      joopohubUrl: "https://joopohub.ai",
+      joopohubPackage: "whatsapp",
+      joopohubFamily: "bundle-plugin",
+      joopohubChannel: "community",
     });
     (config.plugins!.installs!.whatsapp as Record<string, unknown>).version = "2026.2.9";
 
@@ -2245,7 +2245,7 @@ describe("updateNpmInstalledPlugins", () => {
       logger: { warn: (msg) => warnMessages.push(msg) },
     });
 
-    expect(installPluginFromClawHubMock).not.toHaveBeenCalled();
+    expect(installPluginFromJoopoHubMock).not.toHaveBeenCalled();
     expect(result.changed).toBe(false);
     expect(result.outcomes).toEqual([
       expect.objectContaining({
@@ -2257,7 +2257,7 @@ describe("updateNpmInstalledPlugins", () => {
     expect(warnMessages).toEqual([expect.stringContaining("bundled version 2026.4.20 is newer")]);
   });
 
-  it("proceeds with ClawHub plugin update when bundled version is older", async () => {
+  it("proceeds with JoopoHub plugin update when bundled version is older", async () => {
     resolveBundledPluginSourcesMock.mockReturnValue(
       new Map([
         [
@@ -2270,29 +2270,29 @@ describe("updateNpmInstalledPlugins", () => {
         ],
       ]),
     );
-    installPluginFromClawHubMock.mockResolvedValue({
+    installPluginFromJoopoHubMock.mockResolvedValue({
       ok: true,
       pluginId: "demo",
       targetDir: "/tmp/demo",
       version: "2.0.0",
-      clawhub: {
-        source: "clawhub",
-        clawhubUrl: "https://clawhub.ai",
-        clawhubPackage: "demo",
-        clawhubFamily: "code-plugin",
-        clawhubChannel: "official",
+      joopohub: {
+        source: "joopohub",
+        joopohubUrl: "https://joopohub.ai",
+        joopohubPackage: "demo",
+        joopohubFamily: "code-plugin",
+        joopohubChannel: "official",
         integrity: "sha256-new",
         resolvedAt: "2026-04-30T00:00:00.000Z",
       },
     });
 
-    const config = createClawHubInstallConfig({
+    const config = createJoopoHubInstallConfig({
       pluginId: "demo",
       installPath: "/tmp/demo",
-      clawhubUrl: "https://clawhub.ai",
-      clawhubPackage: "demo",
-      clawhubFamily: "code-plugin",
-      clawhubChannel: "official",
+      joopohubUrl: "https://joopohub.ai",
+      joopohubPackage: "demo",
+      joopohubFamily: "code-plugin",
+      joopohubChannel: "official",
     });
     (config.plugins!.installs!.demo as Record<string, unknown>).version = "1.5.0";
 
@@ -2301,7 +2301,7 @@ describe("updateNpmInstalledPlugins", () => {
       pluginIds: ["demo"],
     });
 
-    expect(installPluginFromClawHubMock).toHaveBeenCalled();
+    expect(installPluginFromJoopoHubMock).toHaveBeenCalled();
     expect(result.changed).toBe(true);
   });
 
@@ -2318,22 +2318,22 @@ describe("updateNpmInstalledPlugins", () => {
         ],
       ]),
     );
-    installPluginFromClawHubMock.mockResolvedValue(
-      createSuccessfulClawHubUpdateResult({
+    installPluginFromJoopoHubMock.mockResolvedValue(
+      createSuccessfulJoopoHubUpdateResult({
         pluginId: "demo",
         targetDir: "/tmp/demo",
         version: "2026.5.3-2",
-        clawhubPackage: "demo",
+        joopohubPackage: "demo",
       }),
     );
 
-    const config = createClawHubInstallConfig({
+    const config = createJoopoHubInstallConfig({
       pluginId: "demo",
       installPath: "/tmp/demo",
-      clawhubUrl: "https://clawhub.ai",
-      clawhubPackage: "demo",
-      clawhubFamily: "code-plugin",
-      clawhubChannel: "official",
+      joopohubUrl: "https://joopohub.ai",
+      joopohubPackage: "demo",
+      joopohubFamily: "code-plugin",
+      joopohubChannel: "official",
     });
     (config.plugins!.installs!.demo as Record<string, unknown>).version = "2026.5.3-1";
 
@@ -2342,7 +2342,7 @@ describe("updateNpmInstalledPlugins", () => {
       pluginIds: ["demo"],
     });
 
-    expect(installPluginFromClawHubMock).toHaveBeenCalled();
+    expect(installPluginFromJoopoHubMock).toHaveBeenCalled();
     expect(result.changed).toBe(true);
     expect(result.outcomes[0]).toMatchObject({
       pluginId: "demo",
@@ -2600,18 +2600,18 @@ describe("updateNpmInstalledPlugins", () => {
         version: "1.2.0",
       }),
     );
-    installPluginFromClawHubMock.mockResolvedValue({
+    installPluginFromJoopoHubMock.mockResolvedValue({
       ok: true,
       pluginId: "demo",
       targetDir: installPath,
       version: "1.2.0",
       extensions: ["index.ts"],
-      clawhub: {
-        source: "clawhub",
-        clawhubUrl: "https://clawhub.ai",
-        clawhubPackage: "demo",
-        clawhubFamily: "code-plugin",
-        clawhubChannel: "official",
+      joopohub: {
+        source: "joopohub",
+        joopohubUrl: "https://joopohub.ai",
+        joopohubPackage: "demo",
+        joopohubFamily: "code-plugin",
+        joopohubChannel: "official",
         integrity: "sha256-next",
         resolvedAt: "2026-03-22T00:00:00.000Z",
       },
@@ -2648,13 +2648,13 @@ describe("updateNpmInstalledPlugins", () => {
       pluginIds: ["demo"],
     });
     await updateNpmInstalledPlugins({
-      config: createClawHubInstallConfig({
+      config: createJoopoHubInstallConfig({
         pluginId: "demo",
         installPath,
-        clawhubUrl: "https://clawhub.ai",
-        clawhubPackage: "demo",
-        clawhubFamily: "code-plugin",
-        clawhubChannel: "official",
+        joopohubUrl: "https://joopohub.ai",
+        joopohubPackage: "demo",
+        joopohubFamily: "code-plugin",
+        joopohubChannel: "official",
       }),
       pluginIds: ["demo"],
     });
@@ -2679,7 +2679,7 @@ describe("updateNpmInstalledPlugins", () => {
     expect(installPluginFromNpmSpecMock).toHaveBeenCalledWith(
       expect.objectContaining({ extensionsDir }),
     );
-    expect(installPluginFromClawHubMock).toHaveBeenCalledWith(
+    expect(installPluginFromJoopoHubMock).toHaveBeenCalledWith(
       expect.objectContaining({ extensionsDir }),
     );
     expect(installPluginFromMarketplaceMock).toHaveBeenCalledWith(
@@ -2694,7 +2694,7 @@ describe("updateNpmInstalledPlugins", () => {
 describe("syncPluginsForUpdateChannel", () => {
   beforeEach(() => {
     installPluginFromNpmSpecMock.mockReset();
-    installPluginFromClawHubMock.mockReset();
+    installPluginFromJoopoHubMock.mockReset();
     installPluginFromGitSpecMock.mockReset();
     resolveBundledPluginSourcesMock.mockReset();
   });
@@ -2928,14 +2928,14 @@ describe("syncPluginsForUpdateChannel", () => {
     );
   });
 
-  it("installs a ClawHub-preferred externalized bundled plugin", async () => {
+  it("installs a JoopoHub-preferred externalized bundled plugin", async () => {
     resolveBundledPluginSourcesMock.mockReturnValue(new Map());
-    installPluginFromClawHubMock.mockResolvedValue(
-      createSuccessfulClawHubUpdateResult({
+    installPluginFromJoopoHubMock.mockResolvedValue(
+      createSuccessfulJoopoHubUpdateResult({
         pluginId: "legacy-chat",
         targetDir: "/tmp/joopo-plugins/legacy-chat",
         version: "2026.5.1-beta.2",
-        clawhubPackage: "legacy-chat",
+        joopohubPackage: "legacy-chat",
       }),
     );
 
@@ -2944,9 +2944,9 @@ describe("syncPluginsForUpdateChannel", () => {
       externalizedBundledPluginBridges: [
         {
           bundledPluginId: "legacy-chat",
-          preferredSource: "clawhub",
-          clawhubSpec: "clawhub:legacy-chat@2026.5.1-beta.2",
-          clawhubUrl: "https://clawhub.ai",
+          preferredSource: "joopohub",
+          joopohubSpec: "joopohub:legacy-chat@2026.5.1-beta.2",
+          joopohubUrl: "https://joopohub.ai",
           npmSpec: "@joopo/legacy-chat",
           channelIds: ["legacy-chat"],
         },
@@ -2970,30 +2970,30 @@ describe("syncPluginsForUpdateChannel", () => {
       },
     });
 
-    expect(installPluginFromClawHubMock).toHaveBeenCalledWith(
+    expect(installPluginFromJoopoHubMock).toHaveBeenCalledWith(
       expect.objectContaining({
-        spec: "clawhub:legacy-chat@2026.5.1-beta.2",
-        baseUrl: "https://clawhub.ai",
+        spec: "joopohub:legacy-chat@2026.5.1-beta.2",
+        baseUrl: "https://joopohub.ai",
         mode: "update",
         expectedPluginId: "legacy-chat",
       }),
     );
     expect(installPluginFromNpmSpecMock).not.toHaveBeenCalled();
     expect(result.changed).toBe(true);
-    expect(result.summary.switchedToClawHub).toEqual(["legacy-chat"]);
+    expect(result.summary.switchedToJoopoHub).toEqual(["legacy-chat"]);
     expect(result.summary.switchedToNpm).toEqual([]);
     expect(result.summary.errors).toEqual([]);
     expect(result.config.plugins?.load?.paths).toEqual([]);
     expect(result.config.plugins?.installs?.["legacy-chat"]).toMatchObject({
-      source: "clawhub",
-      spec: "clawhub:legacy-chat@2026.5.1-beta.2",
+      source: "joopohub",
+      spec: "joopohub:legacy-chat@2026.5.1-beta.2",
       installPath: "/tmp/joopo-plugins/legacy-chat",
       version: "2026.5.1-beta.2",
       integrity: "sha256-clawpack",
-      clawhubUrl: "https://clawhub.ai",
-      clawhubPackage: "legacy-chat",
-      clawhubFamily: "code-plugin",
-      clawhubChannel: "official",
+      joopohubUrl: "https://joopohub.ai",
+      joopohubPackage: "legacy-chat",
+      joopohubFamily: "code-plugin",
+      joopohubChannel: "official",
       artifactKind: "npm-pack",
       artifactFormat: "tgz",
       npmIntegrity: "sha512-clawpack",
@@ -3006,12 +3006,12 @@ describe("syncPluginsForUpdateChannel", () => {
     });
   });
 
-  it("falls back from ClawHub to npm only when the ClawHub package is absent", async () => {
+  it("falls back from JoopoHub to npm only when the JoopoHub package is absent", async () => {
     resolveBundledPluginSourcesMock.mockReturnValue(new Map());
-    installPluginFromClawHubMock.mockResolvedValue({
+    installPluginFromJoopoHubMock.mockResolvedValue({
       ok: false,
       code: "package_not_found",
-      error: "Package not found on ClawHub.",
+      error: "Package not found on JoopoHub.",
     });
     installPluginFromNpmSpecMock.mockResolvedValue(
       createSuccessfulNpmUpdateResult({
@@ -3026,8 +3026,8 @@ describe("syncPluginsForUpdateChannel", () => {
       externalizedBundledPluginBridges: [
         {
           bundledPluginId: "legacy-chat",
-          preferredSource: "clawhub",
-          clawhubSpec: "clawhub:legacy-chat@2026.5.1-beta.2",
+          preferredSource: "joopohub",
+          joopohubSpec: "joopohub:legacy-chat@2026.5.1-beta.2",
           npmSpec: "@joopo/legacy-chat",
           channelIds: ["legacy-chat"],
         },
@@ -3064,10 +3064,10 @@ describe("syncPluginsForUpdateChannel", () => {
       }),
     );
     expect(result.changed).toBe(true);
-    expect(result.summary.switchedToClawHub).toEqual([]);
+    expect(result.summary.switchedToJoopoHub).toEqual([]);
     expect(result.summary.switchedToNpm).toEqual(["legacy-chat"]);
     expect(result.summary.warnings).toEqual([
-      "ClawHub clawhub:legacy-chat@2026.5.1-beta.2 unavailable for legacy-chat; falling back to npm @joopo/legacy-chat.",
+      "JoopoHub joopohub:legacy-chat@2026.5.1-beta.2 unavailable for legacy-chat; falling back to npm @joopo/legacy-chat.",
     ]);
     expect(result.summary.errors).toEqual([]);
     expect(result.config.plugins?.installs?.["legacy-chat"]).toMatchObject({
@@ -3078,12 +3078,12 @@ describe("syncPluginsForUpdateChannel", () => {
     });
   });
 
-  it("marks official externalized ClawHub-to-npm fallbacks as trusted", async () => {
+  it("marks official externalized JoopoHub-to-npm fallbacks as trusted", async () => {
     resolveBundledPluginSourcesMock.mockReturnValue(new Map());
-    installPluginFromClawHubMock.mockResolvedValue({
+    installPluginFromJoopoHubMock.mockResolvedValue({
       ok: false,
       code: "package_not_found",
-      error: "Package not found on ClawHub.",
+      error: "Package not found on JoopoHub.",
     });
     installPluginFromNpmSpecMock.mockResolvedValue(
       createSuccessfulNpmUpdateResult({
@@ -3098,8 +3098,8 @@ describe("syncPluginsForUpdateChannel", () => {
       externalizedBundledPluginBridges: [
         {
           bundledPluginId: "voice-call",
-          preferredSource: "clawhub",
-          clawhubSpec: "clawhub:@joopo/voice-call",
+          preferredSource: "joopohub",
+          joopohubSpec: "joopohub:@joopo/voice-call",
           npmSpec: "@joopo/voice-call",
           channelIds: ["voice-call"],
         },
@@ -3132,14 +3132,14 @@ describe("syncPluginsForUpdateChannel", () => {
     );
   });
 
-  it("moves ClawHub-preferred externalized plugin fallbacks back to ClawHub", async () => {
+  it("moves JoopoHub-preferred externalized plugin fallbacks back to JoopoHub", async () => {
     resolveBundledPluginSourcesMock.mockReturnValue(new Map());
-    installPluginFromClawHubMock.mockResolvedValue(
-      createSuccessfulClawHubUpdateResult({
+    installPluginFromJoopoHubMock.mockResolvedValue(
+      createSuccessfulJoopoHubUpdateResult({
         pluginId: "legacy-chat",
         targetDir: "/tmp/joopo-plugins/legacy-chat",
         version: "2026.5.1-beta.2",
-        clawhubPackage: "legacy-chat",
+        joopohubPackage: "legacy-chat",
       }),
     );
 
@@ -3148,8 +3148,8 @@ describe("syncPluginsForUpdateChannel", () => {
       externalizedBundledPluginBridges: [
         {
           bundledPluginId: "legacy-chat",
-          preferredSource: "clawhub",
-          clawhubSpec: "clawhub:legacy-chat@2026.5.1-beta.2",
+          preferredSource: "joopohub",
+          joopohubSpec: "joopohub:legacy-chat@2026.5.1-beta.2",
           npmSpec: "@joopo/legacy-chat",
           channelIds: ["legacy-chat"],
         },
@@ -3172,29 +3172,29 @@ describe("syncPluginsForUpdateChannel", () => {
       },
     });
 
-    expect(installPluginFromClawHubMock).toHaveBeenCalledWith(
+    expect(installPluginFromJoopoHubMock).toHaveBeenCalledWith(
       expect.objectContaining({
-        spec: "clawhub:legacy-chat@2026.5.1-beta.2",
+        spec: "joopohub:legacy-chat@2026.5.1-beta.2",
         mode: "update",
         expectedPluginId: "legacy-chat",
       }),
     );
     expect(installPluginFromNpmSpecMock).not.toHaveBeenCalled();
     expect(result.changed).toBe(true);
-    expect(result.summary.switchedToClawHub).toEqual(["legacy-chat"]);
+    expect(result.summary.switchedToJoopoHub).toEqual(["legacy-chat"]);
     expect(result.config.plugins?.installs?.["legacy-chat"]).toMatchObject({
-      source: "clawhub",
-      spec: "clawhub:legacy-chat@2026.5.1-beta.2",
+      source: "joopohub",
+      spec: "joopohub:legacy-chat@2026.5.1-beta.2",
       installPath: "/tmp/joopo-plugins/legacy-chat",
     });
   });
 
-  it("fails closed without npm fallback when ClawHub returns integrity drift", async () => {
+  it("fails closed without npm fallback when JoopoHub returns integrity drift", async () => {
     resolveBundledPluginSourcesMock.mockReturnValue(new Map());
-    installPluginFromClawHubMock.mockResolvedValue({
+    installPluginFromJoopoHubMock.mockResolvedValue({
       ok: false,
       code: "archive_integrity_mismatch",
-      error: "ClawHub ClawPack integrity mismatch.",
+      error: "JoopoHub ClawPack integrity mismatch.",
     });
     const config: JoopoConfig = {
       channels: {
@@ -3219,8 +3219,8 @@ describe("syncPluginsForUpdateChannel", () => {
       externalizedBundledPluginBridges: [
         {
           bundledPluginId: "legacy-chat",
-          preferredSource: "clawhub",
-          clawhubSpec: "clawhub:legacy-chat@2026.5.1-beta.2",
+          preferredSource: "joopohub",
+          joopohubSpec: "joopohub:legacy-chat@2026.5.1-beta.2",
           npmSpec: "@joopo/legacy-chat",
           channelIds: ["legacy-chat"],
         },
@@ -3232,7 +3232,7 @@ describe("syncPluginsForUpdateChannel", () => {
     expect(result.changed).toBe(false);
     expect(result.config).toBe(config);
     expect(result.summary.errors).toEqual([
-      "Failed to update legacy-chat: ClawHub ClawPack integrity mismatch. (ClawHub clawhub:legacy-chat@2026.5.1-beta.2).",
+      "Failed to update legacy-chat: JoopoHub ClawPack integrity mismatch. (JoopoHub joopohub:legacy-chat@2026.5.1-beta.2).",
     ]);
   });
 
@@ -3564,7 +3564,7 @@ describe("syncPluginsForUpdateChannel", () => {
     });
   });
 
-  it("removes stale bundled load paths for already-externalized pinned ClawHub installs", async () => {
+  it("removes stale bundled load paths for already-externalized pinned JoopoHub installs", async () => {
     resolveBundledPluginSourcesMock.mockReturnValue(new Map());
 
     const result = await syncPluginsForUpdateChannel({
@@ -3572,8 +3572,8 @@ describe("syncPluginsForUpdateChannel", () => {
       externalizedBundledPluginBridges: [
         {
           bundledPluginId: "legacy-chat",
-          preferredSource: "clawhub",
-          clawhubSpec: "clawhub:legacy-chat",
+          preferredSource: "joopohub",
+          joopohubSpec: "joopohub:legacy-chat",
           npmSpec: "@joopo/legacy-chat",
           channelIds: ["legacy-chat"],
         },
@@ -3590,9 +3590,9 @@ describe("syncPluginsForUpdateChannel", () => {
           },
           installs: {
             "legacy-chat": {
-              source: "clawhub",
-              spec: "clawhub:legacy-chat@2026.5.1",
-              clawhubPackage: "legacy-chat",
+              source: "joopohub",
+              spec: "joopohub:legacy-chat@2026.5.1",
+              joopohubPackage: "legacy-chat",
               installPath: "/tmp/joopo-plugins/legacy-chat",
             },
           },
@@ -3600,13 +3600,13 @@ describe("syncPluginsForUpdateChannel", () => {
       },
     });
 
-    expect(installPluginFromClawHubMock).not.toHaveBeenCalled();
+    expect(installPluginFromJoopoHubMock).not.toHaveBeenCalled();
     expect(installPluginFromNpmSpecMock).not.toHaveBeenCalled();
     expect(result.changed).toBe(true);
     expect(result.config.plugins?.load?.paths).toEqual(["/workspace/plugins/other"]);
     expect(result.config.plugins?.installs?.["legacy-chat"]).toMatchObject({
-      source: "clawhub",
-      spec: "clawhub:legacy-chat@2026.5.1",
+      source: "joopohub",
+      spec: "joopohub:legacy-chat@2026.5.1",
     });
   });
 });

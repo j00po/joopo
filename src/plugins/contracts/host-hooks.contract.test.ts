@@ -171,7 +171,7 @@ describe("host-hook fixture plugin contract", () => {
     );
   });
 
-  it("allows the official ClawHub Codex plugin to keep /codex command ownership", () => {
+  it("allows the official JoopoHub Codex plugin to keep /codex command ownership", () => {
     const { config, registry } = createPluginRegistryFixture();
     const codexRoot = path.join("/tmp", ".joopo", "extensions", "codex");
     registerTestPlugin({
@@ -188,7 +188,7 @@ describe("host-hook fixture plugin contract", () => {
       register(api) {
         api.registerCommand({
           name: "codex",
-          description: "Official ClawHub Codex command",
+          description: "Official JoopoHub Codex command",
           ownership: "reserved",
           handler: async () => ({ text: "ok" }),
         });

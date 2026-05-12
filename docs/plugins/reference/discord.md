@@ -12,7 +12,7 @@ Adds the Discord channel surface for sending and receiving Joopo messages.
 ## Distribution
 
 - Package: `@joopo/discord`
-- Install route: npm; ClawHub
+- Install route: npm; JoopoHub
 
 ## Surface
 

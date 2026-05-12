@@ -99,8 +99,8 @@ struct AgentWorkspaceTests {
         try """
         # IDENTITY.md - Agent Identity
 
-        - Name: Clawd
-        - Creature: Space Lobster
+        - Name: Joopo
+        - Creature: Joopo Buddy
         - Vibe: Helpful
         - Emoji: lobster
         """.write(to: identityURL, atomically: true, encoding: .utf8)

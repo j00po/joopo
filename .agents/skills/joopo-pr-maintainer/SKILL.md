@@ -143,15 +143,15 @@ Output only qualifying candidates, with: ref, surface, proof, cause, fix sketch,
 - Do not close for red CI alone. Require a clear low-signal category plus stale or failed validation.
 - Good manual-close categories:
   - blank or mostly untouched PR template with no concrete Joopo problem/fix
-  - random docs-only churn such as root README translations, generic wording tweaks, or community-plugin discoverability docs that should go through ClawHub
+  - random docs-only churn such as root README translations, generic wording tweaks, or community-plugin discoverability docs that should go through JoopoHub
   - test-only coverage without a linked bug, owner request, or behavior change
   - refactor-only cleanup, variable renames, formatting, or generated/baseline churn without maintainer request
-  - third-party channel/provider/tool/skill/plugin work that belongs on ClawHub instead of core
+  - third-party channel/provider/tool/skill/plugin work that belongs on JoopoHub instead of core
   - risky ops/infra drive-bys such as new external CI services, release workflows, host upgrade scripts, Docker base migrations, or apt retry/fix-missing tweaks without owner request and green validation
   - dirty branches where a narrow stated change includes unrelated docs/generated/runtime/extension files
   - repeated bot-review spam or copied bot output without author-owned fixes
 - Keep or escalate plausible focused bug fixes, green PRs, active maintainer discussions, assigned work, recent author follow-up, and unique reproduction details.
-- For third-party capabilities, prefer the `r: third-party-extension` auto-response label when it applies; it points contributors to publish on ClawHub.
+- For third-party capabilities, prefer the `r: third-party-extension` auto-response label when it applies; it points contributors to publish on JoopoHub.
 
 ## Handle GitHub text safely
 

@@ -97,7 +97,7 @@ function parseCatalogEntries(raw: unknown): OfficialExternalPluginCatalogEntry[]
 }
 
 function normalizeDefaultChoice(value: unknown): PluginPackageInstall["defaultChoice"] | undefined {
-  return value === "clawhub" || value === "npm" || value === "local" ? value : undefined;
+  return value === "joopohub" || value === "npm" || value === "local" ? value : undefined;
 }
 
 export function getOfficialExternalPluginCatalogManifest(
@@ -148,17 +148,17 @@ export function resolveOfficialExternalPluginInstall(
 ): PluginPackageInstall | null {
   const manifest = getOfficialExternalPluginCatalogManifest(entry);
   const install = manifest?.install;
-  const clawhubSpec = normalizeOptionalString(install?.clawhubSpec);
+  const joopohubSpec = normalizeOptionalString(install?.joopohubSpec);
   const npmSpec = normalizeOptionalString(install?.npmSpec) ?? normalizeOptionalString(entry.name);
   const localPath = normalizeOptionalString(install?.localPath);
-  if (!clawhubSpec && !npmSpec && !localPath) {
+  if (!joopohubSpec && !npmSpec && !localPath) {
     return null;
   }
   const defaultChoice =
     normalizeDefaultChoice(install?.defaultChoice) ??
-    (npmSpec ? "npm" : clawhubSpec ? "clawhub" : localPath ? "local" : undefined);
+    (npmSpec ? "npm" : joopohubSpec ? "joopohub" : localPath ? "local" : undefined);
   return {
-    ...(clawhubSpec ? { clawhubSpec } : {}),
+    ...(joopohubSpec ? { joopohubSpec } : {}),
     ...(npmSpec ? { npmSpec } : {}),
     ...(localPath ? { localPath } : {}),
     ...(defaultChoice ? { defaultChoice } : {}),

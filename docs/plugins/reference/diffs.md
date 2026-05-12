@@ -12,7 +12,7 @@ Read-only diff viewer and file renderer for agents.
 ## Distribution
 
 - Package: `@joopo/diffs`
-- Install route: npm; ClawHub
+- Install route: npm; JoopoHub
 
 ## Surface
 

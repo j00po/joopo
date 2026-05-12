@@ -86,10 +86,10 @@ For how skills are loaded and prioritized, see [Skills](/tools/skills).
 
 The YAML frontmatter supports these fields:
 
-| Field                               | Required | Description                                                    |
-| ----------------------------------- | -------- | -------------------------------------------------------------- |
-| `name`                              | Yes      | Unique identifier using lowercase letters, digits, and hyphens |
-| `description`                       | Yes      | One-line description shown to the agent                        |
+| Field                            | Required | Description                                                    |
+| -------------------------------- | -------- | -------------------------------------------------------------- |
+| `name`                           | Yes      | Unique identifier using lowercase letters, digits, and hyphens |
+| `description`                    | Yes      | One-line description shown to the agent                        |
 | `metadata.joopo.os`              | No       | OS filter (`["darwin"]`, `["linux"]`, etc.)                    |
 | `metadata.joopo.requires.bins`   | No       | Required binaries on PATH                                      |
 | `metadata.joopo.requires.config` | No       | Required config keys                                           |
@@ -99,7 +99,7 @@ The YAML frontmatter supports these fields:
 - **Be concise** — instruct the model on _what_ to do, not how to be an AI
 - **Safety first** — if your skill uses `exec`, ensure prompts don't allow arbitrary command injection from untrusted input
 - **Test locally** — use `joopo agent --message "..."` to test before sharing
-- **Use ClawHub** — browse and contribute skills at [ClawHub](https://clawhub.ai)
+- **Use JoopoHub** — browse and contribute skills at [JoopoHub](https://joopohub.ai)
 
 ## Where skills live
 
@@ -108,13 +108,13 @@ The YAML frontmatter supports these fields:
 | `\<workspace\>/skills/`         | Highest    | Per-agent             |
 | `\<workspace\>/.agents/skills/` | High       | Per-workspace agent   |
 | `~/.agents/skills/`             | Medium     | Shared agent profile  |
-| `~/.joopo/skills/`           | Medium     | Shared (all agents)   |
-| Bundled (shipped with Joopo) | Low        | Global                |
+| `~/.joopo/skills/`              | Medium     | Shared (all agents)   |
+| Bundled (shipped with Joopo)    | Low        | Global                |
 | `skills.load.extraDirs`         | Lowest     | Custom shared folders |
 
 ## Related
 
 - [Skills reference](/tools/skills) — loading, precedence, and gating rules
 - [Skills config](/tools/skills-config) — `skills.*` config schema
-- [ClawHub](/clawhub) — public skill registry
+- [JoopoHub](/joopohub) — public skill registry
 - [Building Plugins](/plugins/building-plugins) — plugins can ship skills

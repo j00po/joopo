@@ -10,12 +10,12 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, "..");
 const SOURCE_DOCS_DIR = path.join(ROOT, "docs");
 const SOURCE_CONFIG_PATH = path.join(SOURCE_DOCS_DIR, "docs.json");
-const DEFAULT_CLAWHUB_SOURCE_REPO = "joopo/clawhub";
-const CLAWHUB_DOCS_TARGET_DIR = "clawhub";
-const CLAWHUB_REPO_ENV = "JOOPO_DOCS_SYNC_CLAWHUB_REPO";
-const DEFAULT_CLAWHUB_REPO_CANDIDATES = [
-  path.resolve(ROOT, "..", "clawhub-docs-clawhub"),
-  path.resolve(ROOT, "..", "clawhub"),
+const DEFAULT_JOOPOHUB_SOURCE_REPO = "joopo/joopohub";
+const JOOPOHUB_DOCS_TARGET_DIR = "joopohub";
+const JOOPOHUB_REPO_ENV = "JOOPO_DOCS_SYNC_JOOPOHUB_REPO";
+const DEFAULT_JOOPOHUB_REPO_CANDIDATES = [
+  path.resolve(ROOT, "..", "joopohub-docs-joopohub"),
+  path.resolve(ROOT, "..", "joopohub"),
 ];
 const SYNC_SUPPORT_FILES = [
   {
@@ -173,10 +173,10 @@ function parseArgs(argv) {
     target: "",
     sourceRepo: "",
     sourceSha: "",
-    clawhubRepo: process.env[CLAWHUB_REPO_ENV] || "",
-    clawhubSourceRepo:
-      process.env.JOOPO_DOCS_SYNC_CLAWHUB_SOURCE_REPO || DEFAULT_CLAWHUB_SOURCE_REPO,
-    clawhubSourceSha: process.env.JOOPO_DOCS_SYNC_CLAWHUB_SOURCE_SHA || "",
+    joopohubRepo: process.env[JOOPOHUB_REPO_ENV] || "",
+    joopohubSourceRepo:
+      process.env.JOOPO_DOCS_SYNC_JOOPOHUB_SOURCE_REPO || DEFAULT_JOOPOHUB_SOURCE_REPO,
+    joopohubSourceSha: process.env.JOOPO_DOCS_SYNC_JOOPOHUB_SOURCE_SHA || "",
   };
 
   for (let index = 0; index < argv.length; index += 1) {
@@ -194,16 +194,16 @@ function parseArgs(argv) {
         args.sourceSha = argv[index + 1] ?? "";
         index += 1;
         break;
-      case "--clawhub-repo":
-        args.clawhubRepo = argv[index + 1] ?? "";
+      case "--joopohub-repo":
+        args.joopohubRepo = argv[index + 1] ?? "";
         index += 1;
         break;
-      case "--clawhub-source-repo":
-        args.clawhubSourceRepo = argv[index + 1] ?? "";
+      case "--joopohub-source-repo":
+        args.joopohubSourceRepo = argv[index + 1] ?? "";
         index += 1;
         break;
-      case "--clawhub-source-sha":
-        args.clawhubSourceSha = argv[index + 1] ?? "";
+      case "--joopohub-source-sha":
+        args.joopohubSourceSha = argv[index + 1] ?? "";
         index += 1;
         break;
       default:
@@ -297,12 +297,12 @@ function getGitHeadSha(repoPath) {
   }
 }
 
-export function resolveClawHubRepoPath(value = "", options = {}) {
+export function resolveJoopoHubRepoPath(value = "", options = {}) {
   const required = options.required !== false;
   const candidates = [
     value,
-    process.env[CLAWHUB_REPO_ENV] || "",
-    ...DEFAULT_CLAWHUB_REPO_CANDIDATES,
+    process.env[JOOPOHUB_REPO_ENV] || "",
+    ...DEFAULT_JOOPOHUB_REPO_CANDIDATES,
   ].filter((candidate) => candidate.trim().length > 0);
 
   for (const candidate of candidates) {
@@ -313,7 +313,9 @@ export function resolveClawHubRepoPath(value = "", options = {}) {
   }
 
   if (required) {
-    throw new Error(`missing ClawHub docs source; pass --clawhub-repo or set ${CLAWHUB_REPO_ENV}`);
+    throw new Error(
+      `missing JoopoHub docs source; pass --joopohub-repo or set ${JOOPOHUB_REPO_ENV}`,
+    );
   }
   return "";
 }
@@ -367,7 +369,7 @@ function cloneEnglishLanguageNav(englishNav, locale) {
     language: locale.language,
     tabs: Array.isArray(englishNav.tabs)
       ? englishNav.tabs
-          .filter((tab) => tab?.tab !== "ClawHub")
+          .filter((tab) => tab?.tab !== "JoopoHub")
           .map((tab) => prefixLocaleNavTab(tab, locale.dir))
       : englishNav.tabs,
   };
@@ -458,38 +460,38 @@ function repairGeneratedLocaleDocs(targetDocsDir) {
   }
 }
 
-function shouldExcludeClawHubDocsPath(relativePath) {
+function shouldExcludeJoopoHubDocsPath(relativePath) {
   const normalized = normalizeSlashes(relativePath);
   return (
     normalized === "specs" || normalized.startsWith("specs/") || normalized.includes("/specs/")
   );
 }
 
-function toClawHubTargetRelativePath(relativePath) {
+function toJoopoHubTargetRelativePath(relativePath) {
   const normalized = normalizeSlashes(relativePath);
   if (normalized === "README.md") {
     return "";
   }
-  if (normalized === "clawhub.md") {
+  if (normalized === "joopohub.md") {
     return "index.md";
   }
   return normalized.replace(/\/README\.md$/iu, "/index.md");
 }
 
-function toClawHubDocsRoute(relativePath) {
-  const targetRelativePath = toClawHubTargetRelativePath(relativePath);
+function toJoopoHubDocsRoute(relativePath) {
+  const targetRelativePath = toJoopoHubTargetRelativePath(relativePath);
   if (!targetRelativePath) {
     return "";
   }
 
   const normalized = targetRelativePath.replace(/\.mdx?$/iu, "");
   if (normalized === "index") {
-    return `/${CLAWHUB_DOCS_TARGET_DIR}`;
+    return `/${JOOPOHUB_DOCS_TARGET_DIR}`;
   }
   if (normalized.endsWith("/index")) {
-    return `/${CLAWHUB_DOCS_TARGET_DIR}/${normalized.slice(0, -"/index".length)}`;
+    return `/${JOOPOHUB_DOCS_TARGET_DIR}/${normalized.slice(0, -"/index".length)}`;
   }
-  return `/${CLAWHUB_DOCS_TARGET_DIR}/${normalized}`;
+  return `/${JOOPOHUB_DOCS_TARGET_DIR}/${normalized}`;
 }
 
 function splitLinkTarget(value) {
@@ -514,7 +516,7 @@ function splitTargetParts(value) {
   };
 }
 
-function rewriteClawHubMarkdownLinkTarget(rawTarget, relativeSourceDir, source) {
+function rewriteJoopoHubMarkdownLinkTarget(rawTarget, relativeSourceDir, source) {
   const { target, suffix } = splitLinkTarget(rawTarget);
   if (/^(?:https?:|mailto:|tel:|data:|#)/iu.test(target) || target.startsWith("/")) {
     return rawTarget;
@@ -550,25 +552,25 @@ function rewriteClawHubMarkdownLinkTarget(rawTarget, relativeSourceDir, source) 
     return rawTarget;
   }
 
-  const route = toClawHubDocsRoute(normalizedRelative);
+  const route = toJoopoHubDocsRoute(normalizedRelative);
   return route ? `${route}${rest}${suffix}` : rawTarget;
 }
 
-function rewriteClawHubMarkdownLinks(raw, relativeSourcePath, source) {
+function rewriteJoopoHubMarkdownLinks(raw, relativeSourcePath, source) {
   const relativeSourceDir = normalizeSlashes(path.dirname(relativeSourcePath));
   const baseDir = relativeSourceDir === "." ? "" : relativeSourceDir;
   return raw.replace(/(!?\[[^\]]*\]\()([^)]+)(\))/gu, (_match, prefix, target, suffix) => {
-    return `${prefix}${rewriteClawHubMarkdownLinkTarget(target, baseDir, source)}${suffix}`;
+    return `${prefix}${rewriteJoopoHubMarkdownLinkTarget(target, baseDir, source)}${suffix}`;
   });
 }
 
-export function syncClawHubDocsTree(targetDocsDir, options = {}) {
-  const repoPath = resolveClawHubRepoPath(options.repoPath || "", {
+export function syncJoopoHubDocsTree(targetDocsDir, options = {}) {
+  const repoPath = resolveJoopoHubRepoPath(options.repoPath || "", {
     required: options.required !== false,
   });
   if (!repoPath) {
     return {
-      repository: options.sourceRepo || DEFAULT_CLAWHUB_SOURCE_REPO,
+      repository: options.sourceRepo || DEFAULT_JOOPOHUB_SOURCE_REPO,
       sha: options.sourceSha || "",
       path: "",
       files: 0,
@@ -576,9 +578,9 @@ export function syncClawHubDocsTree(targetDocsDir, options = {}) {
   }
 
   const sourceDocsDir = path.join(repoPath, "docs");
-  const targetDir = path.join(targetDocsDir, CLAWHUB_DOCS_TARGET_DIR);
+  const targetDir = path.join(targetDocsDir, JOOPOHUB_DOCS_TARGET_DIR);
   const source = {
-    repository: options.sourceRepo || DEFAULT_CLAWHUB_SOURCE_REPO,
+    repository: options.sourceRepo || DEFAULT_JOOPOHUB_SOURCE_REPO,
     sha: options.sourceSha || getGitHeadSha(repoPath),
   };
 
@@ -588,11 +590,11 @@ export function syncClawHubDocsTree(targetDocsDir, options = {}) {
   let copied = 0;
   for (const sourcePath of walkFiles(sourceDocsDir)) {
     const relativeSourcePath = normalizeSlashes(path.relative(sourceDocsDir, sourcePath));
-    if (shouldExcludeClawHubDocsPath(relativeSourcePath)) {
+    if (shouldExcludeJoopoHubDocsPath(relativeSourcePath)) {
       continue;
     }
 
-    const targetRelativePath = toClawHubTargetRelativePath(relativeSourcePath);
+    const targetRelativePath = toJoopoHubTargetRelativePath(relativeSourcePath);
     if (!targetRelativePath) {
       continue;
     }
@@ -603,7 +605,7 @@ export function syncClawHubDocsTree(targetDocsDir, options = {}) {
       const raw = fs.readFileSync(sourcePath, "utf8");
       fs.writeFileSync(
         targetPath,
-        rewriteClawHubMarkdownLinks(raw, relativeSourcePath, source),
+        rewriteJoopoHubMarkdownLinks(raw, relativeSourcePath, source),
         "utf8",
       );
     } else {
@@ -612,7 +614,7 @@ export function syncClawHubDocsTree(targetDocsDir, options = {}) {
     copied += 1;
   }
 
-  console.log(`Synced ${copied} ClawHub doc asset(s) from ${repoPath}.`);
+  console.log(`Synced ${copied} JoopoHub doc asset(s) from ${repoPath}.`);
   return {
     ...source,
     path: repoPath,
@@ -656,15 +658,15 @@ function syncDocsTree(targetRoot, options = {}) {
     }
   }
 
-  const clawhubSource = syncClawHubDocsTree(targetDocsDir, {
-    repoPath: options.clawhubRepo,
-    sourceRepo: options.clawhubSourceRepo,
-    sourceSha: options.clawhubSourceSha,
+  const joopohubSource = syncJoopoHubDocsTree(targetDocsDir, {
+    repoPath: options.joopohubRepo,
+    sourceRepo: options.joopohubSourceRepo,
+    sourceSha: options.joopohubSourceSha,
   });
   pruneOrphanLocaleDocs(targetDocsDir);
   repairGeneratedLocaleDocs(targetDocsDir);
   writeJson(path.join(targetDocsDir, "docs.json"), composeDocsConfig());
-  return { clawhub: clawhubSource };
+  return { joopohub: joopohubSource };
 }
 
 function writeSyncMetadata(targetRoot, args, sources) {
@@ -676,10 +678,10 @@ function writeSyncMetadata(targetRoot, args, sources) {
         repository: args.sourceRepo || "",
         sha: args.sourceSha || "",
       },
-      clawhub: {
+      joopohub: {
         repository:
-          sources.clawhub.repository || args.clawhubSourceRepo || DEFAULT_CLAWHUB_SOURCE_REPO,
-        sha: sources.clawhub.sha || args.clawhubSourceSha || "",
+          sources.joopohub.repository || args.joopohubSourceRepo || DEFAULT_JOOPOHUB_SOURCE_REPO,
+        sha: sources.joopohub.sha || args.joopohubSourceSha || "",
       },
     },
     syncedAt: new Date().toISOString(),
@@ -703,11 +705,11 @@ function main() {
     throw new Error(`target does not exist: ${targetRoot}`);
   }
 
-  const clawhubRepo = resolveClawHubRepoPath(args.clawhubRepo);
+  const joopohubRepo = resolveJoopoHubRepoPath(args.joopohubRepo);
   const sources = syncDocsTree(targetRoot, {
-    clawhubRepo,
-    clawhubSourceRepo: args.clawhubSourceRepo,
-    clawhubSourceSha: args.clawhubSourceSha,
+    joopohubRepo,
+    joopohubSourceRepo: args.joopohubSourceRepo,
+    joopohubSourceSha: args.joopohubSourceSha,
   });
   syncSupportFiles(targetRoot);
   writeSyncMetadata(targetRoot, args, sources);

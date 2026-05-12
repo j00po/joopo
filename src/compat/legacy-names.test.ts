@@ -5,6 +5,6 @@ describe("compat/legacy-names", () => {
   it("keeps the current manifest key primary while exposing legacy fallbacks", () => {
     expect(PROJECT_NAME).toBe("joopo");
     expect(MANIFEST_KEY).toBe("joopo");
-    expect(LEGACY_MANIFEST_KEYS).toEqual(["clawdbot"]);
+    expect(LEGACY_MANIFEST_KEYS).toEqual(["joopobot"]);
   });
 });

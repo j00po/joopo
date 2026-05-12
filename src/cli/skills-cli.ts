@@ -5,11 +5,11 @@ import {
   resolveDefaultAgentId,
 } from "../agents/agent-scope.js";
 import {
-  installSkillFromClawHub,
-  readTrackedClawHubSkillSlugs,
-  searchSkillsFromClawHub,
-  updateSkillsFromClawHub,
-} from "../agents/skills-clawhub.js";
+  installSkillFromJoopoHub,
+  readTrackedJoopoHubSkillSlugs,
+  searchSkillsFromJoopoHub,
+  updateSkillsFromJoopoHub,
+} from "../agents/skills-joopohub.js";
 import { getRuntimeConfig } from "../config/config.js";
 import { defaultRuntime } from "../runtime.js";
 import { normalizeOptionalString } from "../shared/string-coerce.js";
@@ -101,13 +101,13 @@ export function registerSkillsCli(program: Command) {
 
   skills
     .command("search")
-    .description("Search ClawHub skills")
+    .description("Search JoopoHub skills")
     .argument("[query...]", "Optional search query")
     .option("--limit <n>", "Max results", (value) => Number.parseInt(value, 10))
     .option("--json", "Output as JSON", false)
     .action(async (queryParts: string[], opts: { limit?: number; json?: boolean }) => {
       try {
-        const results = await searchSkillsFromClawHub({
+        const results = await searchSkillsFromJoopoHub({
           query: normalizeOptionalString(queryParts.join(" ")),
           limit: opts.limit,
         });
@@ -116,7 +116,7 @@ export function registerSkillsCli(program: Command) {
           return;
         }
         if (results.length === 0) {
-          defaultRuntime.log("No ClawHub skills found.");
+          defaultRuntime.log("No JoopoHub skills found.");
           return;
         }
         for (const entry of results) {
@@ -132,8 +132,8 @@ export function registerSkillsCli(program: Command) {
 
   skills
     .command("install")
-    .description("Install a skill from ClawHub into the active workspace")
-    .argument("<slug>", "ClawHub skill slug")
+    .description("Install a skill from JoopoHub into the active workspace")
+    .argument("<slug>", "JoopoHub skill slug")
     .option("--version <version>", "Install a specific version")
     .option("--force", "Overwrite an existing workspace skill", false)
     .option("--agent <id>", "Target agent workspace (defaults to cwd-inferred, then default agent)")
@@ -147,7 +147,7 @@ export function registerSkillsCli(program: Command) {
           const workspaceDir = resolveActiveWorkspaceDir({
             agentId: resolveAgentOption(command, opts),
           });
-          const result = await installSkillFromClawHub({
+          const result = await installSkillFromJoopoHub({
             workspaceDir,
             slug,
             version: opts.version,
@@ -171,9 +171,9 @@ export function registerSkillsCli(program: Command) {
 
   skills
     .command("update")
-    .description("Update ClawHub-installed skills in the active workspace")
+    .description("Update JoopoHub-installed skills in the active workspace")
     .argument("[slug]", "Single skill slug")
-    .option("--all", "Update all tracked ClawHub skills", false)
+    .option("--all", "Update all tracked JoopoHub skills", false)
     .option("--agent <id>", "Target agent workspace (defaults to cwd-inferred, then default agent)")
     .action(
       async (
@@ -195,12 +195,12 @@ export function registerSkillsCli(program: Command) {
           const workspaceDir = resolveActiveWorkspaceDir({
             agentId: resolveAgentOption(command, opts),
           });
-          const tracked = await readTrackedClawHubSkillSlugs(workspaceDir);
+          const tracked = await readTrackedJoopoHubSkillSlugs(workspaceDir);
           if (opts.all && tracked.length === 0) {
-            defaultRuntime.log("No tracked ClawHub skills to update.");
+            defaultRuntime.log("No tracked JoopoHub skills to update.");
             return;
           }
-          const results = await updateSkillsFromClawHub({
+          const results = await updateSkillsFromJoopoHub({
             workspaceDir,
             slug,
             logger: {

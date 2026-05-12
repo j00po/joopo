@@ -22,7 +22,7 @@ agent (with a session switcher for other sessions).
   dist/Joopo.app/Contents/MacOS/Joopo --webchat
   ```
 
-- Logs: `./scripts/clawlog.sh` (subsystem `ai.joopo`, category `WebChatSwiftUI`).
+- Logs: `./scripts/joopolog.sh` (subsystem `ai.joopo`, category `WebChatSwiftUI`).
 
 ## How it is wired
 

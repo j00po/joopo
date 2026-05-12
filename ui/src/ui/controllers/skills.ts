@@ -1,7 +1,7 @@
 import type { GatewayBrowserClient } from "../gateway.ts";
 import type { SkillStatusReport } from "../types.ts";
 
-export type ClawHubSearchResult = {
+export type JoopoHubSearchResult = {
   score: number;
   slug: string;
   displayName: string;
@@ -10,7 +10,7 @@ export type ClawHubSearchResult = {
   updatedAt?: number;
 };
 
-export type ClawHubSkillDetail = {
+export type JoopoHubSkillDetail = {
   skill: {
     slug: string;
     displayName: string;
@@ -44,16 +44,16 @@ export type SkillsState = {
   skillsBusyKey: string | null;
   skillEdits: Record<string, string>;
   skillMessages: SkillMessageMap;
-  clawhubSearchQuery: string;
-  clawhubSearchResults: ClawHubSearchResult[] | null;
-  clawhubSearchLoading: boolean;
-  clawhubSearchError: string | null;
-  clawhubDetail: ClawHubSkillDetail | null;
-  clawhubDetailSlug: string | null;
-  clawhubDetailLoading: boolean;
-  clawhubDetailError: string | null;
-  clawhubInstallSlug: string | null;
-  clawhubInstallMessage: { kind: "success" | "error"; text: string } | null;
+  joopohubSearchQuery: string;
+  joopohubSearchResults: JoopoHubSearchResult[] | null;
+  joopohubSearchLoading: boolean;
+  joopohubSearchError: string | null;
+  joopohubDetail: JoopoHubSkillDetail | null;
+  joopohubDetailSlug: string | null;
+  joopohubDetailLoading: boolean;
+  joopohubDetailError: string | null;
+  joopohubInstallSlug: string | null;
+  joopohubInstallMessage: { kind: "success" | "error"; text: string } | null;
 };
 
 export type SkillMessage = {
@@ -94,12 +94,12 @@ async function runStaleAwareRequest<T>(
   onFinally();
 }
 
-export function setClawHubSearchQuery(state: SkillsState, query: string) {
-  state.clawhubSearchQuery = query;
-  state.clawhubInstallMessage = null;
-  state.clawhubSearchResults = null;
-  state.clawhubSearchError = null;
-  state.clawhubSearchLoading = false;
+export function setJoopoHubSearchQuery(state: SkillsState, query: string) {
+  state.joopohubSearchQuery = query;
+  state.joopohubInstallMessage = null;
+  state.joopohubSearchResults = null;
+  state.joopohubSearchError = null;
+  state.joopohubSearchLoading = false;
 }
 
 export async function loadSkills(state: SkillsState, options?: { clearMessages?: boolean }) {
@@ -196,85 +196,85 @@ export async function installSkill(
   });
 }
 
-export async function searchClawHub(state: SkillsState, query: string) {
+export async function searchJoopoHub(state: SkillsState, query: string) {
   if (!state.client || !state.connected) {
     return;
   }
   if (!query.trim()) {
-    state.clawhubSearchResults = null;
-    state.clawhubSearchError = null;
-    state.clawhubSearchLoading = false;
+    state.joopohubSearchResults = null;
+    state.joopohubSearchError = null;
+    state.joopohubSearchLoading = false;
     return;
   }
   const client = state.client;
   // Clear stale entries as soon as a new search begins so the UI cannot act on
   // results that no longer match the current query while the next request is in flight.
-  state.clawhubSearchResults = null;
-  state.clawhubSearchLoading = true;
-  state.clawhubSearchError = null;
+  state.joopohubSearchResults = null;
+  state.joopohubSearchLoading = true;
+  state.joopohubSearchError = null;
   await runStaleAwareRequest(
-    () => query === state.clawhubSearchQuery,
+    () => query === state.joopohubSearchQuery,
     () =>
-      client.request<{ results: ClawHubSearchResult[] }>("skills.search", {
+      client.request<{ results: JoopoHubSearchResult[] }>("skills.search", {
         query,
         limit: 20,
       }),
     (res) => {
-      state.clawhubSearchResults = res?.results ?? [];
+      state.joopohubSearchResults = res?.results ?? [];
     },
     (err) => {
-      state.clawhubSearchError = getErrorMessage(err);
+      state.joopohubSearchError = getErrorMessage(err);
     },
     () => {
-      state.clawhubSearchLoading = false;
+      state.joopohubSearchLoading = false;
     },
   );
 }
 
-export async function loadClawHubDetail(state: SkillsState, slug: string) {
+export async function loadJoopoHubDetail(state: SkillsState, slug: string) {
   if (!state.client || !state.connected) {
     return;
   }
   const client = state.client;
-  state.clawhubDetailSlug = slug;
-  state.clawhubDetailLoading = true;
-  state.clawhubDetailError = null;
-  state.clawhubDetail = null;
+  state.joopohubDetailSlug = slug;
+  state.joopohubDetailLoading = true;
+  state.joopohubDetailError = null;
+  state.joopohubDetail = null;
   await runStaleAwareRequest(
-    () => slug === state.clawhubDetailSlug,
-    () => client.request<ClawHubSkillDetail>("skills.detail", { slug }),
+    () => slug === state.joopohubDetailSlug,
+    () => client.request<JoopoHubSkillDetail>("skills.detail", { slug }),
     (res) => {
-      state.clawhubDetail = res ?? null;
+      state.joopohubDetail = res ?? null;
     },
     (err) => {
-      state.clawhubDetailError = getErrorMessage(err);
+      state.joopohubDetailError = getErrorMessage(err);
     },
     () => {
-      state.clawhubDetailLoading = false;
+      state.joopohubDetailLoading = false;
     },
   );
 }
 
-export function closeClawHubDetail(state: SkillsState) {
-  state.clawhubDetailSlug = null;
-  state.clawhubDetail = null;
-  state.clawhubDetailError = null;
-  state.clawhubDetailLoading = false;
+export function closeJoopoHubDetail(state: SkillsState) {
+  state.joopohubDetailSlug = null;
+  state.joopohubDetail = null;
+  state.joopohubDetailError = null;
+  state.joopohubDetailLoading = false;
 }
 
-export async function installFromClawHub(state: SkillsState, slug: string) {
+export async function installFromJoopoHub(state: SkillsState, slug: string) {
   if (!state.client || !state.connected) {
     return;
   }
-  state.clawhubInstallSlug = slug;
-  state.clawhubInstallMessage = null;
+  state.joopohubInstallSlug = slug;
+  state.joopohubInstallMessage = null;
   try {
-    await state.client.request("skills.install", { source: "clawhub", slug });
+    await state.client.request("skills.install", { source: "joopohub", slug });
     await loadSkills(state);
-    state.clawhubInstallMessage = { kind: "success", text: `Installed ${slug}` };
+    state.joopohubInstallMessage = { kind: "success", text: `Installed ${slug}` };
   } catch (err) {
-    state.clawhubInstallMessage = { kind: "error", text: getErrorMessage(err) };
+    state.joopohubInstallMessage = { kind: "error", text: getErrorMessage(err) };
   } finally {
-    state.clawhubInstallSlug = null;
+    state.joopohubInstallSlug = null;
   }
 }

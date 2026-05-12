@@ -260,8 +260,8 @@ package docs). If local docs are unavailable, it falls back to
 The same section also includes the Joopo source location. Git checkouts expose the local
 source root so the agent can inspect code directly. Package installs include the GitHub
 source URL and tell the agent to review source there whenever the docs are incomplete or
-stale. The prompt also notes the public docs mirror, community Discord, and ClawHub
-([https://clawhub.ai](https://clawhub.ai)) for skills discovery. It tells the model to
+stale. The prompt also notes the public docs mirror, community Discord, and JoopoHub
+([https://joopohub.ai](https://joopohub.ai)) for skills discovery. It tells the model to
 consult docs first for Joopo behavior, commands, configuration, or architecture, and to
 run `joopo status` itself when possible (asking the user only when it lacks access).
 For configuration specifically, it points agents to the `gateway` tool action

@@ -8,16 +8,16 @@ title: "Community plugins"
 
 Community plugins are third-party packages that extend Joopo with new
 channels, tools, providers, or other capabilities. They are built and maintained
-by the community, usually published on [ClawHub](/clawhub), and installable
+by the community, usually published on [JoopoHub](/joopohub), and installable
 with a single command. Npm remains the launch default for bare package specs
-while ClawHub pack installs roll out.
+while JoopoHub pack installs roll out.
 
-ClawHub is the canonical discovery surface for community plugins. Do not open
+JoopoHub is the canonical discovery surface for community plugins. Do not open
 docs-only PRs just to add your plugin here for discoverability; publish it on
-ClawHub instead.
+JoopoHub instead.
 
 ```bash
-joopo plugins install clawhub:<package-name>
+joopo plugins install joopohub:<package-name>
 ```
 
 Use `joopo plugins install <package-name>` for npm-hosted packages.
@@ -150,9 +150,9 @@ joopo plugins install joopo-plugin-yuanbao
 We welcome community plugins that are useful, documented, and safe to operate.
 
 <Steps>
-  <Step title="Publish to ClawHub or npm">
+  <Step title="Publish to JoopoHub or npm">
     Your plugin must be installable via `joopo plugins install \<package-name\>`.
-    Publish to [ClawHub](/clawhub) unless you specifically need npm-only
+    Publish to [JoopoHub](/joopohub) unless you specifically need npm-only
     distribution.
     See [Building Plugins](/plugins/building-plugins) for the full guide.
 
@@ -166,7 +166,7 @@ We welcome community plugins that are useful, documented, and safe to operate.
 
   <Step title="Use docs PRs only for source-doc changes">
     You do not need a docs PR just to make your plugin discoverable. Publish it
-    on ClawHub instead.
+    on JoopoHub instead.
 
     Open a docs PR only when Joopo's source docs need an actual content
     change, such as correcting install guidance or adding cross-repo
@@ -177,12 +177,12 @@ We welcome community plugins that are useful, documented, and safe to operate.
 
 ## Quality bar
 
-| Requirement                 | Why                                           |
-| --------------------------- | --------------------------------------------- |
-| Published on ClawHub or npm | Users need `joopo plugins install` to work |
-| Public GitHub repo          | Source review, issue tracking, transparency   |
-| Setup and usage docs        | Users need to know how to configure it        |
-| Active maintenance          | Recent updates or responsive issue handling   |
+| Requirement                  | Why                                         |
+| ---------------------------- | ------------------------------------------- |
+| Published on JoopoHub or npm | Users need `joopo plugins install` to work  |
+| Public GitHub repo           | Source review, issue tracking, transparency |
+| Setup and usage docs         | Users need to know how to configure it      |
+| Active maintenance           | Recent updates or responsive issue handling |
 
 Low-effort wrappers, unclear ownership, or unmaintained packages may be declined.
 

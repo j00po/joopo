@@ -1,7 +1,4 @@
-import {
-  loadJoopoProviderIndex,
-  type JoopoProviderIndexProvider,
-} from "../model-catalog/index.js";
+import { loadJoopoProviderIndex, type JoopoProviderIndexProvider } from "../model-catalog/index.js";
 import { normalizePluginsConfig, resolveEffectiveEnableState } from "./config-state.js";
 import {
   describePluginInstallSource,
@@ -58,7 +55,7 @@ function isPreferredOrigin(candidate: PluginOrigin, current: PluginOrigin | unde
 }
 
 function normalizeDefaultChoice(value: unknown): PluginPackageInstall["defaultChoice"] | undefined {
-  return value === "clawhub" || value === "npm" || value === "local" ? value : undefined;
+  return value === "joopohub" || value === "npm" || value === "local" ? value : undefined;
 }
 
 function resolveInstallInfoFromInstallRecord(
@@ -69,10 +66,10 @@ function resolveInstallInfoFromInstallRecord(
   }
   const npmSpec = (record.resolvedSpec ?? record.spec)?.trim();
   const localPath = (record.installPath ?? record.sourcePath)?.trim();
-  if (record.source === "clawhub" && record.spec?.trim()) {
+  if (record.source === "joopohub" && record.spec?.trim()) {
     return {
-      clawhubSpec: record.spec.trim(),
-      defaultChoice: "clawhub",
+      joopohubSpec: record.spec.trim(),
+      defaultChoice: "joopohub",
     };
   }
   if (record.source === "npm" && npmSpec) {
@@ -99,23 +96,23 @@ function resolveInstallInfoFromPackageSource(params: {
     params.origin === "bundled" || params.origin === "config"
       ? params.source?.npm?.spec
       : undefined;
-  const clawhubSpec =
+  const joopohubSpec =
     params.origin === "bundled" || params.origin === "config"
-      ? params.source?.clawhub?.spec
+      ? params.source?.joopohub?.spec
       : undefined;
   const localPath = params.source?.local?.path;
-  if (!clawhubSpec && !npmSpec && !localPath) {
+  if (!joopohubSpec && !npmSpec && !localPath) {
     return null;
   }
   const defaultChoice = normalizeDefaultChoice(params.source?.defaultChoice);
   return {
-    ...(clawhubSpec ? { clawhubSpec } : {}),
+    ...(joopohubSpec ? { joopohubSpec } : {}),
     ...(npmSpec ? { npmSpec } : {}),
     ...(localPath ? { localPath } : {}),
     ...(defaultChoice
       ? { defaultChoice }
-      : clawhubSpec
-        ? { defaultChoice: "clawhub" as const }
+      : joopohubSpec
+        ? { defaultChoice: "joopohub" as const }
         : npmSpec
           ? { defaultChoice: "npm" as const }
           : {}),
@@ -145,15 +142,15 @@ function resolveInstallInfoFromProviderIndex(
   if (!install) {
     return null;
   }
-  const clawhubSpec = install.clawhubSpec?.trim();
+  const joopohubSpec = install.joopohubSpec?.trim();
   const npmSpec = install.npmSpec?.trim();
-  if (!clawhubSpec && !npmSpec) {
+  if (!joopohubSpec && !npmSpec) {
     return null;
   }
   const defaultChoice =
-    normalizeDefaultChoice(install.defaultChoice) ?? (clawhubSpec ? "clawhub" : "npm");
+    normalizeDefaultChoice(install.defaultChoice) ?? (joopohubSpec ? "joopohub" : "npm");
   return {
-    ...(clawhubSpec ? { clawhubSpec } : {}),
+    ...(joopohubSpec ? { joopohubSpec } : {}),
     ...(npmSpec ? { npmSpec } : {}),
     defaultChoice,
     ...(install.minHostVersion ? { minHostVersion: install.minHostVersion } : {}),

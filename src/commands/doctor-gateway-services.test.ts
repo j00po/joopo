@@ -149,10 +149,7 @@ async function runRepair(cfg: JoopoConfig) {
   await maybeRepairGatewayServiceConfig(cfg, "local", makeDoctorIo(), makeDoctorPrompts());
 }
 
-async function runNonInteractiveRepair(params: {
-  cfg?: JoopoConfig;
-  updateInProgress?: boolean;
-}) {
+async function runNonInteractiveRepair(params: { cfg?: JoopoConfig; updateInProgress?: boolean }) {
   Object.defineProperty(process.stdin, "isTTY", {
     value: false,
     configurable: true,
@@ -1012,16 +1009,16 @@ describe("maybeScanExtraGatewayServices", () => {
     mocks.findExtraGatewayServices.mockResolvedValue([
       {
         platform: "linux",
-        label: "clawdbot-gateway.service",
-        detail: "unit: /home/test/.config/systemd/user/clawdbot-gateway.service",
+        label: "joopobot-gateway.service",
+        detail: "unit: /home/test/.config/systemd/user/joopobot-gateway.service",
         scope: "user",
         legacy: true,
       },
     ]);
     mocks.uninstallLegacySystemdUnits.mockResolvedValue([
       {
-        name: "clawdbot-gateway",
-        unitPath: "/home/test/.config/systemd/user/clawdbot-gateway.service",
+        name: "joopobot-gateway",
+        unitPath: "/home/test/.config/systemd/user/joopobot-gateway.service",
         enabled: true,
         exists: true,
       },
@@ -1053,7 +1050,7 @@ describe("maybeScanExtraGatewayServices", () => {
       stdout: process.stdout,
     });
     expect(mocks.note).toHaveBeenCalledWith(
-      expect.stringContaining("clawdbot-gateway.service"),
+      expect.stringContaining("joopobot-gateway.service"),
       "Legacy gateway removed",
     );
     expect(runtime.log).toHaveBeenCalledWith(
@@ -1066,8 +1063,8 @@ describe("maybeScanExtraGatewayServices", () => {
       mocks.findExtraGatewayServices.mockResolvedValue([
         {
           platform: "linux",
-          label: "clawdbot-gateway.service",
-          detail: "unit: /home/test/.config/systemd/user/clawdbot-gateway.service",
+          label: "joopobot-gateway.service",
+          detail: "unit: /home/test/.config/systemd/user/joopobot-gateway.service",
           scope: "user",
           legacy: true,
         },
@@ -1077,7 +1074,7 @@ describe("maybeScanExtraGatewayServices", () => {
       await maybeScanExtraGatewayServices({ deep: false }, runtime, makeDoctorPrompts());
 
       expect(mocks.note).toHaveBeenCalledWith(
-        expect.stringContaining("clawdbot-gateway.service"),
+        expect.stringContaining("joopobot-gateway.service"),
         "Other gateway-like services detected",
       );
       expect(mocks.note).toHaveBeenCalledWith(

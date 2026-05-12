@@ -121,14 +121,14 @@ describe("buildWorkspaceSkillStatus", () => {
     expect(skill.install[0]?.id).toBe("brew");
   });
 
-  it("honors legacy clawdbot skill metadata requirements and install hints", async () => {
+  it("honors legacy joopobot skill metadata requirements and install hints", async () => {
     const workspaceDir = await createTempWorkspaceDir();
     await writeSkill({
       dir: path.join(workspaceDir, "skills", "legacy-skill"),
       name: "legacy-skill",
       description: "Legacy metadata",
       metadata:
-        '{"clawdbot":{"requires":{"bins":["fakebin"]},"install":[{"id":"brew","kind":"brew","formula":"fakebin","bins":["fakebin"],"label":"Install fakebin"}]}}',
+        '{"joopobot":{"requires":{"bins":["fakebin"]},"install":[{"id":"brew","kind":"brew","formula":"fakebin","bins":["fakebin"],"label":"Install fakebin"}]}}',
     });
 
     const report = withEnv({ PATH: "" }, () =>

@@ -73,12 +73,12 @@ describe("@joopo/plugin-package-contract", () => {
       {
         fieldPath: "joopo.compat.pluginApi",
         message:
-          "joopo.compat.pluginApi is required for external code plugins published to ClawHub.",
+          "joopo.compat.pluginApi is required for external code plugins published to JoopoHub.",
       },
       {
         fieldPath: "joopo.build.joopoVersion",
         message:
-          "joopo.build.joopoVersion is required for external code plugins published to ClawHub.",
+          "joopo.build.joopoVersion is required for external code plugins published to JoopoHub.",
       },
     ]);
   });

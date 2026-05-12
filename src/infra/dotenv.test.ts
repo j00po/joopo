@@ -618,7 +618,7 @@ describe("loadCliDotEnv", () => {
     await withIsolatedEnvAndCwd(async () => {
       const base = await fs.mkdtemp(path.join(os.tmpdir(), "joopo-dotenv-legacy-"));
       const cwdDir = path.join(base, "cwd");
-      const legacyStateDir = path.join(base, ".clawdbot");
+      const legacyStateDir = path.join(base, ".joopobot");
       process.env.HOME = base;
       delete process.env.JOOPO_STATE_DIR;
       delete process.env.JOOPO_TEST_FAST;
@@ -706,12 +706,12 @@ describe("workspace .env blocklist completeness", () => {
           "JOOPO_UPDATE_PACKAGE_SPEC",
           "JOOPO_GATEWAY_PORT",
           "JOOPO_GATEWAY_URL",
-          "JOOPO_CLAWHUB_URL",
-          "CLAWHUB_URL",
-          "JOOPO_CLAWHUB_TOKEN",
-          "CLAWHUB_TOKEN",
-          "CLAWHUB_AUTH_TOKEN",
-          "CLAWHUB_CONFIG_PATH",
+          "JOOPO_JOOPOHUB_URL",
+          "JOOPOHUB_URL",
+          "JOOPO_JOOPOHUB_TOKEN",
+          "JOOPOHUB_TOKEN",
+          "JOOPOHUB_AUTH_TOKEN",
+          "JOOPOHUB_CONFIG_PATH",
           "JOOPO_DISABLE_BUNDLED_PLUGINS",
           "JOOPO_ALLOW_INSECURE_PRIVATE_WS",
           "JOOPO_BROWSER_EXECUTABLE_PATH",

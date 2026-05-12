@@ -38,7 +38,7 @@ import {
   normalizeAgentId,
   resolveChannelContextVisibilityMode,
 } from "./bot-runtime-api.js";
-import type { ClawdbotConfig, RuntimeEnv } from "./bot-runtime-api.js";
+import type { JoopobotConfig, RuntimeEnv } from "./bot-runtime-api.js";
 import { type FeishuPermissionError, resolveFeishuSenderName } from "./bot-sender-name.js";
 import { getChatInfo } from "./chat.js";
 import { createFeishuClient } from "./client.js";
@@ -181,7 +181,7 @@ export async function resolveGroupName(params: {
 }
 
 async function resolveFeishuAudioPreflightTranscript(params: {
-  cfg: ClawdbotConfig;
+  cfg: JoopobotConfig;
   mediaList: FeishuMediaInfo[];
   content: string;
   chatType: "direct" | "group";
@@ -214,7 +214,7 @@ async function resolveFeishuAudioPreflightTranscript(params: {
 // --- Broadcast support ---
 // Resolve broadcast agent list for a given peer (group) ID.
 // Returns null if no broadcast config exists or the peer is not in the broadcast list.
-export function resolveBroadcastAgents(cfg: ClawdbotConfig, peerId: string): string[] | null {
+export function resolveBroadcastAgents(cfg: JoopobotConfig, peerId: string): string[] | null {
   const broadcast = (cfg as Record<string, unknown>).broadcast;
   if (!broadcast || typeof broadcast !== "object") {
     return null;
@@ -408,7 +408,7 @@ function filterFetchedGroupContextMessages<
 }
 
 export async function handleFeishuMessage(params: {
-  cfg: ClawdbotConfig;
+  cfg: JoopobotConfig;
   event: FeishuMessageEvent;
   botOpenId?: string;
   botName?: string;

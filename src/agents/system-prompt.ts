@@ -523,8 +523,8 @@ function buildDocsSection(params: {
     "Mirror: https://docs.joopo.ai",
     sourcePath ? `Local source: ${sourcePath}` : undefined,
     "Source: https://github.com/joopo/joopo",
-    "Community: https://discord.com/invite/clawd",
-    "Find new skills: https://clawhub.ai",
+    "Community: https://discord.com/invite/joopo",
+    "Find new skills: https://joopohub.ai",
     docsPath
       ? "For Joopo behavior, commands, config, or architecture: consult local docs first."
       : "For Joopo behavior, commands, config, or architecture: consult the docs mirror first.",

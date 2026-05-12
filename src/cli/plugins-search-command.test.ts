@@ -20,7 +20,7 @@ const mocks = vi.hoisted(() => {
     logs,
     errors,
     runtime,
-    searchClawHubPackages: vi.fn(),
+    searchJoopoHubPackages: vi.fn(),
   };
 });
 
@@ -30,8 +30,8 @@ vi.mock("../runtime.js", () => ({
     runtime.writeJson(value, space),
 }));
 
-vi.mock("../infra/clawhub.js", () => ({
-  searchClawHubPackages: mocks.searchClawHubPackages,
+vi.mock("../infra/joopohub.js", () => ({
+  searchJoopoHubPackages: mocks.searchJoopoHubPackages,
 }));
 
 const { runPluginsSearchCommand } = await import("./plugins-search-command.js");
@@ -44,11 +44,11 @@ describe("plugins search command", () => {
     mocks.runtime.error.mockClear();
     mocks.runtime.writeJson.mockClear();
     mocks.runtime.exit.mockClear();
-    mocks.searchClawHubPackages.mockReset();
+    mocks.searchJoopoHubPackages.mockReset();
   });
 
-  it("searches ClawHub code and bundle plugin families", async () => {
-    mocks.searchClawHubPackages
+  it("searches JoopoHub code and bundle plugin families", async () => {
+    mocks.searchJoopoHubPackages
       .mockResolvedValueOnce([
         {
           score: 12,
@@ -84,24 +84,24 @@ describe("plugins search command", () => {
 
     await runPluginsSearchCommand(["calendar"], { limit: 5 }, mocks.runtime);
 
-    expect(mocks.searchClawHubPackages).toHaveBeenCalledWith({
+    expect(mocks.searchJoopoHubPackages).toHaveBeenCalledWith({
       query: "calendar",
       family: "code-plugin",
       limit: 5,
     });
-    expect(mocks.searchClawHubPackages).toHaveBeenCalledWith({
+    expect(mocks.searchJoopoHubPackages).toHaveBeenCalledWith({
       query: "calendar",
       family: "bundle-plugin",
       limit: 5,
     });
     expect(mocks.logs.join("\n")).toContain("joopo-calendar");
     expect(mocks.logs.join("\n")).toContain(
-      "Install: joopo plugins install clawhub:joopo-calendar",
+      "Install: joopo plugins install joopohub:joopo-calendar",
     );
   });
 
   it("writes JSON results when requested", async () => {
-    mocks.searchClawHubPackages.mockResolvedValueOnce([]).mockResolvedValueOnce([]);
+    mocks.searchJoopoHubPackages.mockResolvedValueOnce([]).mockResolvedValueOnce([]);
 
     await runPluginsSearchCommand("calendar", { json: true }, mocks.runtime);
 

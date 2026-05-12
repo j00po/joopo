@@ -17,7 +17,7 @@ import {
   installHooksFromNpmSpec,
   installHooksFromPath,
   installPluginFromNpmPackArchive,
-  installPluginFromClawHub,
+  installPluginFromJoopoHub,
   installPluginFromGitSpec,
   installPluginFromMarketplace,
   installPluginFromNpmSpec,
@@ -25,7 +25,7 @@ import {
   loadConfig,
   loadPluginManifestRegistry,
   readConfigFileSnapshot,
-  parseClawHubPluginSpec,
+  parseJoopoHubPluginSpec,
   recordHookInstall,
   recordPluginInstall,
   resetPluginsCliTestState,
@@ -84,24 +84,24 @@ function createEmptyPluginConfig(): JoopoConfig {
   } as JoopoConfig;
 }
 
-function createClawHubInstallResult(params: {
+function createJoopoHubInstallResult(params: {
   pluginId: string;
   packageName: string;
   version: string;
   channel: string;
-}): Awaited<ReturnType<typeof installPluginFromClawHub>> {
+}): Awaited<ReturnType<typeof installPluginFromJoopoHub>> {
   return {
     ok: true,
     pluginId: params.pluginId,
     targetDir: cliInstallPath(params.pluginId),
     version: params.version,
     packageName: params.packageName,
-    clawhub: {
-      source: "clawhub",
-      clawhubUrl: "https://clawhub.ai",
-      clawhubPackage: params.packageName,
-      clawhubFamily: "code-plugin",
-      clawhubChannel: params.channel,
+    joopohub: {
+      source: "joopohub",
+      joopohubUrl: "https://joopohub.ai",
+      joopohubPackage: params.packageName,
+      joopohubFamily: "code-plugin",
+      joopohubChannel: params.channel,
       version: params.version,
       integrity: "sha256-abc",
       resolvedAt: "2026-03-22T00:00:00.000Z",
@@ -169,10 +169,10 @@ function createGitPluginInstallResult(
   };
 }
 
-function mockClawHubPackageNotFound(packageName: string) {
-  installPluginFromClawHub.mockResolvedValue({
+function mockJoopoHubPackageNotFound(packageName: string) {
+  installPluginFromJoopoHub.mockResolvedValue({
     ok: false,
-    error: `ClawHub /api/v1/packages/${packageName} failed (404): Package not found`,
+    error: `JoopoHub /api/v1/packages/${packageName} failed (404): Package not found`,
     code: "package_not_found",
   });
 }
@@ -182,7 +182,7 @@ function primeNpmPluginFallback(pluginId = "demo") {
   const enabledCfg = createEnabledPluginConfig(pluginId);
 
   loadConfig.mockReturnValue(cfg);
-  mockClawHubPackageNotFound(pluginId);
+  mockJoopoHubPackageNotFound(pluginId);
   installPluginFromNpmSpec.mockResolvedValue(createNpmPluginInstallResult(pluginId));
   enablePluginInConfig.mockReturnValue({ config: enabledCfg });
   recordPluginInstall.mockReturnValue(enabledCfg);
@@ -246,7 +246,7 @@ function primeHookPackNpmFallback() {
   const installedCfg = createNpmHookPackInstalledConfig();
 
   loadConfig.mockReturnValue(cfg);
-  mockClawHubPackageNotFound("@acme/demo-hooks");
+  mockJoopoHubPackageNotFound("@acme/demo-hooks");
   installPluginFromNpmSpec.mockResolvedValue({
     ok: false,
     error: "package.json missing joopo.plugin.json",
@@ -270,7 +270,7 @@ function primeBlockedNpmPluginInstall(params: {
   code?: "security_scan_blocked" | "security_scan_failed";
 }) {
   loadConfig.mockReturnValue({} as JoopoConfig);
-  mockClawHubPackageNotFound(params.spec);
+  mockJoopoHubPackageNotFound(params.spec);
   installPluginFromNpmSpec.mockResolvedValue({
     ok: false,
     error: `Plugin "${params.pluginId}" installation blocked: dangerous code patterns detected: finding details`,
@@ -493,7 +493,7 @@ describe("plugins cli install", () => {
     );
   });
 
-  it("installs ClawHub plugins and persists source metadata", async () => {
+  it("installs JoopoHub plugins and persists source metadata", async () => {
     const cfg = {
       plugins: {
         entries: {},
@@ -501,9 +501,9 @@ describe("plugins cli install", () => {
     } as JoopoConfig;
     const enabledCfg = createEnabledPluginConfig("demo");
     loadConfig.mockReturnValue(cfg);
-    parseClawHubPluginSpec.mockReturnValue({ name: "demo" });
-    installPluginFromClawHub.mockResolvedValue(
-      createClawHubInstallResult({
+    parseJoopoHubPluginSpec.mockReturnValue({ name: "demo" });
+    installPluginFromJoopoHub.mockResolvedValue(
+      createJoopoHubInstallResult({
         pluginId: "demo",
         packageName: "demo",
         version: "1.2.3",
@@ -516,22 +516,22 @@ describe("plugins cli install", () => {
       warnings: [],
     });
 
-    await runPluginsCommand(["plugins", "install", "clawhub:demo"]);
+    await runPluginsCommand(["plugins", "install", "joopohub:demo"]);
 
-    expect(installPluginFromClawHub).toHaveBeenCalledWith(
+    expect(installPluginFromJoopoHub).toHaveBeenCalledWith(
       expect.objectContaining({
-        spec: "clawhub:demo",
+        spec: "joopohub:demo",
       }),
     );
     expect(writePersistedInstalledPluginIndexInstallRecords).toHaveBeenCalledWith({
       demo: expect.objectContaining({
-        source: "clawhub",
-        spec: "clawhub:demo",
+        source: "joopohub",
+        spec: "joopohub:demo",
         installPath: cliInstallPath("demo"),
         version: "1.2.3",
-        clawhubPackage: "demo",
-        clawhubFamily: "code-plugin",
-        clawhubChannel: "official",
+        joopohubPackage: "demo",
+        joopohubFamily: "code-plugin",
+        joopohubChannel: "official",
         clawpackSha256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
         clawpackSpecVersion: 1,
         clawpackManifestSha256: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
@@ -543,15 +543,15 @@ describe("plugins cli install", () => {
     expect(installPluginFromNpmSpec).not.toHaveBeenCalled();
   });
 
-  it("passes the active profile extensions dir to ClawHub installs", async () => {
+  it("passes the active profile extensions dir to JoopoHub installs", async () => {
     const extensionsDir = useProfileExtensionsDir();
     const cfg = createEmptyPluginConfig();
     const enabledCfg = createEnabledPluginConfig("demo");
 
     loadConfig.mockReturnValue(cfg);
-    parseClawHubPluginSpec.mockReturnValue({ name: "demo" });
-    installPluginFromClawHub.mockResolvedValue(
-      createClawHubInstallResult({
+    parseJoopoHubPluginSpec.mockReturnValue({ name: "demo" });
+    installPluginFromJoopoHub.mockResolvedValue(
+      createJoopoHubInstallResult({
         pluginId: "demo",
         packageName: "demo",
         version: "1.2.3",
@@ -564,12 +564,12 @@ describe("plugins cli install", () => {
       warnings: [],
     });
 
-    await runPluginsCommand(["plugins", "install", "clawhub:demo"]);
+    await runPluginsCommand(["plugins", "install", "joopohub:demo"]);
 
-    expect(installPluginFromClawHub).toHaveBeenCalledWith(
+    expect(installPluginFromJoopoHub).toHaveBeenCalledWith(
       expect.objectContaining({
         extensionsDir,
-        spec: "clawhub:demo",
+        spec: "joopohub:demo",
       }),
     );
   });
@@ -659,7 +659,7 @@ describe("plugins cli install", () => {
     expect(runtimeLogs.some((line) => line.includes("requires configuration first"))).toBe(false);
   });
 
-  it("passes force through as overwrite mode for ClawHub installs", async () => {
+  it("passes force through as overwrite mode for JoopoHub installs", async () => {
     const cfg = {
       plugins: {
         entries: {},
@@ -668,9 +668,9 @@ describe("plugins cli install", () => {
     const enabledCfg = createEnabledPluginConfig("demo");
 
     loadConfig.mockReturnValue(cfg);
-    parseClawHubPluginSpec.mockReturnValue({ name: "demo" });
-    installPluginFromClawHub.mockResolvedValue(
-      createClawHubInstallResult({
+    parseJoopoHubPluginSpec.mockReturnValue({ name: "demo" });
+    installPluginFromJoopoHub.mockResolvedValue(
+      createJoopoHubInstallResult({
         pluginId: "demo",
         packageName: "demo",
         version: "1.2.3",
@@ -684,17 +684,17 @@ describe("plugins cli install", () => {
       warnings: [],
     });
 
-    await runPluginsCommand(["plugins", "install", "clawhub:demo", "--force"]);
+    await runPluginsCommand(["plugins", "install", "joopohub:demo", "--force"]);
 
-    expect(installPluginFromClawHub).toHaveBeenCalledWith(
+    expect(installPluginFromJoopoHub).toHaveBeenCalledWith(
       expect.objectContaining({
-        spec: "clawhub:demo",
+        spec: "joopohub:demo",
         mode: "update",
       }),
     );
   });
 
-  it("keeps explicit ClawHub versions pinned in install records", async () => {
+  it("keeps explicit JoopoHub versions pinned in install records", async () => {
     const cfg = {
       plugins: {
         entries: {},
@@ -703,9 +703,9 @@ describe("plugins cli install", () => {
     const enabledCfg = createEnabledPluginConfig("demo");
 
     loadConfig.mockReturnValue(cfg);
-    parseClawHubPluginSpec.mockReturnValue({ name: "demo", version: "1.2.3" });
-    installPluginFromClawHub.mockResolvedValue(
-      createClawHubInstallResult({
+    parseJoopoHubPluginSpec.mockReturnValue({ name: "demo", version: "1.2.3" });
+    installPluginFromJoopoHub.mockResolvedValue(
+      createJoopoHubInstallResult({
         pluginId: "demo",
         packageName: "demo",
         version: "1.2.3",
@@ -718,20 +718,20 @@ describe("plugins cli install", () => {
       warnings: [],
     });
 
-    await runPluginsCommand(["plugins", "install", "clawhub:demo@1.2.3"]);
+    await runPluginsCommand(["plugins", "install", "joopohub:demo@1.2.3"]);
 
-    expect(installPluginFromClawHub).toHaveBeenCalledWith(
+    expect(installPluginFromJoopoHub).toHaveBeenCalledWith(
       expect.objectContaining({
-        spec: "clawhub:demo@1.2.3",
+        spec: "joopohub:demo@1.2.3",
       }),
     );
     expect(writePersistedInstalledPluginIndexInstallRecords).toHaveBeenCalledWith({
       demo: expect.objectContaining({
-        source: "clawhub",
-        spec: "clawhub:demo@1.2.3",
+        source: "joopohub",
+        spec: "joopohub:demo@1.2.3",
         installPath: cliInstallPath("demo"),
         version: "1.2.3",
-        clawhubPackage: "demo",
+        joopohubPackage: "demo",
         clawpackSha256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
         clawpackSpecVersion: 1,
         clawpackManifestSha256: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
@@ -757,7 +757,7 @@ describe("plugins cli install", () => {
     expect(findBundledPluginSourceMock).toHaveBeenCalledWith({
       lookup: { kind: "pluginId", value: "brave" },
     });
-    expect(installPluginFromClawHub).not.toHaveBeenCalled();
+    expect(installPluginFromJoopoHub).not.toHaveBeenCalled();
     expect(installPluginFromNpmSpec).toHaveBeenCalledWith(
       expect.objectContaining({
         spec: "@joopo/brave-plugin",
@@ -781,9 +781,7 @@ describe("plugins cli install", () => {
     const enabledCfg = createEnabledPluginConfig("wecom-joopo-plugin");
     loadConfig.mockReturnValue(cfg);
     findBundledPluginSourceMock.mockReturnValue(undefined);
-    installPluginFromNpmSpec.mockResolvedValue(
-      createNpmPluginInstallResult("wecom-joopo-plugin"),
-    );
+    installPluginFromNpmSpec.mockResolvedValue(createNpmPluginInstallResult("wecom-joopo-plugin"));
     enablePluginInConfig.mockReturnValue({ config: enabledCfg });
     applyExclusiveSlotSelection.mockReturnValue({
       config: enabledCfg,
@@ -822,7 +820,7 @@ describe("plugins cli install", () => {
       expect(findBundledPluginSourceMock).toHaveBeenCalledWith({
         lookup: { kind: "pluginId", value: pluginId },
       });
-      expect(installPluginFromClawHub).not.toHaveBeenCalled();
+      expect(installPluginFromJoopoHub).not.toHaveBeenCalled();
       expect(installPluginFromNpmSpec).toHaveBeenCalledWith(
         expect.objectContaining({
           spec: npmSpec,
@@ -868,7 +866,7 @@ describe("plugins cli install", () => {
     );
   });
 
-  it("installs ordinary bare plugin specs through npm without ClawHub lookup", async () => {
+  it("installs ordinary bare plugin specs through npm without JoopoHub lookup", async () => {
     const cfg = createEmptyPluginConfig();
     const enabledCfg = createEnabledPluginConfig("demo");
     loadConfig.mockReturnValue(cfg);
@@ -881,7 +879,7 @@ describe("plugins cli install", () => {
 
     await runPluginsCommand(["plugins", "install", "demo"]);
 
-    expect(installPluginFromClawHub).not.toHaveBeenCalled();
+    expect(installPluginFromJoopoHub).not.toHaveBeenCalled();
     expect(installPluginFromNpmSpec).toHaveBeenCalledWith(
       expect.objectContaining({
         spec: "demo",
@@ -898,7 +896,7 @@ describe("plugins cli install", () => {
     expect(writeConfigFile).toHaveBeenCalledWith(enabledCfg);
   });
 
-  it("passes bare npm selectors through npm without ClawHub lookup", async () => {
+  it("passes bare npm selectors through npm without JoopoHub lookup", async () => {
     const cfg = createEmptyPluginConfig();
     const enabledCfg = createEnabledPluginConfig("demo");
     loadConfig.mockReturnValue(cfg);
@@ -911,7 +909,7 @@ describe("plugins cli install", () => {
 
     await runPluginsCommand(["plugins", "install", "demo@beta"]);
 
-    expect(installPluginFromClawHub).not.toHaveBeenCalled();
+    expect(installPluginFromJoopoHub).not.toHaveBeenCalled();
     expect(installPluginFromNpmSpec).toHaveBeenCalledWith(
       expect.objectContaining({
         spec: "demo@beta",
@@ -940,7 +938,7 @@ describe("plugins cli install", () => {
         mode: "install",
       }),
     );
-    expect(installPluginFromClawHub).not.toHaveBeenCalled();
+    expect(installPluginFromJoopoHub).not.toHaveBeenCalled();
     expect(writePersistedInstalledPluginIndexInstallRecords).toHaveBeenCalledWith({
       demo: expect.objectContaining({
         source: "npm",
@@ -1022,7 +1020,7 @@ describe("plugins cli install", () => {
         trustedSourceLinkedOfficialInstall: true,
       }),
     );
-    expect(installPluginFromClawHub).not.toHaveBeenCalled();
+    expect(installPluginFromJoopoHub).not.toHaveBeenCalled();
   });
 
   it("marks explicit official npm package installs as trusted", async () => {
@@ -1047,7 +1045,7 @@ describe("plugins cli install", () => {
         trustedSourceLinkedOfficialInstall: true,
       }),
     );
-    expect(installPluginFromClawHub).not.toHaveBeenCalled();
+    expect(installPluginFromJoopoHub).not.toHaveBeenCalled();
   });
 
   it("marks scoped official npm package installs as trusted", async () => {
@@ -1072,7 +1070,7 @@ describe("plugins cli install", () => {
         trustedSourceLinkedOfficialInstall: true,
       }),
     );
-    expect(installPluginFromClawHub).not.toHaveBeenCalled();
+    expect(installPluginFromJoopoHub).not.toHaveBeenCalled();
   });
 
   it("marks catalog npm package installs with alternate selectors as trusted", async () => {
@@ -1080,9 +1078,7 @@ describe("plugins cli install", () => {
     const enabledCfg = createEnabledPluginConfig("wecom-joopo-plugin");
 
     loadConfig.mockReturnValue(cfg);
-    installPluginFromNpmSpec.mockResolvedValue(
-      createNpmPluginInstallResult("wecom-joopo-plugin"),
-    );
+    installPluginFromNpmSpec.mockResolvedValue(createNpmPluginInstallResult("wecom-joopo-plugin"));
     enablePluginInConfig.mockReturnValue({ config: enabledCfg });
     recordPluginInstall.mockReturnValue(enabledCfg);
     applyExclusiveSlotSelection.mockReturnValue({
@@ -1106,7 +1102,7 @@ describe("plugins cli install", () => {
         expectedIntegrity: expect.any(String),
       }),
     );
-    expect(installPluginFromClawHub).not.toHaveBeenCalled();
+    expect(installPluginFromJoopoHub).not.toHaveBeenCalled();
   });
 
   it("passes the active profile extensions dir to npm installs", async () => {
@@ -1133,7 +1129,7 @@ describe("plugins cli install", () => {
     );
   });
 
-  it("passes npm: prefix installs through npm options without ClawHub lookup", async () => {
+  it("passes npm: prefix installs through npm options without JoopoHub lookup", async () => {
     const cfg = createEmptyPluginConfig();
     const enabledCfg = createEnabledPluginConfig("demo");
 
@@ -1157,10 +1153,10 @@ describe("plugins cli install", () => {
         dangerouslyForceUnsafeInstall: true,
       }),
     );
-    expect(installPluginFromClawHub).not.toHaveBeenCalled();
+    expect(installPluginFromJoopoHub).not.toHaveBeenCalled();
   });
 
-  it("reports npm install failures without trying ClawHub when npm: prefix is used", async () => {
+  it("reports npm install failures without trying JoopoHub when npm: prefix is used", async () => {
     loadConfig.mockReturnValue({} as JoopoConfig);
     installPluginFromNpmSpec.mockResolvedValue({
       ok: false,
@@ -1175,7 +1171,7 @@ describe("plugins cli install", () => {
       "__exit__:1",
     );
 
-    expect(installPluginFromClawHub).not.toHaveBeenCalled();
+    expect(installPluginFromJoopoHub).not.toHaveBeenCalled();
     expect(runtimeErrors.at(-1)).toContain("npm install failed");
   });
 
@@ -1195,11 +1191,11 @@ describe("plugins cli install", () => {
       error: "package.json missing joopo.hooks",
     });
 
-    await expect(
-      runPluginsCommand(["plugins", "install", "npm:@joopo/whatsapp"]),
-    ).rejects.toThrow("__exit__:1");
+    await expect(runPluginsCommand(["plugins", "install", "npm:@joopo/whatsapp"])).rejects.toThrow(
+      "__exit__:1",
+    );
 
-    expect(installPluginFromClawHub).not.toHaveBeenCalled();
+    expect(installPluginFromJoopoHub).not.toHaveBeenCalled();
     expect(runtimeErrors.at(-1)).toContain(
       "one of this plugin's npm dependencies is fetched from a git URL",
     );
@@ -1228,7 +1224,7 @@ describe("plugins cli install", () => {
         spec: "memory-lancedb",
       }),
     );
-    expect(installPluginFromClawHub).not.toHaveBeenCalled();
+    expect(installPluginFromJoopoHub).not.toHaveBeenCalled();
     expect(writeConfigFile).not.toHaveBeenCalled();
     expect(runtimeErrors.at(-1)).toContain("Package not found on npm: memory-lancedb.");
   });
@@ -1239,7 +1235,7 @@ describe("plugins cli install", () => {
     await expect(runPluginsCommand(["plugins", "install", "npm:"])).rejects.toThrow("__exit__:1");
 
     expect(installPluginFromNpmSpec).not.toHaveBeenCalled();
-    expect(installPluginFromClawHub).not.toHaveBeenCalled();
+    expect(installPluginFromJoopoHub).not.toHaveBeenCalled();
     expect(runtimeErrors.at(-1)).toContain("unsupported npm: spec: missing package");
   });
 
@@ -1264,7 +1260,7 @@ describe("plugins cli install", () => {
         mode: "install",
       }),
     );
-    expect(installPluginFromClawHub).not.toHaveBeenCalled();
+    expect(installPluginFromJoopoHub).not.toHaveBeenCalled();
     expect(installPluginFromNpmSpec).not.toHaveBeenCalled();
     expect(writePersistedInstalledPluginIndexInstallRecords).toHaveBeenCalledWith({
       demo: expect.objectContaining({
@@ -1497,11 +1493,10 @@ describe("plugins cli install", () => {
 
   it("suggests update or --force when npm plugin install target already exists", async () => {
     loadConfig.mockReturnValue({} as JoopoConfig);
-    mockClawHubPackageNotFound("@example/lossless-claw");
+    mockJoopoHubPackageNotFound("@example/lossless-claw");
     installPluginFromNpmSpec.mockResolvedValue({
       ok: false,
-      error:
-        "plugin already exists: /home/joopo/.joopo/extensions/lossless-claw (delete it first)",
+      error: "plugin already exists: /home/joopo/.joopo/extensions/lossless-claw (delete it first)",
     });
     installHooksFromNpmSpec.mockResolvedValue({
       ok: false,
@@ -1702,9 +1697,9 @@ describe("plugins cli install", () => {
     const pluginInstallError = "plugin blocked by security scan";
 
     loadConfig.mockReturnValue(cfg);
-    installPluginFromClawHub.mockResolvedValue({
+    installPluginFromJoopoHub.mockResolvedValue({
       ok: false,
-      error: "ClawHub /api/v1/packages/demo failed (404): Package not found",
+      error: "JoopoHub /api/v1/packages/demo failed (404): Package not found",
       code: "package_not_found",
     });
     installPluginFromNpmSpec.mockResolvedValue({
@@ -1741,9 +1736,9 @@ describe("plugins cli install", () => {
     const pluginInstallError = "plugin security scan failed";
 
     loadConfig.mockReturnValue(cfg);
-    installPluginFromClawHub.mockResolvedValue({
+    installPluginFromJoopoHub.mockResolvedValue({
       ok: false,
-      error: "ClawHub /api/v1/packages/demo failed (404): Package not found",
+      error: "JoopoHub /api/v1/packages/demo failed (404): Package not found",
       code: "package_not_found",
     });
     installPluginFromNpmSpec.mockResolvedValue({
@@ -1826,9 +1821,9 @@ describe("plugins cli install", () => {
     } as JoopoConfig;
 
     loadConfig.mockReturnValue(cfg);
-    installPluginFromClawHub.mockResolvedValue({
+    installPluginFromJoopoHub.mockResolvedValue({
       ok: false,
-      error: "ClawHub /api/v1/packages/@acme/demo-hooks failed (404): Package not found",
+      error: "JoopoHub /api/v1/packages/@acme/demo-hooks failed (404): Package not found",
       code: "package_not_found",
     });
     installPluginFromNpmSpec.mockResolvedValue({
@@ -1865,15 +1860,15 @@ describe("plugins cli install", () => {
     expect(runtimeLogs.some((line) => line.includes("Installed hook pack: demo-hooks"))).toBe(true);
   });
 
-  it("does not fall back to npm when explicit ClawHub rejects a real package", async () => {
-    parseClawHubPluginSpec.mockReturnValue({ name: "demo" });
-    installPluginFromClawHub.mockResolvedValue({
+  it("does not fall back to npm when explicit JoopoHub rejects a real package", async () => {
+    parseJoopoHubPluginSpec.mockReturnValue({ name: "demo" });
+    installPluginFromJoopoHub.mockResolvedValue({
       ok: false,
       error: 'Use "joopo skills install demo" instead.',
       code: "skill_package",
     });
 
-    await expect(runPluginsCommand(["plugins", "install", "clawhub:demo"])).rejects.toThrow(
+    await expect(runPluginsCommand(["plugins", "install", "joopohub:demo"])).rejects.toThrow(
       "__exit__:1",
     );
 

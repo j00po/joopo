@@ -13,7 +13,7 @@ export const PLUGIN_PRERELEASE_REQUIRED_SURFACES = Object.freeze([
   "external-install-boundary",
   "status-diagnostics",
   "npm-registry-plugin",
-  "clawhub-registry-plugin",
+  "joopohub-registry-plugin",
   "resource-guardrails",
   "live-ish-availability",
 ]);
@@ -66,7 +66,7 @@ const pluginPrereleaseDockerLanes = Object.freeze([
       "external-install-boundary",
       "status-diagnostics",
       "npm-registry-plugin",
-      "clawhub-registry-plugin",
+      "joopohub-registry-plugin",
       "resource-guardrails",
     ],
   },

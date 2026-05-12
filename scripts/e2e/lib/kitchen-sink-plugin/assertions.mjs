@@ -12,8 +12,8 @@ function expectFailure() {
   const spec = process.env.KITCHEN_SINK_SPEC;
   const displayedSpec = source === "npm" ? spec.replace(/^npm:/u, "") : spec;
   const expected =
-    source === "clawhub"
-      ? /Version not found on ClawHub|ClawHub .* failed \(404\)|version.*not found/iu
+    source === "joopohub"
+      ? /Version not found on JoopoHub|JoopoHub .* failed \(404\)|version.*not found/iu
       : /No matching version|ETARGET|notarget|npm (?:error|ERR!)/iu;
   if (!output.includes(displayedSpec)) {
     throw new Error(`expected failure output to mention ${displayedSpec}`);
@@ -194,7 +194,7 @@ function assertRealPathInside(parentPath, childPath, label) {
   }
 }
 
-function assertClawHubExternalInstallContract(installPath) {
+function assertJoopoHubExternalInstallContract(installPath) {
   const joopoPeerPath = path.join(installPath, "node_modules", "joopo");
   if (!fs.existsSync(joopoPeerPath)) {
     throw new Error(`missing kitchen-sink joopo peer symlink: ${joopoPeerPath}`);
@@ -214,7 +214,7 @@ function assertClawHubExternalInstallContract(installPath) {
   }
 }
 
-function assertClawHubArtifactMetadata(record) {
+function assertJoopoHubArtifactMetadata(record) {
   if (record.artifactKind === "legacy-zip") {
     if (record.artifactFormat !== "zip") {
       throw new Error(
@@ -225,7 +225,7 @@ function assertClawHubArtifactMetadata(record) {
   }
 
   if (record.artifactKind !== "npm-pack" || record.artifactFormat !== "tgz") {
-    throw new Error(`missing kitchen-sink ClawHub artifact metadata: ${JSON.stringify(record)}`);
+    throw new Error(`missing kitchen-sink JoopoHub artifact metadata: ${JSON.stringify(record)}`);
   }
   if (!record.clawpackSha256 || typeof record.clawpackSize !== "number") {
     throw new Error(`missing kitchen-sink ClawPack metadata: ${JSON.stringify(record)}`);
@@ -239,8 +239,8 @@ function inferInstallSource(spec) {
   if (spec?.startsWith("npm:")) {
     return "npm";
   }
-  if (spec?.startsWith("clawhub:")) {
-    return "clawhub";
+  if (spec?.startsWith("joopohub:")) {
+    return "joopohub";
   }
   return null;
 }
@@ -394,24 +394,24 @@ function assertInstalled() {
     if (!record.resolvedVersion || !record.resolvedSpec) {
       throw new Error(`missing npm resolution metadata: ${JSON.stringify(record)}`);
     }
-  } else if (source === "clawhub") {
-    const value = spec.slice("clawhub:".length).trim();
+  } else if (source === "joopohub") {
+    const value = spec.slice("joopohub:".length).trim();
     const slashIndex = value.lastIndexOf("/");
     const atIndex = value.lastIndexOf("@");
     const packageName = atIndex > 0 && atIndex > slashIndex ? value.slice(0, atIndex) : value;
     if (record.spec !== spec) {
-      throw new Error(`expected kitchen-sink ClawHub spec ${spec}, got ${record.spec}`);
+      throw new Error(`expected kitchen-sink JoopoHub spec ${spec}, got ${record.spec}`);
     }
-    if (record.clawhubPackage !== packageName) {
-      throw new Error(`expected ClawHub package ${packageName}, got ${record.clawhubPackage}`);
+    if (record.joopohubPackage !== packageName) {
+      throw new Error(`expected JoopoHub package ${packageName}, got ${record.joopohubPackage}`);
     }
-    if (record.clawhubFamily !== "code-plugin" && record.clawhubFamily !== "bundle-plugin") {
-      throw new Error(`unexpected ClawHub family: ${record.clawhubFamily}`);
+    if (record.joopohubFamily !== "code-plugin" && record.joopohubFamily !== "bundle-plugin") {
+      throw new Error(`unexpected JoopoHub family: ${record.joopohubFamily}`);
     }
     if (!record.version || !record.integrity || !record.resolvedAt) {
-      throw new Error(`missing ClawHub resolution metadata: ${JSON.stringify(record)}`);
+      throw new Error(`missing JoopoHub resolution metadata: ${JSON.stringify(record)}`);
     }
-    assertClawHubArtifactMetadata(record);
+    assertJoopoHubArtifactMetadata(record);
   }
   if (typeof record.installPath !== "string" || record.installPath.length === 0) {
     throw new Error("missing kitchen-sink install path");
@@ -420,8 +420,8 @@ function assertInstalled() {
   if (!fs.existsSync(installPath)) {
     throw new Error(`kitchen-sink install path missing: ${record.installPath}`);
   }
-  if (source === "clawhub" && record.artifactKind === "npm-pack") {
-    assertClawHubExternalInstallContract(installPath);
+  if (source === "joopohub" && record.artifactKind === "npm-pack") {
+    assertJoopoHubExternalInstallContract(installPath);
   }
   fs.writeFileSync(`/tmp/kitchen-sink-${label}-install-path.txt`, installPath, "utf8");
 }

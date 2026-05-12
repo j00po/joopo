@@ -540,14 +540,14 @@ enumeration of `src/gateway/server-methods/*.ts`.
   - The response includes eligibility, missing requirements, config checks, and
     sanitized install options without exposing raw secret values.
 - Operators may call `skills.search` and `skills.detail` (`operator.read`) for
-  ClawHub discovery metadata.
+  JoopoHub discovery metadata.
 - Operators may call `skills.install` (`operator.admin`) in two modes:
-  - ClawHub mode: `{ source: "clawhub", slug, version?, force? }` installs a
+  - JoopoHub mode: `{ source: "joopohub", slug, version?, force? }` installs a
     skill folder into the default agent workspace `skills/` directory.
   - Gateway installer mode: `{ name, installId, dangerouslyForceUnsafeInstall?, timeoutMs? }`
     runs a declared `metadata.joopo.install` action on the gateway host.
 - Operators may call `skills.update` (`operator.admin`) in two modes:
-  - ClawHub mode updates one tracked slug or all tracked ClawHub installs in
+  - JoopoHub mode updates one tracked slug or all tracked JoopoHub installs in
     the default agent workspace.
   - Config mode patches `skills.entries.<skillKey>` values such as `enabled`,
     `apiKey`, and `env`.

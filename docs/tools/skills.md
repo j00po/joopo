@@ -23,7 +23,7 @@ Joopo loads skills from these sources, **highest precedence first**:
 | 1   | Workspace skills      | `<workspace>/skills`             |
 | 2   | Project agent skills  | `<workspace>/.agents/skills`     |
 | 3   | Personal agent skills | `~/.agents/skills`               |
-| 4   | Managed/local skills  | `~/.joopo/skills`             |
+| 4   | Managed/local skills  | `~/.joopo/skills`                |
 | 5   | Bundled skills        | shipped with the install         |
 | 6   | Extra skill folders   | `skills.load.extraDirs` (config) |
 
@@ -46,7 +46,7 @@ In **multi-agent** setups each agent has its own workspace:
 | Per-agent            | `<workspace>/skills`                        | Only that agent             |
 | Project-agent        | `<workspace>/.agents/skills`                | Only that workspace's agent |
 | Personal-agent       | `~/.agents/skills`                          | All agents on that machine  |
-| Shared managed/local | `~/.joopo/skills`                        | All agents on that machine  |
+| Shared managed/local | `~/.joopo/skills`                           | All agents on that machine  |
 | Shared extra dirs    | `skills.load.extraDirs` (lowest precedence) | All agents on that machine  |
 
 Same name in multiple places → highest source wins. Workspace beats
@@ -120,21 +120,21 @@ hard-won workflows such as media QA checklists. Start with pending
 approval; use automatic writes only in trusted workspaces after reviewing
 its proposals. Full guide: [Skill Workshop plugin](/plugins/skill-workshop).
 
-## ClawHub (install and sync)
+## JoopoHub (install and sync)
 
-[ClawHub](https://clawhub.ai) is the public skills registry for Joopo.
+[JoopoHub](https://joopohub.ai) is the public skills registry for Joopo.
 Use native `joopo skills` commands for discover/install/update, or the
-separate `clawhub` CLI for publish/sync workflows. Full guide:
-[ClawHub](/clawhub).
+separate `joopohub` CLI for publish/sync workflows. Full guide:
+[JoopoHub](/joopohub).
 
-| Action                             | Command                                |
-| ---------------------------------- | -------------------------------------- |
+| Action                             | Command                             |
+| ---------------------------------- | ----------------------------------- |
 | Install a skill into the workspace | `joopo skills install <skill-slug>` |
 | Update all installed skills        | `joopo skills update --all`         |
-| Sync (scan + publish updates)      | `clawhub sync --all`                   |
+| Sync (scan + publish updates)      | `joopohub sync --all`               |
 
 Native `joopo skills install` installs into the active workspace
-`skills/` directory. The separate `clawhub` CLI also installs into
+`skills/` directory. The separate `joopohub` CLI also installs into
 `./skills` under your current working directory (or falls back to the
 configured Joopo workspace). Joopo picks that up as
 `<workspace>/skills` on the next session.
@@ -142,11 +142,11 @@ Configured skill roots also support one grouping level, such as
 `skills/<group>/<skill>/SKILL.md`, so related third-party skills can be
 kept under a shared folder without broad recursive scanning.
 
-ClawHub skill pages expose the latest security scan state before install,
+JoopoHub skill pages expose the latest security scan state before install,
 with scanner detail pages for VirusTotal, ClawScan, and static analysis.
 `joopo skills install <slug>` remains only the install path; publishers
-recover false positives through the ClawHub dashboard or
-`clawhub skill rescan <slug>`.
+recover false positives through the JoopoHub dashboard or
+`joopohub skill rescan <slug>`.
 
 ## Security
 
@@ -158,7 +158,7 @@ Prefer sandboxed runs for untrusted inputs and risky tools. See
 
 - Workspace and extra-dir skill discovery only accepts skill roots and `SKILL.md` files whose resolved realpath stays inside the configured root.
 - Gateway-backed skill dependency installs (`skills.install`, onboarding, and the Skills settings UI) run the built-in dangerous-code scanner before executing installer metadata. `critical` findings block by default unless the caller explicitly sets the dangerous override; suspicious findings still warn only.
-- `joopo skills install <slug>` is different - it downloads a ClawHub skill folder into the workspace and does not use the installer-metadata path above.
+- `joopo skills install <slug>` is different - it downloads a JoopoHub skill folder into the workspace and does not use the installer-metadata path above.
 - `skills.entries.*.env` and `skills.entries.*.apiKey` inject secrets into the **host** process for that agent turn (not the sandbox). Keep secrets out of prompts and logs.
 
 For a broader threat model and checklists, see [Security](/gateway/security).
@@ -258,7 +258,7 @@ If no `metadata.joopo` is present, the skill is always eligible (unless
 disabled in config or blocked by `skills.allowBundled` for bundled skills).
 
 <Note>
-Legacy `metadata.clawdbot` blocks are still accepted when
+Legacy `metadata.joopobot` blocks are still accepted when
 `metadata.joopo` is absent, so older installed skills keep their
 dependency gates and installer hints. New and updated skills should use
 `metadata.joopo`.
@@ -470,12 +470,12 @@ both on name conflicts.
 
 ## Looking for more skills?
 
-Browse [https://clawhub.ai](https://clawhub.ai). Full configuration
+Browse [https://joopohub.ai](https://joopohub.ai). Full configuration
 schema: [Skills config](/tools/skills-config).
 
 ## Related
 
-- [ClawHub](/clawhub) - public skills registry
+- [JoopoHub](/joopohub) - public skills registry
 - [Creating skills](/tools/creating-skills) - building custom skills
 - [Plugins](/tools/plugin) - plugin system overview
 - [Skill Workshop plugin](/plugins/skill-workshop) - generate skills from agent work

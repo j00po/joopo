@@ -17,7 +17,7 @@ export type {
   PluginRuntime,
   ReplyPayload,
 } from "joopo/plugin-sdk/core";
-export type { JoopoConfig as ClawdbotConfig } from "joopo/plugin-sdk/core";
+export type { JoopoConfig as JoopobotConfig } from "joopo/plugin-sdk/core";
 export type { RuntimeEnv } from "joopo/plugin-sdk/runtime";
 export type { GroupToolPolicyConfig } from "joopo/plugin-sdk/config-types";
 export {
@@ -39,10 +39,7 @@ export {
   filterSupplementalContextItems,
   resolveChannelContextVisibilityMode,
 } from "joopo/plugin-sdk/context-visibility-runtime";
-export {
-  loadSessionStore,
-  resolveSessionStoreEntry,
-} from "joopo/plugin-sdk/session-store-runtime";
+export { loadSessionStore, resolveSessionStoreEntry } from "joopo/plugin-sdk/session-store-runtime";
 export { readJsonFileWithFallback } from "joopo/plugin-sdk/json-store";
 export { createPersistentDedupe } from "joopo/plugin-sdk/persistent-dedupe";
 export { normalizeAgentId } from "joopo/plugin-sdk/routing";

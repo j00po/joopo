@@ -14,8 +14,8 @@ generation, video generation, web fetch, web search, agent tools, or any
 combination.
 
 You do not need to add your plugin to the Joopo repository. Publish to
-[ClawHub](/clawhub) and users install with
-`joopo plugins install clawhub:<package-name>`. Bare package specs still
+[JoopoHub](/joopohub) and users install with
+`joopo plugins install joopohub:<package-name>`. Bare package specs still
 install from npm during the launch cutover.
 
 ## Prerequisites
@@ -99,7 +99,7 @@ and provider plugins have dedicated guides linked above.
     must be listed in `contracts.tools` so Joopo can discover the owning
     plugin without loading every plugin runtime. Plugins should also declare
     `activation.onStartup` intentionally. This example sets it to `true`. See
-    [Manifest](/plugins/manifest) for the full schema. The canonical ClawHub
+    [Manifest](/plugins/manifest) for the full schema. The canonical JoopoHub
     publish snippets live in `docs/snippets/plugin-publish/`.
 
   </Step>
@@ -136,16 +136,16 @@ and provider plugins have dedicated guides linked above.
 
   <Step title="Test and publish">
 
-    **External plugins:** validate and publish with ClawHub, then install:
+    **External plugins:** validate and publish with JoopoHub, then install:
 
     ```bash
-    clawhub package publish your-org/your-plugin --dry-run
-    clawhub package publish your-org/your-plugin
-    joopo plugins install clawhub:@myorg/joopo-my-plugin
+    joopohub package publish your-org/your-plugin --dry-run
+    joopohub package publish your-org/your-plugin
+    joopo plugins install joopohub:@myorg/joopo-my-plugin
     ```
 
     Bare package specs like `@myorg/joopo-my-plugin` install from npm during
-    the launch cutover. Use `clawhub:` when you want ClawHub resolution.
+    the launch cutover. Use `joopohub:` when you want JoopoHub resolution.
 
     **In-repo plugins:** place under the bundled plugin workspace tree - automatically discovered.
 

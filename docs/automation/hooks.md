@@ -164,7 +164,7 @@ Npm specs are registry-only (package name + optional exact version or dist-tag).
 | --------------------- | ------------------------------------------------- | -------------------------------------------------------------- |
 | session-memory        | `command:new`, `command:reset`                    | Saves session context to `<workspace>/memory/`                 |
 | bootstrap-extra-files | `agent:bootstrap`                                 | Injects additional bootstrap files from glob patterns          |
-| command-logger        | `command`                                         | Logs all commands to `~/.joopo/logs/commands.log`           |
+| command-logger        | `command`                                         | Logs all commands to `~/.joopo/logs/commands.log`              |
 | compaction-notifier   | `session:compact:before`, `session:compact:after` | Sends visible chat notices when session compaction starts/ends |
 | boot-md               | `gateway:startup`                                 | Runs `BOOT.md` when the gateway starts                         |
 
@@ -328,7 +328,7 @@ Check for missing binaries (PATH), environment variables, config values, or OS c
 
 1. Verify the hook is enabled: `joopo hooks list`
 2. Restart your gateway process so hooks reload.
-3. Check gateway logs: `./scripts/clawlog.sh | grep hook`
+3. Check gateway logs: `./scripts/joopolog.sh | grep hook`
 
 ## Related
 

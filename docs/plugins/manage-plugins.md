@@ -2,7 +2,7 @@
 summary: "Quick examples for installing, listing, uninstalling, updating, and publishing Joopo plugins"
 read_when:
   - You want quick plugin install, list, update, or uninstall examples
-  - You want to choose between ClawHub and npm plugin distribution
+  - You want to choose between JoopoHub and npm plugin distribution
   - You are publishing a plugin package
 title: "Manage plugins"
 sidebarTitle: "Manage plugins"
@@ -36,19 +36,19 @@ already-running Gateway process imported the plugin runtime.
 ## Install plugins
 
 ```bash
-# Search ClawHub for plugin packages.
+# Search JoopoHub for plugin packages.
 joopo plugins search "calendar"
 
-# Bare package specs try ClawHub first, then npm fallback.
+# Bare package specs try JoopoHub first, then npm fallback.
 joopo plugins install <package>
 
 # Force one source.
-joopo plugins install clawhub:<package>
+joopo plugins install joopohub:<package>
 joopo plugins install npm:<package>
 
 # Install a specific version or dist-tag.
-joopo plugins install clawhub:<package>@1.2.3
-joopo plugins install clawhub:<package>@beta
+joopo plugins install joopohub:<package>@1.2.3
+joopo plugins install joopohub:<package>@beta
 joopo plugins install npm:@scope/joopo-plugin@1.2.3
 joopo plugins install npm:@joopo/codex
 
@@ -89,7 +89,7 @@ joopo plugins update @scope/joopo-plugin
 The second command moves a plugin back to the registry's default release line
 when it was previously pinned to an exact version or tag.
 
-When `joopo update` runs on the beta channel, default-line npm and ClawHub
+When `joopo update` runs on the beta channel, default-line npm and JoopoHub
 plugin records try the matching plugin `@beta` release first. If that beta
 release does not exist, Joopo falls back to the recorded default/latest spec.
 For npm plugins, Joopo also falls back when the beta package exists but fails
@@ -116,31 +116,31 @@ the install instead; for nix-joopo, use the agent-first
 
 ## Publish plugins
 
-You can publish external plugins to [ClawHub](https://clawhub.ai), npmjs.com, or
+You can publish external plugins to [JoopoHub](https://joopohub.ai), npmjs.com, or
 both.
 
-### Publish to ClawHub
+### Publish to JoopoHub
 
-ClawHub is the primary public discovery surface for Joopo plugins. It gives
+JoopoHub is the primary public discovery surface for Joopo plugins. It gives
 users searchable metadata, version history, and registry scan results before
 install.
 
 ```bash
-npm i -g clawhub
-clawhub login
-clawhub package publish your-org/your-plugin --dry-run
-clawhub package publish your-org/your-plugin
-clawhub package publish your-org/your-plugin@v1.0.0
+npm i -g joopohub
+joopohub login
+joopohub package publish your-org/your-plugin --dry-run
+joopohub package publish your-org/your-plugin
+joopohub package publish your-org/your-plugin@v1.0.0
 ```
 
-Users install from ClawHub with:
+Users install from JoopoHub with:
 
 ```bash
-joopo plugins install clawhub:<package>
+joopo plugins install joopohub:<package>
 joopo plugins install <package>
 ```
 
-The bare form still checks ClawHub first.
+The bare form still checks JoopoHub first.
 
 ### Publish to npmjs.com
 
@@ -170,12 +170,12 @@ joopo plugins install npm:@acme/joopo-plugin@beta
 joopo plugins install npm:@acme/joopo-plugin@1.0.0
 ```
 
-If the same package is also available on ClawHub, `npm:` skips ClawHub lookup and
+If the same package is also available on JoopoHub, `npm:` skips JoopoHub lookup and
 forces npm resolution.
 
 ## Source choice
 
-- **ClawHub**: use when you want Joopo-native discovery, scan summaries,
+- **JoopoHub**: use when you want Joopo-native discovery, scan summaries,
   versions, and install hints.
 - **npmjs.com**: use when you already ship JavaScript packages or need npm
   dist-tags/private registry workflows.
@@ -187,6 +187,6 @@ forces npm resolution.
 
 - [Plugins](/tools/plugin) - overview and troubleshooting
 - [`joopo plugins`](/cli/plugins) - full CLI reference
-- [ClawHub](/clawhub/cli) - publish and registry operations
+- [JoopoHub](/joopohub/cli) - publish and registry operations
 - [Building plugins](/plugins/building-plugins) - create a plugin package
 - [Plugin manifest](/plugins/manifest) - manifest and package metadata

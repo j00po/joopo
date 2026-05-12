@@ -4,11 +4,9 @@ import { assertConfigWriteAllowedInCurrentMode, readConfigFileSnapshot } from ".
 import type { JoopoConfig } from "../config/types.joopo.js";
 import { installHooksFromNpmSpec, installHooksFromPath } from "../hooks/install.js";
 import { resolveArchiveKind } from "../infra/archive.js";
-import { parseClawHubPluginSpec } from "../infra/clawhub.js";
 import { formatErrorMessage } from "../infra/errors.js";
+import { parseJoopoHubPluginSpec } from "../infra/joopohub.js";
 import { type BundledPluginSource, findBundledPluginSource } from "../plugins/bundled-sources.js";
-import { buildClawHubPluginInstallRecordFields } from "../plugins/clawhub-install-records.js";
-import { installPluginFromClawHub } from "../plugins/clawhub.js";
 import { installPluginFromGitSpec, parseGitPluginSpec } from "../plugins/git-install.js";
 import { resolveDefaultPluginExtensionsDir } from "../plugins/install-paths.js";
 import type { InstallSafetyOverrides } from "../plugins/install-security-scan.js";
@@ -18,6 +16,8 @@ import {
   installPluginFromNpmSpec,
   installPluginFromPath,
 } from "../plugins/install.js";
+import { buildJoopoHubPluginInstallRecordFields } from "../plugins/joopohub-install-records.js";
+import { installPluginFromJoopoHub } from "../plugins/joopohub.js";
 import {
   installPluginFromMarketplace,
   resolveMarketplaceInstallShortcut,
@@ -916,9 +916,9 @@ export async function runPluginInstallCommand(params: {
     return;
   }
 
-  const clawhubSpec = parseClawHubPluginSpec(raw);
-  if (clawhubSpec) {
-    const result = await installPluginFromClawHub({
+  const joopohubSpec = parseJoopoHubPluginSpec(raw);
+  if (joopohubSpec) {
+    const result = await installPluginFromJoopoHub({
       ...safetyOverrides,
       mode: installMode,
       spec: raw,
@@ -934,7 +934,7 @@ export async function runPluginInstallCommand(params: {
       snapshot,
       pluginId: result.pluginId,
       install: {
-        ...buildClawHubPluginInstallRecordFields(result.clawhub),
+        ...buildJoopoHubPluginInstallRecordFields(result.joopohub),
         spec: raw,
         installPath: result.targetDir,
       },

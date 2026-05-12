@@ -93,7 +93,7 @@ API key auth, and dynamic model resolution.
     when a provider variant should reuse another provider id's auth. `modelSupport`
     is optional and lets Joopo auto-load your provider plugin from shorthand
     model ids like `acme-large` before runtime hooks exist. If you publish the
-    provider on ClawHub, those `joopo.compat` and `joopo.build` fields
+    provider on JoopoHub, those `joopo.compat` and `joopo.build` fields
     are required in `package.json`.
 
   </Step>
@@ -731,17 +731,17 @@ API key auth, and dynamic model resolution.
   </Step>
 </Steps>
 
-## Publish to ClawHub
+## Publish to JoopoHub
 
 Provider plugins publish the same way as any other external code plugin:
 
 ```bash
-clawhub package publish your-org/your-plugin --dry-run
-clawhub package publish your-org/your-plugin
+joopohub package publish your-org/your-plugin --dry-run
+joopohub package publish your-org/your-plugin
 ```
 
 Do not use the legacy skill-only publish alias here; plugin packages should use
-`clawhub package publish`.
+`joopohub package publish`.
 
 ## File structure
 

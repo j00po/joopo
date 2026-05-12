@@ -1,10 +1,10 @@
 import { describe, expect, it, vi } from "vitest";
 import {
   installSkill,
-  loadClawHubDetail,
+  loadJoopoHubDetail,
   saveSkillApiKey,
-  searchClawHub,
-  setClawHubSearchQuery,
+  searchJoopoHub,
+  setJoopoHubSearchQuery,
   updateSkillEnabled,
   type SkillsState,
 } from "./skills.ts";
@@ -22,8 +22,8 @@ function createState(): { state: SkillsState; request: ReturnType<typeof vi.fn> 
     skillsBusyKey: null,
     skillEdits: {},
     skillMessages: {},
-    clawhubSearchQuery: "github",
-    clawhubSearchResults: [
+    joopohubSearchQuery: "github",
+    joopohubSearchResults: [
       {
         score: 0.9,
         slug: "github",
@@ -32,14 +32,14 @@ function createState(): { state: SkillsState; request: ReturnType<typeof vi.fn> 
         version: "1.0.0",
       },
     ],
-    clawhubSearchLoading: false,
-    clawhubSearchError: "old error",
-    clawhubDetail: null,
-    clawhubDetailSlug: null,
-    clawhubDetailLoading: false,
-    clawhubDetailError: null,
-    clawhubInstallSlug: null,
-    clawhubInstallMessage: null,
+    joopohubSearchLoading: false,
+    joopohubSearchError: "old error",
+    joopohubDetail: null,
+    joopohubDetailSlug: null,
+    joopohubDetailLoading: false,
+    joopohubDetailError: null,
+    joopohubInstallSlug: null,
+    joopohubInstallMessage: null,
   };
   return { state, request };
 }
@@ -68,25 +68,25 @@ function mockSkillMutationRequests(request: ReturnType<typeof vi.fn>, installMes
   });
 }
 
-describe("searchClawHub", () => {
+describe("searchJoopoHub", () => {
   it("clears stale query state immediately when the input changes", () => {
     const { state } = createState();
 
-    state.clawhubSearchLoading = true;
-    state.clawhubInstallMessage = { kind: "success", text: "Installed github" };
+    state.joopohubSearchLoading = true;
+    state.joopohubInstallMessage = { kind: "success", text: "Installed github" };
 
-    setClawHubSearchQuery(state, "github app");
+    setJoopoHubSearchQuery(state, "github app");
 
-    expect(state.clawhubSearchQuery).toBe("github app");
-    expect(state.clawhubSearchResults).toBeNull();
-    expect(state.clawhubSearchError).toBeNull();
-    expect(state.clawhubSearchLoading).toBe(false);
-    expect(state.clawhubInstallMessage).toBeNull();
+    expect(state.joopohubSearchQuery).toBe("github app");
+    expect(state.joopohubSearchResults).toBeNull();
+    expect(state.joopohubSearchError).toBeNull();
+    expect(state.joopohubSearchLoading).toBe(false);
+    expect(state.joopohubInstallMessage).toBeNull();
   });
 
   it("clears stale results as soon as a new search starts", async () => {
     const { state, request } = createState();
-    type SearchResponse = { results: SkillsState["clawhubSearchResults"] };
+    type SearchResponse = { results: SkillsState["joopohubSearchResults"] };
     let resolveRequest: (value: SearchResponse) => void = () => {
       throw new Error("expected search request promise to be pending");
     };
@@ -97,11 +97,11 @@ describe("searchClawHub", () => {
         }),
     );
 
-    const pending = searchClawHub(state, "github");
+    const pending = searchJoopoHub(state, "github");
 
-    expect(state.clawhubSearchResults).toBeNull();
-    expect(state.clawhubSearchLoading).toBe(true);
-    expect(state.clawhubSearchError).toBeNull();
+    expect(state.joopohubSearchResults).toBeNull();
+    expect(state.joopohubSearchLoading).toBe(true);
+    expect(state.joopohubSearchError).toBeNull();
 
     resolveRequest({
       results: [
@@ -116,7 +116,7 @@ describe("searchClawHub", () => {
     });
     await pending;
 
-    expect(state.clawhubSearchResults).toEqual([
+    expect(state.joopohubSearchResults).toEqual([
       {
         score: 0.95,
         slug: "github-new",
@@ -125,45 +125,45 @@ describe("searchClawHub", () => {
         version: "2.0.0",
       },
     ]);
-    expect(state.clawhubSearchLoading).toBe(false);
+    expect(state.joopohubSearchLoading).toBe(false);
   });
 
   it("clears stale results when the query is emptied", async () => {
     const { state, request } = createState();
 
-    await searchClawHub(state, "   ");
+    await searchJoopoHub(state, "   ");
 
     expect(request).not.toHaveBeenCalled();
-    expect(state.clawhubSearchResults).toBeNull();
-    expect(state.clawhubSearchError).toBeNull();
-    expect(state.clawhubSearchLoading).toBe(false);
+    expect(state.joopohubSearchResults).toBeNull();
+    expect(state.joopohubSearchError).toBeNull();
+    expect(state.joopohubSearchLoading).toBe(false);
   });
 
   it("ignores stale search responses after query changes", async () => {
     const { state, request } = createState();
     const queue = createDeferredRequestQueue(request);
 
-    const pending = searchClawHub(state, "github");
-    setClawHubSearchQuery(state, "gitlab");
+    const pending = searchJoopoHub(state, "github");
+    setJoopoHubSearchQuery(state, "gitlab");
     queue.resolveNext({
       results: [{ score: 1, slug: "github", displayName: "GitHub" }],
     });
     await pending;
 
-    expect(state.clawhubSearchQuery).toBe("gitlab");
-    expect(state.clawhubSearchResults).toBeNull();
-    expect(state.clawhubSearchError).toBeNull();
-    expect(state.clawhubSearchLoading).toBe(false);
+    expect(state.joopohubSearchQuery).toBe("gitlab");
+    expect(state.joopohubSearchResults).toBeNull();
+    expect(state.joopohubSearchError).toBeNull();
+    expect(state.joopohubSearchLoading).toBe(false);
   });
 });
 
-describe("loadClawHubDetail", () => {
+describe("loadJoopoHubDetail", () => {
   it("ignores stale detail responses after slug changes", async () => {
     const { state, request } = createState();
     const queue = createDeferredRequestQueue(request);
 
-    const firstPending = loadClawHubDetail(state, "github");
-    const secondPending = loadClawHubDetail(state, "gitlab");
+    const firstPending = loadJoopoHubDetail(state, "github");
+    const secondPending = loadJoopoHubDetail(state, "gitlab");
 
     queue.resolveNext({
       skill: { slug: "github", displayName: "GitHub", createdAt: 1, updatedAt: 2 },
@@ -175,8 +175,8 @@ describe("loadClawHubDetail", () => {
     });
     await secondPending;
 
-    expect(state.clawhubDetailLoading).toBe(false);
-    expect(state.clawhubDetail?.skill?.slug).toBe("gitlab");
+    expect(state.joopohubDetailLoading).toBe(false);
+    expect(state.joopohubDetail?.skill?.slug).toBe("gitlab");
   });
 });
 

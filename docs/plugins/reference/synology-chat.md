@@ -12,7 +12,7 @@ Adds the Synology Chat channel surface for sending and receiving Joopo messages.
 ## Distribution
 
 - Package: `@joopo/synology-chat`
-- Install route: npm; ClawHub
+- Install route: npm; JoopoHub
 
 ## Surface
 

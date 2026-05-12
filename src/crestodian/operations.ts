@@ -101,11 +101,11 @@ const CONFIG_SET_REF_RE =
   /^(?:config\s+set-ref|set\s+secretref|set\s+secret\s+ref)\s+(?<path>[A-Za-z0-9_.[\]-]+)\s+(?:(?<source>env|file|exec)\s+)?(?<id>\S+)(?:\s+provider\s+(?<provider>[A-Za-z0-9_-]+))?$/i;
 const SETUP_RE =
   /^(?:setup(?!\s+agent\b)|set\s+me\s+up|set\s+up\s+joopo|onboard|onboard\s+me|bootstrap|first\s+run)(?:\b|$)/i;
-const PLUGIN_LIST_RE = /^(?:plugins?|clawhub)\s+list$|^list\s+plugins?$/i;
+const PLUGIN_LIST_RE = /^(?:plugins?|joopohub)\s+list$|^list\s+plugins?$/i;
 const PLUGIN_SEARCH_RE =
-  /^(?:(?:plugins?|clawhub)\s+search|search\s+plugins?(?:\s+for)?)\s+(?<query>.+)$/i;
+  /^(?:(?:plugins?|joopohub)\s+search|search\s+plugins?(?:\s+for)?)\s+(?<query>.+)$/i;
 const PLUGIN_INSTALL_RE =
-  /^(?:(?:plugins?)\s+install|install\s+(?:(?<source>npm|clawhub)\s+)?plugins?)\s+(?<spec>\S+)$/i;
+  /^(?:(?:plugins?)\s+install|install\s+(?:(?<source>npm|joopohub)\s+)?plugins?)\s+(?<spec>\S+)$/i;
 const PLUGIN_UNINSTALL_RE =
   /^(?:(?:plugins?)\s+(?:uninstall|remove)|(?:uninstall|remove)\s+plugins?)\s+(?<pluginId>[A-Za-z0-9_.@/-]+)$/i;
 
@@ -274,8 +274,8 @@ function normalizePluginInstallSpec(spec: string, source: string | undefined): s
   if (normalizedSource === "npm" && !trimmed.toLowerCase().startsWith("npm:")) {
     return `npm:${trimmed}`;
   }
-  if (normalizedSource === "clawhub" && !trimmed.toLowerCase().startsWith("clawhub:")) {
-    return `clawhub:${trimmed}`;
+  if (normalizedSource === "joopohub" && !trimmed.toLowerCase().startsWith("joopohub:")) {
+    return `joopohub:${trimmed}`;
   }
   return trimmed;
 }
@@ -286,10 +286,10 @@ function validateCrestodianPluginInstallSpec(spec: string): string | null {
     return "Plugin install spec is required.";
   }
   if (/\s/.test(trimmed)) {
-    return "Crestodian plugin install accepts one npm or ClawHub package spec.";
+    return "Crestodian plugin install accepts one npm or JoopoHub package spec.";
   }
   if (/^(?:\.{1,2}\/|\/|~\/|file:|git(?:\+ssh|\+https)?:|https?:)/i.test(trimmed)) {
-    return "Crestodian plugin install accepts npm or ClawHub package specs only.";
+    return "Crestodian plugin install accepts npm or JoopoHub package specs only.";
   }
   return null;
 }

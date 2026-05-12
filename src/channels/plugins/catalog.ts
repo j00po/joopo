@@ -1,8 +1,8 @@
 import path from "node:path";
 import { MANIFEST_KEY } from "../../compat/legacy-names.js";
+import { resolveJoopoPackageRootSync } from "../../infra/joopo-root.js";
 import { tryReadJsonSync } from "../../infra/json-files.js";
 import { isPrereleaseSemverVersion, parseRegistryNpmSpec } from "../../infra/npm-registry-spec.js";
-import { resolveJoopoPackageRootSync } from "../../infra/joopo-root.js";
 import { listChannelCatalogEntries } from "../../plugins/channel-catalog-registry.js";
 import {
   describePluginInstallSource,
@@ -34,7 +34,7 @@ export type ChannelUiCatalog = {
 };
 
 export type ChannelPluginCatalogInstall = PluginPackageInstall &
-  ({ clawhubSpec: string } | { npmSpec: string });
+  ({ joopohubSpec: string } | { npmSpec: string });
 
 export type ChannelPluginCatalogEntry = {
   id: string;
@@ -237,7 +237,7 @@ function resolveInstallInfo(params: {
   packageDir?: string;
   workspaceDir?: string;
 }): ChannelPluginCatalogEntry["install"] | null {
-  const clawhubSpec = normalizeOptionalString(params.install?.clawhubSpec);
+  const joopohubSpec = normalizeOptionalString(params.install?.joopohubSpec);
   let npmSpec =
     normalizeOptionalString(params.install?.npmSpec) ?? normalizeOptionalString(params.packageName);
   const packageVersion = normalizeOptionalString(params.packageVersion);
@@ -253,7 +253,7 @@ function resolveInstallInfo(params: {
   ) {
     npmSpec = `${parsedNpmSpec.name}@${packageVersion}`;
   }
-  if (!clawhubSpec && !npmSpec) {
+  if (!joopohubSpec && !npmSpec) {
     return null;
   }
   let localPath = normalizeOptionalString(params.install?.localPath);
@@ -262,14 +262,14 @@ function resolveInstallInfo(params: {
   }
   const requestedDefaultChoice = params.install?.defaultChoice;
   const defaultChoice: NonNullable<PluginPackageInstall["defaultChoice"]> =
-    requestedDefaultChoice === "clawhub" && clawhubSpec
-      ? "clawhub"
+    requestedDefaultChoice === "joopohub" && joopohubSpec
+      ? "joopohub"
       : requestedDefaultChoice === "npm" && npmSpec
         ? "npm"
         : requestedDefaultChoice === "local" && localPath
           ? "local"
-          : clawhubSpec
-            ? "clawhub"
+          : joopohubSpec
+            ? "joopohub"
             : localPath
               ? "local"
               : "npm";
@@ -284,9 +284,9 @@ function resolveInstallInfo(params: {
       ? { allowInvalidConfigRecovery: true }
       : {}),
   };
-  if (clawhubSpec) {
+  if (joopohubSpec) {
     return {
-      clawhubSpec,
+      joopohubSpec,
       ...(npmSpec ? { npmSpec } : {}),
       ...install,
     };

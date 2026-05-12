@@ -29,7 +29,7 @@ Update and plugin tests protect these contracts:
   paths. Startup should not grow hidden compatibility migrations for stale
   plugin state.
 - Plugin installs work from local directories, git repos, npm packages, and the
-  ClawHub registry path.
+  JoopoHub registry path.
 - Plugin npm dependencies are installed in the managed npm root, scanned before
   trust, and removed through npm during uninstall so hoisted dependencies do not
   linger.
@@ -88,9 +88,9 @@ Important lanes:
   local folder update skip behavior, local folders with preinstalled
   dependencies, `file:` package installs, git installs with CLI execution, git
   moving-ref updates, npm registry installs with hoisted transitive
-  dependencies, npm update no-ops, local ClawHub fixture installs and update
+  dependencies, npm update no-ops, local JoopoHub fixture installs and update
   no-ops, marketplace update behavior, and Claude-bundle enable/inspect. Set
-  `JOOPO_PLUGINS_E2E_CLAWHUB=0` to keep the ClawHub block hermetic/offline.
+  `JOOPO_PLUGINS_E2E_JOOPOHUB=0` to keep the JoopoHub block hermetic/offline.
 - `test:docker:plugin-lifecycle-matrix` installs the candidate package in a bare
   container, runs an npm plugin through install, inspect, disable, enable,
   explicit upgrade, explicit downgrade, and uninstall after deleting the plugin
@@ -264,7 +264,7 @@ can fail for the right reason:
 - CLI install/update behavior: Docker lane assertion or fixture.
 - Published-release migration behavior: `published-upgrade-survivor` scenario.
 - Update-owned restart behavior: `update-restart-auth`.
-- Registry/package source behavior: `test:docker:plugins` fixture or ClawHub
+- Registry/package source behavior: `test:docker:plugins` fixture or JoopoHub
   fixture server.
 - Dependency layout or cleanup behavior: assert both runtime execution and the
   filesystem boundary. npm dependencies may be hoisted under the managed npm

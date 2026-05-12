@@ -16,9 +16,9 @@ npm-latest-full|${KITCHEN_SINK_NPM_SPEC}|joopo-kitchen-sink-fixture|npm|success|
 npm-latest-conformance|${KITCHEN_SINK_NPM_SPEC}|joopo-kitchen-sink-fixture|npm|success|conformance|conformance
 npm-latest-adversarial|${KITCHEN_SINK_NPM_SPEC}|joopo-kitchen-sink-fixture|npm|success|adversarial|adversarial
 npm-beta|${KITCHEN_SINK_NPM_MISSING_SPEC}|joopo-kitchen-sink-fixture|npm|failure|none
-clawhub-latest|clawhub:@joopo/kitchen-sink@latest|joopo-kitchen-sink-fixture|clawhub|success|basic
-clawhub-beta|clawhub:@joopo/kitchen-sink@beta|joopo-kitchen-sink-fixture|clawhub|failure|none
-npm-to-clawhub|clawhub:@joopo/kitchen-sink@latest|joopo-kitchen-sink-fixture|clawhub|success|basic||${KITCHEN_SINK_NPM_SPEC}
+joopohub-latest|joopohub:@joopo/kitchen-sink@latest|joopo-kitchen-sink-fixture|joopohub|success|basic
+joopohub-beta|joopohub:@joopo/kitchen-sink@beta|joopo-kitchen-sink-fixture|joopohub|failure|none
+npm-to-joopohub|joopohub:@joopo/kitchen-sink@latest|joopo-kitchen-sink-fixture|joopohub|success|basic||${KITCHEN_SINK_NPM_SPEC}
 SCENARIOS
 )"
 KITCHEN_SINK_SCENARIOS="${JOOPO_KITCHEN_SINK_PLUGIN_SCENARIOS:-$DEFAULT_KITCHEN_SINK_SCENARIOS}"
@@ -38,14 +38,14 @@ DOCKER_ENV_ARGS=(
   -e "JOOPO_TEST_STATE_SCRIPT_B64=$JOOPO_TEST_STATE_SCRIPT_B64"
   -e "KITCHEN_SINK_SCENARIOS=$KITCHEN_SINK_SCENARIOS"
 )
-if [[ "${JOOPO_KITCHEN_SINK_LIVE_CLAWHUB:-0}" = "1" ]]; then
+if [[ "${JOOPO_KITCHEN_SINK_LIVE_JOOPOHUB:-0}" = "1" ]]; then
   for env_name in \
-    JOOPO_KITCHEN_SINK_LIVE_CLAWHUB \
-    JOOPO_CLAWHUB_URL \
-    CLAWHUB_URL \
-    JOOPO_CLAWHUB_TOKEN \
-    CLAWHUB_TOKEN \
-    CLAWHUB_AUTH_TOKEN; do
+    JOOPO_KITCHEN_SINK_LIVE_JOOPOHUB \
+    JOOPO_JOOPOHUB_URL \
+    JOOPOHUB_URL \
+    JOOPO_JOOPOHUB_TOKEN \
+    JOOPOHUB_TOKEN \
+    JOOPOHUB_AUTH_TOKEN; do
     env_value="${!env_name:-}"
     if [[ -n "$env_value" && "$env_value" != "undefined" && "$env_value" != "null" ]]; then
       DOCKER_ENV_ARGS+=(-e "$env_name")

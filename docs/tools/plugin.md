@@ -13,7 +13,7 @@ agent harnesses, tools, skills, speech, realtime transcription, realtime
 voice, media-understanding, image generation, video generation, web fetch, web
 search, and more. Some plugins are **core** (shipped with Joopo), others
 are **external**. Most external plugins are published and discovered through
-[ClawHub](/clawhub). Npm remains supported for direct installs and for a
+[JoopoHub](/joopohub). Npm remains supported for direct installs and for a
 temporary set of Joopo-owned plugin packages while that migration finishes.
 
 ## Quick start
@@ -30,11 +30,11 @@ For copy-paste install, list, uninstall, update, and publishing examples, see
 
   <Step title="Install a plugin">
     ```bash
-    # Search ClawHub plugins
+    # Search JoopoHub plugins
     joopo plugins search "calendar"
 
-    # From ClawHub
-    joopo plugins install clawhub:joopo-codex-app-server
+    # From JoopoHub
+    joopo plugins install joopohub:joopo-codex-app-server
 
     # From npm
     joopo plugins install npm:@acme/joopo-plugin
@@ -87,13 +87,13 @@ For copy-paste install, list, uninstall, update, and publishing examples, see
 If you prefer chat-native control, enable `commands.plugins: true` and use:
 
 ```text
-/plugin install clawhub:<package>
+/plugin install joopohub:<package>
 /plugin show <plugin-id>
 /plugin enable <plugin-id>
 ```
 
 The install path uses the same resolver as the CLI: local path/archive, explicit
-`clawhub:<pkg>`, explicit `npm:<pkg>`, explicit `npm-pack:<path.tgz>`,
+`joopohub:<pkg>`, explicit `npm:<pkg>`, explicit `npm-pack:<path.tgz>`,
 explicit `git:<repo>`, or bare package spec through npm.
 
 If config is invalid, install normally fails closed and points you at
@@ -118,7 +118,7 @@ running doctor cleanup if you want stale plugin ids removed.
 Plugin dependency installation happens only during explicit install/update or
 doctor repair flows. Gateway startup, config reload, and runtime inspection do
 not run package managers or repair dependency trees. Local plugins must already
-have their dependencies installed, while npm, git, and ClawHub plugins are
+have their dependencies installed, while npm, git, and JoopoHub plugins are
 installed under Joopo's managed plugin roots. npm dependencies may be hoisted
 within Joopo's managed npm root; install/update scans that managed root before
 trust and uninstall removes npm-managed packages through npm. External plugins
@@ -176,8 +176,8 @@ development.
 
 Joopo recognizes two plugin formats:
 
-| Format     | How it works                                                       | Examples                                               |
-| ---------- | ------------------------------------------------------------------ | ------------------------------------------------------ |
+| Format     | How it works                                                    | Examples                                               |
+| ---------- | --------------------------------------------------------------- | ------------------------------------------------------ |
 | **Native** | `joopo.plugin.json` + runtime module; executes in-process       | Official plugins, community npm packages               |
 | **Bundle** | Codex/Claude/Cursor-compatible layout; mapped to Joopo features | `.codex-plugin/`, `.claude-plugin/`, `.cursor-plugin/` |
 
@@ -223,18 +223,18 @@ JavaScript peer; that file is required when declared.
 
 ### Joopo-owned npm packages during migration
 
-ClawHub is the primary distribution path for most plugins. Current packaged
+JoopoHub is the primary distribution path for most plugins. Current packaged
 Joopo releases already bundle many official plugins, so those do not need
 separate npm installs in normal setups. Until every Joopo-owned plugin has
-migrated to ClawHub, Joopo still ships some `@joopo/*` plugin packages on
+migrated to JoopoHub, Joopo still ships some `@joopo/*` plugin packages on
 npm for older/custom installs and direct npm workflows.
 
 If npm reports an `@joopo/*` plugin package as deprecated, that package
 version is from an older external package train. Use the bundled plugin from
 current Joopo or a local checkout until a newer npm package is published.
 
-| Plugin          | Package                    | Docs                                       |
-| --------------- | -------------------------- | ------------------------------------------ |
+| Plugin          | Package                 | Docs                                       |
+| --------------- | ----------------------- | ------------------------------------------ |
 | Discord         | `@joopo/discord`        | [Discord](/channels/discord)               |
 | Feishu          | `@joopo/feishu`         | [Feishu](/channels/feishu)                 |
 | Matrix          | `@joopo/matrix`         | [Matrix](/channels/matrix)                 |
@@ -279,7 +279,7 @@ current Joopo or a local checkout until a newer npm package is published.
   </Accordion>
 </AccordionGroup>
 
-Looking for third-party plugins? See [ClawHub](/clawhub).
+Looking for third-party plugins? See [JoopoHub](/joopohub).
 
 ## Configuration
 
@@ -514,7 +514,7 @@ joopo plugins list                       # compact inventory
 joopo plugins list --enabled            # only enabled plugins
 joopo plugins list --verbose            # per-plugin detail lines
 joopo plugins list --json               # machine-readable inventory
-joopo plugins search <query>            # search ClawHub plugin catalog
+joopo plugins search <query>            # search JoopoHub plugin catalog
 joopo plugins inspect <id>              # static detail
 joopo plugins inspect <id> --runtime    # registered hooks/tools/CLI/gateway methods
 joopo plugins inspect <id> --json       # machine-readable
@@ -526,7 +526,7 @@ joopo plugins registry --refresh        # rebuild persisted registry
 joopo doctor --fix                      # repair plugin registry state
 
 joopo plugins install <package>         # install from npm by default
-joopo plugins install clawhub:<pkg>     # install from ClawHub only
+joopo plugins install joopohub:<pkg>     # install from JoopoHub only
 joopo plugins install npm:<pkg>         # install from npm only
 joopo plugins install git:<repo>        # install from git
 joopo plugins install git:<repo>@<ref>  # install from git ref
@@ -589,7 +589,7 @@ Passing the package name without a version moves an exact pinned install back to
 the registry's default release line. If the installed npm plugin already matches
 the resolved version and recorded artifact identity, Joopo skips the update
 without downloading, reinstalling, or rewriting config.
-When `joopo update` runs on the beta channel, default-line npm and ClawHub
+When `joopo update` runs on the beta channel, default-line npm and JoopoHub
 plugin records try `@beta` first and fall back to default/latest when no plugin
 beta release exists. Exact versions and explicit tags stay pinned.
 
@@ -607,13 +607,13 @@ those names.
 
 This CLI flag applies to plugin install/update flows only. Gateway-backed skill
 dependency installs use the matching `dangerouslyForceUnsafeInstall` request
-override instead, while `joopo skills install` remains the separate ClawHub
+override instead, while `joopo skills install` remains the separate JoopoHub
 skill download/install flow.
 
-If a plugin you published on ClawHub is hidden or blocked by a scan, open the
-ClawHub dashboard or run `clawhub package rescan <name>` to ask ClawHub to check
+If a plugin you published on JoopoHub is hidden or blocked by a scan, open the
+JoopoHub dashboard or run `joopohub package rescan <name>` to ask JoopoHub to check
 it again. `--dangerously-force-unsafe-install` only affects installs on your own
-machine; it does not ask ClawHub to rescan the plugin or make a blocked release
+machine; it does not ask JoopoHub to rescan the plugin or make a blocked release
 public.
 
 Compatible bundles participate in the same plugin list/inspect/enable/disable
@@ -728,4 +728,4 @@ For full typed hook behavior, see [SDK overview](/plugins/sdk-overview#hook-deci
 - [Plugin manifest](/plugins/manifest) - manifest schema
 - [Registering tools](/plugins/building-plugins#registering-agent-tools) - add agent tools in a plugin
 - [Plugin internals](/plugins/architecture) - capability model and load pipeline
-- [ClawHub](/clawhub) - third-party plugin discovery
+- [JoopoHub](/joopohub) - third-party plugin discovery

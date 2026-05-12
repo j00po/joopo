@@ -31,13 +31,13 @@ vi.mock("../plugins/install.js", () => ({
   installPluginFromNpmSpec,
 }));
 
-const installPluginFromClawHub = vi.hoisted(() => vi.fn());
-vi.mock("../plugins/clawhub.js", () => ({
-  CLAWHUB_INSTALL_ERROR_CODE: {
+const installPluginFromJoopoHub = vi.hoisted(() => vi.fn());
+vi.mock("../plugins/joopohub.js", () => ({
+  JOOPOHUB_INSTALL_ERROR_CODE: {
     PACKAGE_NOT_FOUND: "package_not_found",
     VERSION_NOT_FOUND: "version_not_found",
   },
-  installPluginFromClawHub,
+  installPluginFromJoopoHub,
 }));
 
 const enablePluginInConfig = vi.hoisted(() =>
@@ -121,25 +121,25 @@ describe("ensureOnboardingPluginInstalled", () => {
     }
 
     expect(installPluginFromNpmSpec).not.toHaveBeenCalled();
-    expect(installPluginFromClawHub).not.toHaveBeenCalled();
+    expect(installPluginFromJoopoHub).not.toHaveBeenCalled();
     expect(enablePluginInConfig).not.toHaveBeenCalled();
   });
 
-  it("installs and records ClawHub provider plugins with source facts", async () => {
-    installPluginFromClawHub.mockImplementation(async (params) => {
-      params.logger?.info?.("Downloading demo-plugin from ClawHub…");
+  it("installs and records JoopoHub provider plugins with source facts", async () => {
+    installPluginFromJoopoHub.mockImplementation(async (params) => {
+      params.logger?.info?.("Downloading demo-plugin from JoopoHub…");
       return {
         ok: true,
         pluginId: "demo-plugin",
         targetDir: "/tmp/demo-plugin",
         version: "2026.5.2",
         packageName: "demo-plugin",
-        clawhub: {
-          source: "clawhub",
-          clawhubUrl: "https://clawhub.ai",
-          clawhubPackage: "demo-plugin",
-          clawhubFamily: "code-plugin",
-          clawhubChannel: "official",
+        joopohub: {
+          source: "joopohub",
+          joopohubUrl: "https://joopohub.ai",
+          joopohubPackage: "demo-plugin",
+          joopohubFamily: "code-plugin",
+          joopohubChannel: "official",
           version: "2026.5.2",
           integrity: "sha256-clawpack",
           resolvedAt: "2026-05-02T00:00:00.000Z",
@@ -160,21 +160,21 @@ describe("ensureOnboardingPluginInstalled", () => {
         pluginId: "demo-plugin",
         label: "Demo Provider",
         install: {
-          clawhubSpec: "clawhub:demo-plugin@2026.5.2",
+          joopohubSpec: "joopohub:demo-plugin@2026.5.2",
           npmSpec: "@joopo/demo-plugin@2026.5.2",
-          defaultChoice: "clawhub",
+          defaultChoice: "joopohub",
         },
       },
       prompter: {
-        select: vi.fn(async () => "clawhub"),
+        select: vi.fn(async () => "joopohub"),
         progress: vi.fn(() => ({ update, stop })),
       } as never,
       runtime: {} as never,
     });
 
-    expect(installPluginFromClawHub).toHaveBeenCalledWith(
+    expect(installPluginFromJoopoHub).toHaveBeenCalledWith(
       expect.objectContaining({
-        spec: "clawhub:demo-plugin@2026.5.2",
+        spec: "joopohub:demo-plugin@2026.5.2",
         expectedPluginId: "demo-plugin",
         mode: "install",
         timeoutMs: 300_000,
@@ -186,12 +186,12 @@ describe("ensureOnboardingPluginInstalled", () => {
       expect.anything(),
       expect.objectContaining({
         pluginId: "demo-plugin",
-        source: "clawhub",
-        spec: "clawhub:demo-plugin@2026.5.2",
+        source: "joopohub",
+        spec: "joopohub:demo-plugin@2026.5.2",
         installPath: "/tmp/demo-plugin",
         version: "2026.5.2",
         integrity: "sha256-clawpack",
-        clawhubPackage: "demo-plugin",
+        joopohubPackage: "demo-plugin",
         clawpackSize: 4096,
       }),
     );
@@ -200,8 +200,8 @@ describe("ensureOnboardingPluginInstalled", () => {
     expect(result.cfg.plugins?.installs).toEqual({
       "demo-plugin": expect.objectContaining({
         pluginId: "demo-plugin",
-        source: "clawhub",
-        spec: "clawhub:demo-plugin@2026.5.2",
+        source: "joopohub",
+        spec: "joopohub:demo-plugin@2026.5.2",
       }),
     });
   });
@@ -332,11 +332,11 @@ describe("ensureOnboardingPluginInstalled", () => {
     let captured:
       | {
           options: Array<{
-            value: "clawhub" | "npm" | "local" | "skip";
+            value: "joopohub" | "npm" | "local" | "skip";
             label: string;
             hint?: string;
           }>;
-          initialValue: "clawhub" | "npm" | "local" | "skip";
+          initialValue: "joopohub" | "npm" | "local" | "skip";
         }
       | undefined;
 
@@ -366,15 +366,15 @@ describe("ensureOnboardingPluginInstalled", () => {
     expect(installPluginFromNpmSpec).not.toHaveBeenCalled();
   });
 
-  it("defaults dual-source remote installs to npm unless ClawHub is explicit", async () => {
+  it("defaults dual-source remote installs to npm unless JoopoHub is explicit", async () => {
     let captured:
       | {
           options: Array<{
-            value: "clawhub" | "npm" | "local" | "skip";
+            value: "joopohub" | "npm" | "local" | "skip";
             label: string;
             hint?: string;
           }>;
-          initialValue: "clawhub" | "npm" | "local" | "skip";
+          initialValue: "joopohub" | "npm" | "local" | "skip";
         }
       | undefined;
 
@@ -384,7 +384,7 @@ describe("ensureOnboardingPluginInstalled", () => {
         pluginId: "demo-plugin",
         label: "Demo Plugin",
         install: {
-          clawhubSpec: "clawhub:demo-plugin@2026.5.2",
+          joopohubSpec: "joopohub:demo-plugin@2026.5.2",
           npmSpec: "@joopo/demo-plugin@2026.5.2",
         },
       },
@@ -398,19 +398,19 @@ describe("ensureOnboardingPluginInstalled", () => {
     });
 
     expect(captured?.options).toEqual([
-      { value: "clawhub", label: "Download from ClawHub (clawhub:demo-plugin@2026.5.2)" },
+      { value: "joopohub", label: "Download from JoopoHub (joopohub:demo-plugin@2026.5.2)" },
       { value: "npm", label: "Download from npm (@joopo/demo-plugin@2026.5.2)" },
       { value: "skip", label: "Skip for now" },
     ]);
     expect(captured?.initialValue).toBe("npm");
-    expect(installPluginFromClawHub).not.toHaveBeenCalled();
+    expect(installPluginFromJoopoHub).not.toHaveBeenCalled();
     expect(installPluginFromNpmSpec).not.toHaveBeenCalled();
   });
 
-  it("honors explicit ClawHub defaults for dual-source remote installs", async () => {
+  it("honors explicit JoopoHub defaults for dual-source remote installs", async () => {
     let captured:
       | {
-          initialValue: "clawhub" | "npm" | "local" | "skip";
+          initialValue: "joopohub" | "npm" | "local" | "skip";
         }
       | undefined;
 
@@ -420,9 +420,9 @@ describe("ensureOnboardingPluginInstalled", () => {
         pluginId: "demo-plugin",
         label: "Demo Plugin",
         install: {
-          clawhubSpec: "clawhub:demo-plugin@2026.5.2",
+          joopohubSpec: "joopohub:demo-plugin@2026.5.2",
           npmSpec: "@joopo/demo-plugin@2026.5.2",
-          defaultChoice: "clawhub",
+          defaultChoice: "joopohub",
         },
       },
       prompter: {
@@ -434,14 +434,14 @@ describe("ensureOnboardingPluginInstalled", () => {
       runtime: {} as never,
     });
 
-    expect(captured?.initialValue).toBe("clawhub");
+    expect(captured?.initialValue).toBe("joopohub");
   });
 
-  it("falls back from ClawHub to npm when the ClawHub package is unavailable", async () => {
-    installPluginFromClawHub.mockResolvedValueOnce({
+  it("falls back from JoopoHub to npm when the JoopoHub package is unavailable", async () => {
+    installPluginFromJoopoHub.mockResolvedValueOnce({
       ok: false,
       code: "package_not_found",
-      error: "Package not found on ClawHub.",
+      error: "Package not found on JoopoHub.",
     });
     installPluginFromNpmSpec.mockResolvedValueOnce({
       ok: true,
@@ -462,13 +462,13 @@ describe("ensureOnboardingPluginInstalled", () => {
         pluginId: "demo-plugin",
         label: "Demo Plugin",
         install: {
-          clawhubSpec: "clawhub:demo-plugin@2026.5.2",
+          joopohubSpec: "joopohub:demo-plugin@2026.5.2",
           npmSpec: "@joopo/demo-plugin@2026.5.2",
-          defaultChoice: "clawhub",
+          defaultChoice: "joopohub",
         },
       },
       prompter: {
-        select: vi.fn(async () => "clawhub"),
+        select: vi.fn(async () => "joopohub"),
         confirm: vi.fn(async () => true),
         note: vi.fn(async () => {}),
         progress: vi.fn(() => ({ update: vi.fn(), stop: vi.fn() })),
@@ -486,13 +486,13 @@ describe("ensureOnboardingPluginInstalled", () => {
     expect(result.installed).toBe(true);
   });
 
-  it("does not fall back from ClawHub to npm when ClawHub verification fails", async () => {
+  it("does not fall back from JoopoHub to npm when JoopoHub verification fails", async () => {
     const confirm = vi.fn(async () => true);
     const runtimeError = vi.fn();
-    installPluginFromClawHub.mockResolvedValueOnce({
+    installPluginFromJoopoHub.mockResolvedValueOnce({
       ok: false,
       code: "archive_integrity_mismatch",
-      error: "ClawHub ClawPack integrity mismatch.",
+      error: "JoopoHub ClawPack integrity mismatch.",
     });
 
     const result = await ensureOnboardingPluginInstalled({
@@ -501,13 +501,13 @@ describe("ensureOnboardingPluginInstalled", () => {
         pluginId: "demo-plugin",
         label: "Demo Plugin",
         install: {
-          clawhubSpec: "clawhub:demo-plugin@2026.5.2",
+          joopohubSpec: "joopohub:demo-plugin@2026.5.2",
           npmSpec: "@joopo/demo-plugin@2026.5.2",
-          defaultChoice: "clawhub",
+          defaultChoice: "joopohub",
         },
       },
       prompter: {
-        select: vi.fn(async () => "clawhub"),
+        select: vi.fn(async () => "joopohub"),
         confirm,
         note: vi.fn(async () => {}),
         progress: vi.fn(() => ({ update: vi.fn(), stop: vi.fn() })),
@@ -519,7 +519,7 @@ describe("ensureOnboardingPluginInstalled", () => {
     expect(confirm).not.toHaveBeenCalled();
     expect(installPluginFromNpmSpec).not.toHaveBeenCalled();
     expect(runtimeError).toHaveBeenCalledWith(
-      "Plugin install failed: ClawHub ClawPack integrity mismatch.",
+      "Plugin install failed: JoopoHub ClawPack integrity mismatch.",
     );
     expect(result).toEqual({
       cfg: {},
@@ -542,11 +542,11 @@ describe("ensureOnboardingPluginInstalled", () => {
         | {
             message: string;
             options: Array<{
-              value: "clawhub" | "npm" | "local" | "skip";
+              value: "joopohub" | "npm" | "local" | "skip";
               label: string;
               hint?: string;
             }>;
-            initialValue: "clawhub" | "npm" | "local" | "skip";
+            initialValue: "joopohub" | "npm" | "local" | "skip";
           }
         | undefined;
 
@@ -598,11 +598,11 @@ describe("ensureOnboardingPluginInstalled", () => {
         | {
             message: string;
             options: Array<{
-              value: "clawhub" | "npm" | "local" | "skip";
+              value: "joopohub" | "npm" | "local" | "skip";
               label: string;
               hint?: string;
             }>;
-            initialValue: "clawhub" | "npm" | "local" | "skip";
+            initialValue: "joopohub" | "npm" | "local" | "skip";
           }
         | undefined;
 
@@ -706,11 +706,11 @@ describe("ensureOnboardingPluginInstalled", () => {
         | {
             message: string;
             options: Array<{
-              value: "clawhub" | "npm" | "local" | "skip";
+              value: "joopohub" | "npm" | "local" | "skip";
               label: string;
               hint?: string;
             }>;
-            initialValue: "clawhub" | "npm" | "local" | "skip";
+            initialValue: "joopohub" | "npm" | "local" | "skip";
           }
         | undefined;
 
@@ -817,11 +817,11 @@ describe("ensureOnboardingPluginInstalled", () => {
         | {
             message: string;
             options: Array<{
-              value: "clawhub" | "npm" | "local" | "skip";
+              value: "joopohub" | "npm" | "local" | "skip";
               label: string;
               hint?: string;
             }>;
-            initialValue: "clawhub" | "npm" | "local" | "skip";
+            initialValue: "joopohub" | "npm" | "local" | "skip";
           }
         | undefined;
 
@@ -909,71 +909,68 @@ describe("ensureOnboardingPluginInstalled", () => {
   });
 
   it("records local install source metadata when npm install falls back to local", async () => {
-    await withTempDir(
-      { prefix: "joopo-onboarding-install-npm-fallback-record-" },
-      async (temp) => {
-        const workspaceDir = path.join(temp, "workspace");
-        const pluginDir = path.join(workspaceDir, "plugins", "demo");
-        await fs.mkdir(path.join(workspaceDir, ".git"), { recursive: true });
-        await fs.mkdir(pluginDir, { recursive: true });
-        installPluginFromNpmSpec.mockResolvedValueOnce({
-          ok: false,
-          error: "registry unavailable",
-        });
-        const note = vi.fn(async () => {});
+    await withTempDir({ prefix: "joopo-onboarding-install-npm-fallback-record-" }, async (temp) => {
+      const workspaceDir = path.join(temp, "workspace");
+      const pluginDir = path.join(workspaceDir, "plugins", "demo");
+      await fs.mkdir(path.join(workspaceDir, ".git"), { recursive: true });
+      await fs.mkdir(pluginDir, { recursive: true });
+      installPluginFromNpmSpec.mockResolvedValueOnce({
+        ok: false,
+        error: "registry unavailable",
+      });
+      const note = vi.fn(async () => {});
 
-        const result = await ensureOnboardingPluginInstalled({
-          cfg: {},
-          entry: {
-            pluginId: "demo-plugin",
-            label: "Demo Plugin",
-            install: {
-              npmSpec: "@demo/plugin@1.2.3",
-              localPath: "plugins/demo",
+      const result = await ensureOnboardingPluginInstalled({
+        cfg: {},
+        entry: {
+          pluginId: "demo-plugin",
+          label: "Demo Plugin",
+          install: {
+            npmSpec: "@demo/plugin@1.2.3",
+            localPath: "plugins/demo",
+          },
+        },
+        prompter: {
+          select: vi.fn(async () => "npm"),
+          note,
+          confirm: vi.fn(async () => true),
+          progress: vi.fn(() => ({ update: vi.fn(), stop: vi.fn() })),
+        } as never,
+        runtime: {} as never,
+        workspaceDir,
+      });
+
+      const realPluginDir = await fs.realpath(pluginDir);
+      expect(note).toHaveBeenCalledWith(
+        "Failed to install @demo/plugin@1.2.3: registry unavailable\nReturning to selection.",
+        "Plugin install",
+      );
+      expect(recordPluginInstall).toHaveBeenCalledWith(
+        expect.objectContaining({
+          plugins: {
+            load: {
+              paths: [realPluginDir],
             },
           },
-          prompter: {
-            select: vi.fn(async () => "npm"),
-            note,
-            confirm: vi.fn(async () => true),
-            progress: vi.fn(() => ({ update: vi.fn(), stop: vi.fn() })),
-          } as never,
-          runtime: {} as never,
-          workspaceDir,
-        });
-
-        const realPluginDir = await fs.realpath(pluginDir);
-        expect(note).toHaveBeenCalledWith(
-          "Failed to install @demo/plugin@1.2.3: registry unavailable\nReturning to selection.",
-          "Plugin install",
-        );
-        expect(recordPluginInstall).toHaveBeenCalledWith(
-          expect.objectContaining({
-            plugins: {
-              load: {
-                paths: [realPluginDir],
-              },
-            },
-          }),
-          {
-            pluginId: "demo-plugin",
-            source: "path",
-            sourcePath: "./plugins/demo",
-            spec: "@demo/plugin@1.2.3",
-          },
-        );
-        expect(result.installed).toBe(true);
-        expect(result.status).toBe("installed");
-        expect(result.cfg.plugins?.installs).toEqual({
-          "demo-plugin": {
-            pluginId: "demo-plugin",
-            source: "path",
-            sourcePath: "./plugins/demo",
-            spec: "@demo/plugin@1.2.3",
-          },
-        });
-      },
-    );
+        }),
+        {
+          pluginId: "demo-plugin",
+          source: "path",
+          sourcePath: "./plugins/demo",
+          spec: "@demo/plugin@1.2.3",
+        },
+      );
+      expect(result.installed).toBe(true);
+      expect(result.status).toBe("installed");
+      expect(result.cfg.plugins?.installs).toEqual({
+        "demo-plugin": {
+          pluginId: "demo-plugin",
+          source: "path",
+          sourcePath: "./plugins/demo",
+          spec: "@demo/plugin@1.2.3",
+        },
+      });
+    });
   });
 
   it("records absolute local catalog paths as workspace-relative source metadata", async () => {
@@ -1020,7 +1017,7 @@ describe("ensureOnboardingPluginInstalled", () => {
       let captured:
         | {
             options: Array<{
-              value: "clawhub" | "npm" | "local" | "skip";
+              value: "joopohub" | "npm" | "local" | "skip";
               label: string;
               hint?: string;
             }>;
@@ -1072,7 +1069,7 @@ describe("ensureOnboardingPluginInstalled", () => {
       let captured:
         | {
             options: Array<{
-              value: "clawhub" | "npm" | "local" | "skip";
+              value: "joopohub" | "npm" | "local" | "skip";
               label: string;
               hint?: string;
             }>;
@@ -1134,7 +1131,7 @@ describe("ensureOnboardingPluginInstalled", () => {
         let captured:
           | {
               options: Array<{
-                value: "clawhub" | "npm" | "local" | "skip";
+                value: "joopohub" | "npm" | "local" | "skip";
                 label: string;
                 hint?: string;
               }>;

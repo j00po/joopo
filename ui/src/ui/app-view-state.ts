@@ -9,8 +9,8 @@ import type { DevicePairingList } from "./controllers/devices.ts";
 import type { ExecApprovalRequest } from "./controllers/exec-approval.ts";
 import type { ExecApprovalsFile, ExecApprovalsSnapshot } from "./controllers/exec-approvals.ts";
 import type {
-  ClawHubSearchResult,
-  ClawHubSkillDetail,
+  JoopoHubSearchResult,
+  JoopoHubSkillDetail,
   SkillMessage,
 } from "./controllers/skills.ts";
 import type { EmbedSandboxMode } from "./embed-sandbox.ts";
@@ -364,16 +364,16 @@ export type AppViewState = {
     skillMessages: Record<string, SkillMessage>;
     skillsBusyKey: string | null;
     skillsDetailKey: string | null;
-    clawhubSearchQuery: string;
-    clawhubSearchResults: ClawHubSearchResult[] | null;
-    clawhubSearchLoading: boolean;
-    clawhubSearchError: string | null;
-    clawhubDetail: ClawHubSkillDetail | null;
-    clawhubDetailSlug: string | null;
-    clawhubDetailLoading: boolean;
-    clawhubDetailError: string | null;
-    clawhubInstallSlug: string | null;
-    clawhubInstallMessage: { kind: "success" | "error"; text: string } | null;
+    joopohubSearchQuery: string;
+    joopohubSearchResults: JoopoHubSearchResult[] | null;
+    joopohubSearchLoading: boolean;
+    joopohubSearchError: string | null;
+    joopohubDetail: JoopoHubSkillDetail | null;
+    joopohubDetailSlug: string | null;
+    joopohubDetailLoading: boolean;
+    joopohubDetailError: string | null;
+    joopohubInstallSlug: string | null;
+    joopohubInstallMessage: { kind: "success" | "error"; text: string } | null;
     healthLoading: boolean;
     healthResult: HealthSummary | null;
     healthError: string | null;

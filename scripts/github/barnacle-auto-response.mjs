@@ -13,20 +13,20 @@ import {
 const activePrLimit = 20;
 
 const thirdPartyExtensionMessage =
-  "Please publish this as a third-party plugin on [ClawHub](https://clawhub.ai) instead of adding it to the core repo. Docs: https://docs.joopo.ai/plugin and https://docs.joopo.ai/clawhub";
+  "Please publish this as a third-party plugin on [JoopoHub](https://joopohub.ai) instead of adding it to the core repo. Docs: https://docs.joopo.ai/plugin and https://docs.joopo.ai/joopohub";
 
 const rules = [
   {
     label: "r: skill",
     close: true,
     message:
-      "Thanks for the contribution! New skills should be published on [ClawHub](https://clawhub.ai) for everyone to use. We’re keeping the core lean on skills, so I’m closing this out.",
+      "Thanks for the contribution! New skills should be published on [JoopoHub](https://joopohub.ai) for everyone to use. We’re keeping the core lean on skills, so I’m closing this out.",
   },
   {
     label: "r: support",
     close: true,
     message:
-      "Please use [our support server](https://discord.gg/clawd) and ask in #help or #users-helping-users to resolve this, or follow the stuck FAQ at https://docs.joopo.ai/help/faq#im-stuck-whats-the-fastest-way-to-get-unstuck.",
+      "Please use [our support server](https://discord.gg/joopo) and ask in #help or #users-helping-users to resolve this, or follow the stuck FAQ at https://docs.joopo.ai/help/faq#im-stuck-whats-the-fastest-way-to-get-unstuck.",
   },
   {
     label: "r: false-positive",
@@ -65,7 +65,7 @@ const rules = [
     close: true,
     commentTriggers: ["bluebubbles", "blue bubbles"],
     message:
-      "BlueBubbles is deprecated and no longer ships as a bundled Joopo channel. Use iMessage via `imsg` instead: https://docs.joopo.ai/channels/imessage. If this needs to stay BlueBubbles-backed, publish it as a third-party plugin on ClawHub instead of adding it back to core.",
+      "BlueBubbles is deprecated and no longer ships as a bundled Joopo channel. Use iMessage via `imsg` instead: https://docs.joopo.ai/channels/imessage. If this needs to stay BlueBubbles-backed, publish it as a third-party plugin on JoopoHub instead of adding it back to core.",
   },
   {
     label: "r: moltbook",
@@ -81,7 +81,7 @@ const rules = [
 export const managedLabelSpecs = {
   "r: skill": {
     color: "5319E7",
-    description: "Auto-close: skills should be published on ClawHub, not added to core.",
+    description: "Auto-close: skills should be published on JoopoHub, not added to core.",
   },
   "r: support": {
     color: "0E8A16",
@@ -109,11 +109,11 @@ export const managedLabelSpecs = {
   },
   "r: third-party-extension": {
     color: "5319E7",
-    description: "Auto-close: third-party plugins/capabilities belong on ClawHub.",
+    description: "Auto-close: third-party plugins/capabilities belong on JoopoHub.",
   },
   "r: bluebubbles": {
     color: "D93F0B",
-    description: "Auto-close: BlueBubbles is deprecated; use iMessage via imsg or ClawHub.",
+    description: "Auto-close: BlueBubbles is deprecated; use iMessage via imsg or JoopoHub.",
   },
   "r: moltbook": {
     color: "B60205",
@@ -185,7 +185,7 @@ export const managedLabelSpecs = {
   },
   "triage: external-plugin-candidate": {
     color: "C5DEF5",
-    description: "Candidate: plugin/capability may belong on ClawHub.",
+    description: "Candidate: plugin/capability may belong on JoopoHub.",
   },
 };
 
@@ -226,7 +226,7 @@ const bugSubtypeLabels = Object.keys(bugSubtypeLabelSpecs);
 
 const maintainerTeam = "maintainer";
 const pingWarningMessage =
-  "Please don’t spam-ping multiple maintainers at once. Be patient, or join our community Discord for help: https://discord.gg/clawd";
+  "Please don’t spam-ping multiple maintainers at once. Be patient, or join our community Discord for help: https://discord.gg/joopo";
 const mentionRegex = /@([A-Za-z0-9-]+)/g;
 const triggerLabel = "trigger-response";
 const activePrLimitLabel = "r: too-many-prs";
@@ -280,7 +280,7 @@ const candidateActionRules = [
     label: candidateLabels.docsDiscoverability,
     close: true,
     message:
-      "Closing this PR because docs discoverability and community-plugin listing changes should go through ClawHub or a maintainer-owned docs plan, not drive-by core churn.",
+      "Closing this PR because docs discoverability and community-plugin listing changes should go through JoopoHub or a maintainer-owned docs plan, not drive-by core churn.",
   },
   {
     label: candidateLabels.lowSignalDocs,
@@ -523,7 +523,7 @@ export function classifyPullRequestCandidateLabels(pullRequest, files) {
     docsOnly &&
     !linkedReference &&
     (discoverabilityDocs ||
-      /\b(community plugin|plugin listing|discoverability|showcase|clawhub)\b/i.test(text))
+      /\b(community plugin|plugin listing|discoverability|showcase|joopohub)\b/i.test(text))
   ) {
     labelsToAdd.push(candidateLabels.docsDiscoverability);
   }
@@ -559,7 +559,7 @@ export function classifyPullRequestCandidateLabels(pullRequest, files) {
   if (
     !clearDesignContext &&
     (addsPluginManifest ||
-      /\b(third[- ]party|external plugin|community plugin|clawhub)\b/i.test(lowerText))
+      /\b(third[- ]party|external plugin|community plugin|joopohub)\b/i.test(lowerText))
   ) {
     labelsToAdd.push(candidateLabels.externalPluginCandidate);
   }

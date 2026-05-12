@@ -25,20 +25,20 @@ run_expect_failure() {
   node scripts/e2e/lib/kitchen-sink-plugin/assertions.mjs expect-failure "$output_file"
 }
 
-start_kitchen_sink_clawhub_fixture_server() {
+start_kitchen_sink_joopohub_fixture_server() {
   local fixture_dir="$1"
-  local server_log="$fixture_dir/clawhub-fixture.log"
-  local server_port_file="$fixture_dir/clawhub-fixture-port"
-  local server_pid_file="$fixture_dir/clawhub-fixture-pid"
+  local server_log="$fixture_dir/joopohub-fixture.log"
+  local server_port_file="$fixture_dir/joopohub-fixture-port"
+  local server_pid_file="$fixture_dir/joopohub-fixture-pid"
 
-  node scripts/e2e/lib/clawhub-fixture-server.cjs kitchen-sink-plugin "$server_port_file" >"$server_log" 2>&1 &
+  node scripts/e2e/lib/joopohub-fixture-server.cjs kitchen-sink-plugin "$server_port_file" >"$server_log" 2>&1 &
   local server_pid="$!"
   echo "$server_pid" >"$server_pid_file"
 
-  local wait_attempts="${JOOPO_CLAWHUB_FIXTURE_WAIT_ATTEMPTS:-600}"
+  local wait_attempts="${JOOPO_JOOPOHUB_FIXTURE_WAIT_ATTEMPTS:-600}"
   for _ in $(seq 1 "$wait_attempts"); do
     if [[ -s "$server_port_file" ]]; then
-      export JOOPO_CLAWHUB_URL="http://127.0.0.1:$(cat "$server_port_file")"
+      export JOOPO_JOOPOHUB_URL="http://127.0.0.1:$(cat "$server_port_file")"
       trap 'if [[ -f "'"$server_pid_file"'" ]]; then kill "$(cat "'"$server_pid_file"'")" 2>/dev/null || true; fi' EXIT
       return 0
     fi
@@ -51,7 +51,7 @@ start_kitchen_sink_clawhub_fixture_server() {
 
   cat "$server_log"
   ps -p "$server_pid" -o pid=,stat=,etime=,command= || true
-  echo "Timed out waiting for kitchen-sink ClawHub fixture server." >&2
+  echo "Timed out waiting for kitchen-sink JoopoHub fixture server." >&2
   return 1
 }
 
@@ -94,7 +94,7 @@ run_success_scenario() {
   node "$JOOPO_ENTRY" plugins inspect "$KITCHEN_SINK_ID" --runtime --json >"/tmp/kitchen-sink-${KITCHEN_SINK_LABEL}-inspect.json"
   node "$JOOPO_ENTRY" plugins inspect --all --runtime --json >"/tmp/kitchen-sink-${KITCHEN_SINK_LABEL}-inspect-all.json"
   assert_kitchen_sink_installed
-  if [ "$KITCHEN_SINK_SOURCE" = "clawhub" ]; then
+  if [ "$KITCHEN_SINK_SOURCE" = "joopohub" ]; then
     run_logged_print "kitchen-sink-uninstall-${KITCHEN_SINK_LABEL}" node "$JOOPO_ENTRY" plugins uninstall "$KITCHEN_SINK_SPEC" --force
   else
     run_logged_print "kitchen-sink-uninstall-${KITCHEN_SINK_LABEL}" node "$JOOPO_ENTRY" plugins uninstall "$KITCHEN_SINK_ID" --force
@@ -112,16 +112,16 @@ run_failure_scenario() {
   assert_kitchen_sink_removed
 }
 
-if [[ "$KITCHEN_SINK_SCENARIOS" == *"clawhub:"* ]]; then
-  if [[ "${JOOPO_KITCHEN_SINK_LIVE_CLAWHUB:-0}" = "1" ]]; then
-    export JOOPO_CLAWHUB_URL="${JOOPO_CLAWHUB_URL:-${CLAWHUB_URL:-https://clawhub.ai}}"
+if [[ "$KITCHEN_SINK_SCENARIOS" == *"joopohub:"* ]]; then
+  if [[ "${JOOPO_KITCHEN_SINK_LIVE_JOOPOHUB:-0}" = "1" ]]; then
+    export JOOPO_JOOPOHUB_URL="${JOOPO_JOOPOHUB_URL:-${JOOPOHUB_URL:-https://joopohub.ai}}"
   else
-    if [[ -n "${JOOPO_CLAWHUB_URL:-}" || -n "${CLAWHUB_URL:-}" ]]; then
-      echo "Ignoring ambient ClawHub URL for fixture-mode kitchen-sink E2E; set JOOPO_KITCHEN_SINK_LIVE_CLAWHUB=1 for live ClawHub."
+    if [[ -n "${JOOPO_JOOPOHUB_URL:-}" || -n "${JOOPOHUB_URL:-}" ]]; then
+      echo "Ignoring ambient JoopoHub URL for fixture-mode kitchen-sink E2E; set JOOPO_KITCHEN_SINK_LIVE_JOOPOHUB=1 for live JoopoHub."
     fi
-    unset JOOPO_CLAWHUB_URL CLAWHUB_URL
-    clawhub_fixture_dir="$(mktemp -d "/tmp/joopo-kitchen-sink-clawhub.XXXXXX")"
-    start_kitchen_sink_clawhub_fixture_server "$clawhub_fixture_dir"
+    unset JOOPO_JOOPOHUB_URL JOOPOHUB_URL
+    joopohub_fixture_dir="$(mktemp -d "/tmp/joopo-kitchen-sink-joopohub.XXXXXX")"
+    start_kitchen_sink_joopohub_fixture_server "$joopohub_fixture_dir"
   fi
 fi
 

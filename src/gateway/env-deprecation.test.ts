@@ -1,8 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import {
-  resetLegacyJoopoEnvWarningForTest,
-  warnLegacyJoopoEnvVars,
-} from "./env-deprecation.js";
+import { resetLegacyJoopoEnvWarningForTest, warnLegacyJoopoEnvVars } from "./env-deprecation.js";
 
 describe("warnLegacyJoopoEnvVars", () => {
   const originalNodeEnv = process.env.NODE_ENV;
@@ -25,9 +22,9 @@ describe("warnLegacyJoopoEnvVars", () => {
 
   it("warns with counts and prefixes instead of secret-shaped env names", () => {
     warnLegacyJoopoEnvVars({
-      CLAWDBOT_GATEWAY_TOKEN: "old-token",
+      JOOPOBOT_GATEWAY_TOKEN: "old-token",
       MOLTBOT_GATEWAY_PASSWORD: "old-password", // pragma: allowlist secret
-      "CLAWDBOT_MALICIOUS\nforged": "old-value",
+      "JOOPOBOT_MALICIOUS\nforged": "old-value",
     });
 
     expect(emitWarning).toHaveBeenCalledOnce();
@@ -35,7 +32,7 @@ describe("warnLegacyJoopoEnvVars", () => {
       string,
       { code: string; type: string },
     ];
-    expect(message).toContain("Legacy CLAWDBOT_*, MOLTBOT_* environment variables");
+    expect(message).toContain("Legacy JOOPOBOT_*, MOLTBOT_* environment variables");
     expect(message).toContain("3 total");
     expect(message).toContain("replacing the legacy prefix with JOOPO_");
     expect(message).not.toContain("GATEWAY_TOKEN");
@@ -54,7 +51,7 @@ describe("warnLegacyJoopoEnvVars", () => {
   });
 
   it("warns only once after a successful emit", () => {
-    warnLegacyJoopoEnvVars({ CLAWDBOT_GATEWAY_TOKEN: "old-token" });
+    warnLegacyJoopoEnvVars({ JOOPOBOT_GATEWAY_TOKEN: "old-token" });
     warnLegacyJoopoEnvVars({ MOLTBOT_GATEWAY_TOKEN: "old-token" });
 
     expect(emitWarning).toHaveBeenCalledOnce();
@@ -67,17 +64,17 @@ describe("warnLegacyJoopoEnvVars", () => {
       })
       .mockImplementationOnce(() => {});
 
-    expect(() => warnLegacyJoopoEnvVars({ CLAWDBOT_GATEWAY_TOKEN: "old-token" })).toThrow(
+    expect(() => warnLegacyJoopoEnvVars({ JOOPOBOT_GATEWAY_TOKEN: "old-token" })).toThrow(
       "warning sink failed",
     );
-    warnLegacyJoopoEnvVars({ CLAWDBOT_GATEWAY_TOKEN: "old-token" });
+    warnLegacyJoopoEnvVars({ JOOPOBOT_GATEWAY_TOKEN: "old-token" });
 
     expect(emitWarning).toHaveBeenCalledTimes(2);
   });
 
   it("suppresses warning noise based on the passed env", () => {
     warnLegacyJoopoEnvVars({
-      CLAWDBOT_GATEWAY_TOKEN: "old-token",
+      JOOPOBOT_GATEWAY_TOKEN: "old-token",
       VITEST: "true",
     });
 
@@ -87,7 +84,7 @@ describe("warnLegacyJoopoEnvVars", () => {
   it("does not let process.env test flags suppress a synthetic env", () => {
     process.env.VITEST = "true";
 
-    warnLegacyJoopoEnvVars({ CLAWDBOT_GATEWAY_TOKEN: "old-token" });
+    warnLegacyJoopoEnvVars({ JOOPOBOT_GATEWAY_TOKEN: "old-token" });
 
     expect(emitWarning).toHaveBeenCalledOnce();
   });

@@ -1050,7 +1050,7 @@ describe("/acp command", () => {
       backendSessionId: "acpx-1",
     });
 
-    const result = await runDiscordAcpCommand("/acp spawn codex --cwd /home/bob/clawd");
+    const result = await runDiscordAcpCommand("/acp spawn codex --cwd /home/bob/joopo");
 
     expect(result?.reply?.text).toContain("Spawned ACP session agent:codex:acp:");
     expect(result?.reply?.text).toContain("Created thread thread-created and bound it");
@@ -1059,7 +1059,7 @@ describe("/acp command", () => {
       expect.objectContaining({
         agent: "codex",
         mode: "persistent",
-        cwd: "/home/bob/clawd",
+        cwd: "/home/bob/joopo",
       }),
     );
     expect(hoisted.sessionBindingBindMock).toHaveBeenCalledWith(
@@ -1067,7 +1067,7 @@ describe("/acp command", () => {
         targetKind: "session",
         placement: "child",
         metadata: expect.objectContaining({
-          introText: expect.stringContaining("cwd: /home/bob/clawd"),
+          introText: expect.stringContaining("cwd: /home/bob/joopo"),
         }),
       }),
     );
@@ -1111,7 +1111,7 @@ describe("/acp command", () => {
 
   it("accepts unicode dash option prefixes in /acp spawn args", async () => {
     const result = await runThreadAcpCommand(
-      "/acp spawn codex \u2014mode oneshot \u2014thread here \u2014cwd /home/bob/clawd \u2014label jeerreview",
+      "/acp spawn codex \u2014mode oneshot \u2014thread here \u2014cwd /home/bob/joopo \u2014label jeerreview",
     );
 
     expect(result?.reply?.text).toContain("Spawned ACP session agent:codex:acp:");
@@ -1120,7 +1120,7 @@ describe("/acp command", () => {
       expect.objectContaining({
         agent: "codex",
         mode: "oneshot",
-        cwd: "/home/bob/clawd",
+        cwd: "/home/bob/joopo",
       }),
     );
     expect(hoisted.sessionBindingBindMock).toHaveBeenCalledWith(

@@ -2,7 +2,7 @@ export type {
   ChannelMessageActionName,
   ChannelMeta,
   ChannelPlugin,
-  ClawdbotConfig,
+  JoopobotConfig,
 } from "../runtime-api.js";
 
 export { DEFAULT_ACCOUNT_ID } from "joopo/plugin-sdk/account-resolution";

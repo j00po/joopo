@@ -1,16 +1,14 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
-  installPluginFromClawHub: vi.fn(),
+  installPluginFromJoopoHub: vi.fn(),
   installPluginFromNpmSpec: vi.fn(),
   listChannelPluginCatalogEntries: vi.fn(),
   listOfficialExternalPluginCatalogEntries: vi.fn(),
   loadInstalledPluginIndex: vi.fn(),
   loadInstalledPluginIndexInstallRecords: vi.fn(),
   loadPluginMetadataSnapshot: vi.fn(),
-  getOfficialExternalPluginCatalogManifest: vi.fn(
-    (entry: { joopo?: unknown }) => entry.joopo,
-  ),
+  getOfficialExternalPluginCatalogManifest: vi.fn((entry: { joopo?: unknown }) => entry.joopo),
   resolveOfficialExternalPluginId: vi.fn((entry: { id?: string }) => entry.id),
   resolveOfficialExternalPluginInstall: vi.fn(
     (entry: { install?: unknown }) => entry.install ?? null,
@@ -47,12 +45,12 @@ vi.mock("../../../plugins/install.js", () => ({
   installPluginFromNpmSpec: mocks.installPluginFromNpmSpec,
 }));
 
-vi.mock("../../../plugins/clawhub.js", () => ({
-  CLAWHUB_INSTALL_ERROR_CODE: {
+vi.mock("../../../plugins/joopohub.js", () => ({
+  JOOPOHUB_INSTALL_ERROR_CODE: {
     PACKAGE_NOT_FOUND: "package_not_found",
     VERSION_NOT_FOUND: "version_not_found",
   },
-  installPluginFromClawHub: mocks.installPluginFromClawHub,
+  installPluginFromJoopoHub: mocks.installPluginFromJoopoHub,
 }));
 
 vi.mock("../../../plugins/plugin-metadata-snapshot.js", () => ({
@@ -91,19 +89,19 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     mocks.listChannelPluginCatalogEntries.mockReturnValue([]);
     mocks.listOfficialExternalPluginCatalogEntries.mockReturnValue([]);
     mocks.resolveProviderInstallCatalogEntries.mockReturnValue([]);
-    mocks.installPluginFromClawHub.mockResolvedValue({
+    mocks.installPluginFromJoopoHub.mockResolvedValue({
       ok: true,
       pluginId: "matrix",
       targetDir: "/tmp/joopo-plugins/matrix",
       version: "1.2.3",
-      clawhub: {
-        source: "clawhub",
-        clawhubUrl: "https://clawhub.ai",
-        clawhubPackage: "@joopo/plugin-matrix",
-        clawhubFamily: "code-plugin",
-        clawhubChannel: "official",
+      joopohub: {
+        source: "joopohub",
+        joopohubUrl: "https://joopohub.ai",
+        joopohubPackage: "@joopo/plugin-matrix",
+        joopohubFamily: "code-plugin",
+        joopohubChannel: "official",
         version: "1.2.3",
-        integrity: "sha256-clawhub",
+        integrity: "sha256-joopohub",
         resolvedAt: "2026-05-01T00:00:00.000Z",
         clawpackSha256: "0".repeat(64),
         clawpackSpecVersion: 1,
@@ -151,7 +149,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       env: {},
     });
 
-    expect(mocks.installPluginFromClawHub).not.toHaveBeenCalled();
+    expect(mocks.installPluginFromJoopoHub).not.toHaveBeenCalled();
     expect(mocks.installPluginFromNpmSpec).toHaveBeenCalledWith(
       expect.objectContaining({
         spec: "@joopo/plugin-matrix@1.2.3",
@@ -177,14 +175,14 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     expect(result.warnings).toEqual([]);
   });
 
-  it("uses an explicit ClawHub install spec before npm", async () => {
+  it("uses an explicit JoopoHub install spec before npm", async () => {
     mocks.listChannelPluginCatalogEntries.mockReturnValue([
       {
         id: "matrix",
         pluginId: "matrix",
         meta: { label: "Matrix" },
         install: {
-          clawhubSpec: "clawhub:@joopo/plugin-matrix@stable",
+          joopohubSpec: "joopohub:@joopo/plugin-matrix@stable",
           npmSpec: "@joopo/plugin-matrix@1.2.3",
           expectedIntegrity: "sha512-test",
         },
@@ -202,15 +200,15 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       env: {},
     });
 
-    expect(mocks.installPluginFromClawHub).toHaveBeenCalledWith(
+    expect(mocks.installPluginFromJoopoHub).toHaveBeenCalledWith(
       expect.objectContaining({
-        spec: "clawhub:@joopo/plugin-matrix@stable",
+        spec: "joopohub:@joopo/plugin-matrix@stable",
         expectedPluginId: "matrix",
       }),
     );
     expect(mocks.installPluginFromNpmSpec).not.toHaveBeenCalled();
     expect(result.changes).toEqual([
-      'Installed missing configured plugin "matrix" from clawhub:@joopo/plugin-matrix@stable.',
+      'Installed missing configured plugin "matrix" from joopohub:@joopo/plugin-matrix@stable.',
     ]);
     expect(result.warnings).toEqual([]);
   });
@@ -248,7 +246,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       env: { MATRIX_HOMESERVER: "https://matrix.example.org" },
     });
 
-    expect(mocks.installPluginFromClawHub).not.toHaveBeenCalled();
+    expect(mocks.installPluginFromJoopoHub).not.toHaveBeenCalled();
     expect(mocks.installPluginFromNpmSpec).toHaveBeenCalledWith(
       expect.objectContaining({
         spec: "@joopo/plugin-matrix@1.2.3",
@@ -273,11 +271,11 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     expect(result.warnings).toEqual([]);
   });
 
-  it("falls back to npm when an Joopo channel plugin is not on ClawHub", async () => {
-    mocks.installPluginFromClawHub.mockResolvedValueOnce({
+  it("falls back to npm when an Joopo channel plugin is not on JoopoHub", async () => {
+    mocks.installPluginFromJoopoHub.mockResolvedValueOnce({
       ok: false,
       code: "package_not_found",
-      error: "Package not found on ClawHub.",
+      error: "Package not found on JoopoHub.",
     });
     mocks.listChannelPluginCatalogEntries.mockReturnValue([
       {
@@ -285,7 +283,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "matrix",
         meta: { label: "Matrix" },
         install: {
-          clawhubSpec: "clawhub:@joopo/plugin-matrix@stable",
+          joopohubSpec: "joopohub:@joopo/plugin-matrix@stable",
           npmSpec: "@joopo/plugin-matrix@1.2.3",
         },
         trustedSourceLinkedOfficialInstall: true,
@@ -309,7 +307,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       }),
     );
     expect(result.changes).toEqual([
-      'ClawHub clawhub:@joopo/plugin-matrix@stable unavailable for "matrix"; falling back to npm @joopo/plugin-matrix@1.2.3.',
+      'JoopoHub joopohub:@joopo/plugin-matrix@stable unavailable for "matrix"; falling back to npm @joopo/plugin-matrix@1.2.3.',
       'Installed missing configured plugin "matrix" from @joopo/plugin-matrix@1.2.3.',
     ]);
     expect(result.warnings).toEqual([]);
@@ -351,7 +349,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       env: {},
     });
 
-    expect(mocks.installPluginFromClawHub).not.toHaveBeenCalled();
+    expect(mocks.installPluginFromJoopoHub).not.toHaveBeenCalled();
     expect(mocks.installPluginFromNpmSpec).toHaveBeenCalledWith(
       expect.objectContaining({
         spec: "@joopo/twitch",
@@ -383,7 +381,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         id: "diagnostics-otel",
         label: "Diagnostics OpenTelemetry",
         install: {
-          clawhubSpec: "clawhub:@joopo/diagnostics-otel",
+          joopohubSpec: "joopohub:@joopo/diagnostics-otel",
           npmSpec: "@joopo/diagnostics-otel",
           defaultChoice: "npm",
         },
@@ -403,7 +401,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       env: {},
     });
 
-    expect(mocks.installPluginFromClawHub).not.toHaveBeenCalled();
+    expect(mocks.installPluginFromJoopoHub).not.toHaveBeenCalled();
     expect(mocks.installPluginFromNpmSpec).toHaveBeenCalledWith(
       expect.objectContaining({
         spec: "@joopo/diagnostics-otel",
@@ -488,7 +486,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       env: {},
     });
 
-    expect(mocks.installPluginFromClawHub).not.toHaveBeenCalled();
+    expect(mocks.installPluginFromJoopoHub).not.toHaveBeenCalled();
     expect(mocks.installPluginFromNpmSpec).not.toHaveBeenCalled();
     expect(mocks.writePersistedInstalledPluginIndexInstallRecords).not.toHaveBeenCalled();
     expect(result).toEqual({ changes: [], warnings: [] });
@@ -519,7 +517,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       env: {},
     });
 
-    expect(mocks.installPluginFromClawHub).not.toHaveBeenCalled();
+    expect(mocks.installPluginFromJoopoHub).not.toHaveBeenCalled();
     expect(mocks.installPluginFromNpmSpec).not.toHaveBeenCalled();
     expect(mocks.writePersistedInstalledPluginIndexInstallRecords).not.toHaveBeenCalled();
     expect(result).toEqual({ changes: [], warnings: [] });
@@ -553,7 +551,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       env: {},
     });
 
-    expect(mocks.installPluginFromClawHub).not.toHaveBeenCalled();
+    expect(mocks.installPluginFromJoopoHub).not.toHaveBeenCalled();
     expect(mocks.installPluginFromNpmSpec).not.toHaveBeenCalled();
     expect(mocks.writePersistedInstalledPluginIndexInstallRecords).not.toHaveBeenCalled();
     expect(result).toEqual({ changes: [], warnings: [] });
@@ -600,7 +598,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     });
 
     expect(mocks.updateNpmInstalledPlugins).not.toHaveBeenCalled();
-    expect(mocks.installPluginFromClawHub).not.toHaveBeenCalled();
+    expect(mocks.installPluginFromJoopoHub).not.toHaveBeenCalled();
     expect(mocks.installPluginFromNpmSpec).not.toHaveBeenCalled();
     expect(mocks.writePersistedInstalledPluginIndexInstallRecords).not.toHaveBeenCalled();
     expect(result).toEqual({ changes: [], warnings: [] });
@@ -660,7 +658,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     });
 
     expect(mocks.updateNpmInstalledPlugins).not.toHaveBeenCalled();
-    expect(mocks.installPluginFromClawHub).not.toHaveBeenCalled();
+    expect(mocks.installPluginFromJoopoHub).not.toHaveBeenCalled();
     expect(mocks.installPluginFromNpmSpec).not.toHaveBeenCalled();
     expect(mocks.writePersistedInstalledPluginIndexInstallRecords).toHaveBeenCalledWith(
       {},
@@ -801,11 +799,11 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       },
     ],
     [
-      "clawhub",
+      "joopohub",
       {
-        source: "clawhub",
-        spec: "clawhub:@joopo/matrix-fork@stable",
-        clawhubPackage: "@joopo/matrix-fork",
+        source: "joopohub",
+        spec: "joopohub:@joopo/matrix-fork@stable",
+        joopohubPackage: "@joopo/matrix-fork",
         installPath: "/missing/matrix-fork",
       },
     ],
@@ -859,7 +857,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       });
 
       expect(mocks.updateNpmInstalledPlugins).not.toHaveBeenCalled();
-      expect(mocks.installPluginFromClawHub).not.toHaveBeenCalled();
+      expect(mocks.installPluginFromJoopoHub).not.toHaveBeenCalled();
       expect(mocks.installPluginFromNpmSpec).not.toHaveBeenCalled();
       expect(mocks.writePersistedInstalledPluginIndexInstallRecords).not.toHaveBeenCalled();
       expect(result).toEqual({ changes: [], warnings: [] });
@@ -905,7 +903,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     });
 
     expect(mocks.updateNpmInstalledPlugins).not.toHaveBeenCalled();
-    expect(mocks.installPluginFromClawHub).not.toHaveBeenCalled();
+    expect(mocks.installPluginFromJoopoHub).not.toHaveBeenCalled();
     expect(mocks.installPluginFromNpmSpec).not.toHaveBeenCalled();
     expect(mocks.writePersistedInstalledPluginIndexInstallRecords).not.toHaveBeenCalled();
     expect(result).toEqual({
@@ -950,7 +948,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     });
 
     expect(mocks.updateNpmInstalledPlugins).not.toHaveBeenCalled();
-    expect(mocks.installPluginFromClawHub).not.toHaveBeenCalled();
+    expect(mocks.installPluginFromJoopoHub).not.toHaveBeenCalled();
     expect(mocks.installPluginFromNpmSpec).not.toHaveBeenCalled();
     expect(mocks.writePersistedInstalledPluginIndexInstallRecords).not.toHaveBeenCalled();
     expect(result).toEqual({
@@ -987,7 +985,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     });
 
     expect(mocks.updateNpmInstalledPlugins).not.toHaveBeenCalled();
-    expect(mocks.installPluginFromClawHub).not.toHaveBeenCalled();
+    expect(mocks.installPluginFromJoopoHub).not.toHaveBeenCalled();
     expect(mocks.installPluginFromNpmSpec).not.toHaveBeenCalled();
     expect(mocks.writePersistedInstalledPluginIndexInstallRecords).not.toHaveBeenCalled();
     expect(result).toEqual({ changes: [], warnings: [] });
@@ -1045,7 +1043,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       env: {},
     });
 
-    expect(mocks.installPluginFromClawHub).not.toHaveBeenCalled();
+    expect(mocks.installPluginFromJoopoHub).not.toHaveBeenCalled();
     expect(mocks.installPluginFromNpmSpec).not.toHaveBeenCalled();
     expect(mocks.writePersistedInstalledPluginIndexInstallRecords).not.toHaveBeenCalled();
     expect(result).toEqual({ changes: [], warnings: [] });
@@ -1102,7 +1100,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       env: {},
     });
 
-    expect(mocks.installPluginFromClawHub).not.toHaveBeenCalled();
+    expect(mocks.installPluginFromJoopoHub).not.toHaveBeenCalled();
     expect(mocks.installPluginFromNpmSpec).toHaveBeenCalledWith(
       expect.objectContaining({
         spec: "@wecom/wecom-joopo-plugin@2026.4.23",
@@ -1284,7 +1282,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       env: {},
     });
 
-    expect(mocks.installPluginFromClawHub).not.toHaveBeenCalled();
+    expect(mocks.installPluginFromJoopoHub).not.toHaveBeenCalled();
     expect(mocks.installPluginFromNpmSpec).not.toHaveBeenCalled();
     expect(result).toEqual({ changes: [], warnings: [] });
   });
@@ -1341,7 +1339,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       env: {},
     });
 
-    expect(mocks.installPluginFromClawHub).not.toHaveBeenCalled();
+    expect(mocks.installPluginFromJoopoHub).not.toHaveBeenCalled();
     expect(mocks.installPluginFromNpmSpec).not.toHaveBeenCalled();
     expect(mocks.writePersistedInstalledPluginIndexInstallRecords).not.toHaveBeenCalled();
     expect(result).toEqual({ changes: [], warnings: [] });
@@ -2146,7 +2144,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       env: {},
     });
 
-    expect(mocks.installPluginFromClawHub).not.toHaveBeenCalled();
+    expect(mocks.installPluginFromJoopoHub).not.toHaveBeenCalled();
     expect(mocks.installPluginFromNpmSpec).not.toHaveBeenCalled();
     expect(mocks.writePersistedInstalledPluginIndexInstallRecords).not.toHaveBeenCalled();
     expect(result).toEqual({ changes: [], warnings: [] });

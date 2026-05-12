@@ -40,12 +40,12 @@ vi.mock("../../infra/archive.js", () => ({
   resolveArchiveKind: vi.fn(() => null),
 }));
 
-vi.mock("../../infra/clawhub.js", () => ({
-  parseClawHubPluginSpec: vi.fn(() => null),
+vi.mock("../../infra/joopohub.js", () => ({
+  parseJoopoHubPluginSpec: vi.fn(() => null),
 }));
 
-vi.mock("../../plugins/clawhub.js", () => ({
-  installPluginFromClawHub: vi.fn(),
+vi.mock("../../plugins/joopohub.js", () => ({
+  installPluginFromJoopoHub: vi.fn(),
 }));
 
 vi.mock("../../plugins/install.js", () => ({

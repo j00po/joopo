@@ -1,14 +1,14 @@
-import { parseClawHubPluginSpec } from "../infra/clawhub-spec.js";
+import { parseJoopoHubPluginSpec } from "../infra/joopohub-spec.js";
 import { parseRegistryNpmSpec, type ParsedRegistryNpmSpec } from "../infra/npm-registry-spec.js";
 import { normalizeOptionalString } from "../shared/string-coerce.js";
 import type { PluginPackageInstall } from "./manifest.js";
 
 export type PluginInstallSourceWarning =
-  | "invalid-clawhub-spec"
+  | "invalid-joopohub-spec"
   | "invalid-npm-spec"
   | "invalid-default-choice"
   | "default-choice-missing-source"
-  | "clawhub-spec-floating"
+  | "joopohub-spec-floating"
   | "npm-integrity-without-source"
   | "npm-spec-floating"
   | "npm-spec-missing-integrity"
@@ -35,7 +35,7 @@ export type PluginInstallLocalSourceInfo = {
   path: string;
 };
 
-export type PluginInstallClawHubSourceInfo = {
+export type PluginInstallJoopoHubSourceInfo = {
   spec: string;
   packageName: string;
   version?: string;
@@ -44,7 +44,7 @@ export type PluginInstallClawHubSourceInfo = {
 
 export type PluginInstallSourceInfo = {
   defaultChoice?: PluginPackageInstall["defaultChoice"];
-  clawhub?: PluginInstallClawHubSourceInfo;
+  joopohub?: PluginInstallJoopoHubSourceInfo;
   npm?: PluginInstallNpmSourceInfo;
   local?: PluginInstallLocalSourceInfo;
   warnings: readonly PluginInstallSourceWarning[];
@@ -65,7 +65,7 @@ function resolveNpmPinState(params: {
 }
 
 function resolveDefaultChoice(value: unknown): PluginPackageInstall["defaultChoice"] | undefined {
-  return value === "clawhub" || value === "npm" || value === "local" ? value : undefined;
+  return value === "joopohub" || value === "npm" || value === "local" ? value : undefined;
 }
 
 function normalizeExpectedPackageName(value: string | null | undefined): string | undefined {
@@ -80,34 +80,34 @@ export function describePluginInstallSource(
   install: PluginPackageInstall,
   options?: DescribePluginInstallSourceOptions,
 ): PluginInstallSourceInfo {
-  const clawhubSpec = normalizeOptionalString(install.clawhubSpec);
+  const joopohubSpec = normalizeOptionalString(install.joopohubSpec);
   const npmSpec = normalizeOptionalString(install.npmSpec);
   const localPath = normalizeOptionalString(install.localPath);
   const defaultChoice = resolveDefaultChoice(install.defaultChoice);
   const expectedIntegrity = normalizeOptionalString(install.expectedIntegrity);
   const expectedPackageName = normalizeExpectedPackageName(options?.expectedPackageName);
   const warnings: PluginInstallSourceWarning[] = [];
-  let clawhub: PluginInstallClawHubSourceInfo | undefined;
+  let joopohub: PluginInstallJoopoHubSourceInfo | undefined;
   let npm: PluginInstallNpmSourceInfo | undefined;
 
   if (install.defaultChoice !== undefined && !defaultChoice) {
     warnings.push("invalid-default-choice");
   }
 
-  if (clawhubSpec) {
-    const parsed = parseClawHubPluginSpec(clawhubSpec);
+  if (joopohubSpec) {
+    const parsed = parseJoopoHubPluginSpec(joopohubSpec);
     if (parsed) {
       if (!parsed.version) {
-        warnings.push("clawhub-spec-floating");
+        warnings.push("joopohub-spec-floating");
       }
-      clawhub = {
-        spec: clawhubSpec,
+      joopohub = {
+        spec: joopohubSpec,
         packageName: parsed.name,
         ...(parsed.version ? { version: parsed.version } : {}),
         exactVersion: Boolean(parsed.version),
       };
     } else {
-      warnings.push("invalid-clawhub-spec");
+      warnings.push("invalid-joopohub-spec");
     }
   }
 
@@ -141,7 +141,7 @@ export function describePluginInstallSource(
       warnings.push("invalid-npm-spec");
     }
   }
-  if (defaultChoice === "clawhub" && !clawhub) {
+  if (defaultChoice === "joopohub" && !joopohub) {
     warnings.push("default-choice-missing-source");
   }
   if (defaultChoice === "npm" && !npm) {
@@ -156,7 +156,7 @@ export function describePluginInstallSource(
 
   return {
     ...(defaultChoice ? { defaultChoice } : {}),
-    ...(clawhub ? { clawhub } : {}),
+    ...(joopohub ? { joopohub } : {}),
     ...(npm ? { npm } : {}),
     ...(localPath ? { local: { path: localPath } } : {}),
     warnings,

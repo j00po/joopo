@@ -53,7 +53,7 @@ async function setElevenLabsTalkConfig() {
       elevenlabs: {
         voiceId: "stub-default-voice",
         voiceAliases: {
-          Clawd: ALIAS_STUB_VOICE_ID,
+          Joopo: ALIAS_STUB_VOICE_ID,
         },
       },
     },
@@ -213,7 +213,7 @@ describe("gateway talk runtime", () => {
 
         const res = await invokeTalkSpeakDirect({
           text: "Hello from talk mode.",
-          voiceId: "clawd",
+          voiceId: "joopo",
           outputFormat: "pcm_44100",
           latencyTier: 3,
         });

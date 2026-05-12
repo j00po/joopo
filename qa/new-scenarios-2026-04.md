@@ -76,7 +76,7 @@ Ten repo-grounded candidate scenarios to add after the current seed suite.
 
 - Goal: verify a newly installed skill becomes usable without a broken intermediate state.
 - Flow:
-  - Install a ClawHub or gateway-managed skill.
+  - Install a JoopoHub or gateway-managed skill.
   - Re-check skill inventory.
   - Ask the agent to perform the skill-backed task.
 - Pass:

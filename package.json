@@ -1,17 +1,17 @@
 {
   "name": "joopo",
   "version": "2026.5.6",
-  "description": "Multi-channel AI gateway with extensible messaging integrations",
+  "description": "Personal AI assistant gateway with extensible messaging integrations",
   "keywords": [],
-  "homepage": "https://github.com/joopo/joopo#readme",
+  "homepage": "https://github.com/j00po/joopo#readme",
   "bugs": {
-    "url": "https://github.com/joopo/joopo/issues"
+    "url": "https://github.com/j00po/joopo/issues"
   },
   "license": "MIT",
   "author": "",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/joopo/joopo.git"
+    "url": "git+https://github.com/j00po/joopo.git"
   },
   "bin": {
     "joopo": "joopo.mjs"
@@ -1497,8 +1497,8 @@
     "release:generated:check": "node scripts/release-preflight.mjs --check",
     "release:joopo:npm:check": "node --import tsx scripts/joopo-npm-release-check.ts",
     "release:joopo:npm:verify-published": "node --import tsx scripts/joopo-npm-postpublish-verify.ts",
-    "release:plugins:clawhub:check": "node --import tsx scripts/plugin-clawhub-release-check.ts",
-    "release:plugins:clawhub:plan": "node --import tsx scripts/plugin-clawhub-release-plan.ts",
+    "release:plugins:joopohub:check": "node --import tsx scripts/plugin-joopohub-release-check.ts",
+    "release:plugins:joopohub:plan": "node --import tsx scripts/plugin-joopohub-release-plan.ts",
     "release:plugins:npm:check": "node --import tsx scripts/plugin-npm-release-check.ts",
     "release:plugins:npm:plan": "node --import tsx scripts/plugin-npm-release-plan.ts",
     "release:prep": "node scripts/release-preflight.mjs --fix",
@@ -1702,7 +1702,7 @@
     "@mariozechner/pi-tui": "0.73.0",
     "@modelcontextprotocol/sdk": "1.29.0",
     "@mozilla/readability": "^0.6.0",
-    "@joopo/fs-safe": "github:joopo/fs-safe#c7ccb99d3058f2acf2ad2758ad2470c7e113a53c",
+    "@joopo/fs-safe": "workspace:*",
     "@slack/bolt": "^4.7.2",
     "@slack/types": "^2.21.0",
     "@slack/web-api": "^7.15.2",
@@ -1809,7 +1809,8 @@
       "tough-cookie": "4.1.3",
       "yauzl": "3.2.1",
       "protobufjs": "7.5.5",
-      "uuid": "14.0.0"
+      "uuid": "14.0.0",
+      "unrun": "0.2.37"
     },
     "onlyBuiltDependencies": [
       "@joopo/fs-safe",

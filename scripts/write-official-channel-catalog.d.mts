@@ -8,10 +8,10 @@ export function buildOfficialChannelCatalog(params?: { repoRoot?: string; cwd?: 
     joopo: {
       channel: Record<string, unknown>;
       install: {
-        clawhubSpec?: string;
+        joopohubSpec?: string;
         npmSpec?: string;
         localPath?: string;
-        defaultChoice?: "clawhub" | "npm" | "local";
+        defaultChoice?: "joopohub" | "npm" | "local";
         minHostVersion?: string;
         expectedIntegrity?: string;
         allowInvalidConfigRecovery?: boolean;

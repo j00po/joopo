@@ -1,7 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-type LoadJoopoProviderIndex =
-  typeof import("../model-catalog/index.js").loadJoopoProviderIndex;
+type LoadJoopoProviderIndex = typeof import("../model-catalog/index.js").loadJoopoProviderIndex;
 type LoadPluginRegistrySnapshot = typeof import("./plugin-registry.js").loadPluginRegistrySnapshot;
 type ResolveManifestProviderAuthChoices =
   typeof import("./provider-auth-choices.js").resolveManifestProviderAuthChoices;
@@ -265,7 +264,7 @@ describe("provider install catalog", () => {
     });
   });
 
-  it("preserves durable ClawHub install records for provider setup reinstall hints", () => {
+  it("preserves durable JoopoHub install records for provider setup reinstall hints", () => {
     loadPluginRegistrySnapshot.mockReturnValue({
       version: 1,
       hostContractVersion: "test",
@@ -275,10 +274,10 @@ describe("provider install catalog", () => {
       generatedAtMs: 0,
       installRecords: {
         vllm: {
-          source: "clawhub",
-          spec: "clawhub:joopo/vllm@2026.5.2",
+          source: "joopohub",
+          spec: "joopohub:joopo/vllm@2026.5.2",
           integrity: "sha256-clawpack",
-          clawhubPackage: "joopo/vllm",
+          joopohubPackage: "joopo/vllm",
         },
       },
       plugins: [
@@ -326,13 +325,13 @@ describe("provider install catalog", () => {
 
     expect(resolveProviderInstallCatalogEntry("vllm")).toMatchObject({
       install: {
-        clawhubSpec: "clawhub:joopo/vllm@2026.5.2",
-        defaultChoice: "clawhub",
+        joopohubSpec: "joopohub:joopo/vllm@2026.5.2",
+        defaultChoice: "joopohub",
       },
       installSource: {
-        defaultChoice: "clawhub",
-        clawhub: {
-          spec: "clawhub:joopo/vllm@2026.5.2",
+        defaultChoice: "joopohub",
+        joopohub: {
+          spec: "joopohub:joopo/vllm@2026.5.2",
           packageName: "joopo/vllm",
           version: "2026.5.2",
           exactVersion: true,
@@ -565,7 +564,7 @@ describe("provider install catalog", () => {
     });
   });
 
-  it("surfaces provider-index ClawHub install metadata as the preferred source", () => {
+  it("surfaces provider-index JoopoHub install metadata as the preferred source", () => {
     loadJoopoProviderIndex.mockReturnValue({
       version: 1,
       providers: {
@@ -576,9 +575,9 @@ describe("provider install catalog", () => {
             id: "moonshot",
             package: "@joopo/plugin-moonshot",
             install: {
-              clawhubSpec: "clawhub:joopo/moonshot@2026.5.2",
+              joopohubSpec: "joopohub:joopo/moonshot@2026.5.2",
               npmSpec: "@joopo/plugin-moonshot@2026.5.2",
-              defaultChoice: "clawhub",
+              defaultChoice: "joopohub",
               expectedIntegrity: "sha512-moonshot",
             },
           },
@@ -606,15 +605,15 @@ describe("provider install catalog", () => {
       label: "Moonshot AI",
       origin: "bundled",
       install: {
-        clawhubSpec: "clawhub:joopo/moonshot@2026.5.2",
+        joopohubSpec: "joopohub:joopo/moonshot@2026.5.2",
         npmSpec: "@joopo/plugin-moonshot@2026.5.2",
-        defaultChoice: "clawhub",
+        defaultChoice: "joopohub",
         expectedIntegrity: "sha512-moonshot",
       },
       installSource: {
-        defaultChoice: "clawhub",
-        clawhub: {
-          spec: "clawhub:joopo/moonshot@2026.5.2",
+        defaultChoice: "joopohub",
+        joopohub: {
+          spec: "joopohub:joopo/moonshot@2026.5.2",
           packageName: "joopo/moonshot",
           version: "2026.5.2",
           exactVersion: true,
@@ -746,9 +745,9 @@ describe("provider install catalog", () => {
             id: "moonshot",
             package: "@joopo/plugin-moonshot",
             install: {
-              clawhubSpec: "clawhub:joopo/moonshot@2026.5.2",
+              joopohubSpec: "joopohub:joopo/moonshot@2026.5.2",
               npmSpec: "@joopo/plugin-moonshot@2026.5.2",
-              defaultChoice: "clawhub",
+              defaultChoice: "joopohub",
             },
           },
           authChoices: [
@@ -766,9 +765,9 @@ describe("provider install catalog", () => {
             id: "vllm",
             package: "@joopo/plugin-vllm",
             install: {
-              clawhubSpec: "clawhub:joopo/vllm@2026.5.2",
+              joopohubSpec: "joopohub:joopo/vllm@2026.5.2",
               npmSpec: "@joopo/plugin-vllm@2026.5.2",
-              defaultChoice: "clawhub",
+              defaultChoice: "joopohub",
             },
           },
           authChoices: [
@@ -789,14 +788,14 @@ describe("provider install catalog", () => {
     expect(resolveProviderInstallCatalogEntry("vllm-server")).toMatchObject({
       pluginId: "vllm",
       install: {
-        clawhubSpec: "clawhub:joopo/vllm@2026.5.2",
+        joopohubSpec: "joopohub:joopo/vllm@2026.5.2",
         npmSpec: "@joopo/plugin-vllm@2026.5.2",
-        defaultChoice: "clawhub",
+        defaultChoice: "joopohub",
       },
       installSource: {
-        defaultChoice: "clawhub",
-        clawhub: {
-          spec: "clawhub:joopo/vllm@2026.5.2",
+        defaultChoice: "joopohub",
+        joopohub: {
+          spec: "joopohub:joopo/vllm@2026.5.2",
         },
         npm: {
           spec: "@joopo/plugin-vllm@2026.5.2",

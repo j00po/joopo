@@ -1961,7 +1961,7 @@ describe("spawnAcpDirect", () => {
       {
         task: "Check workspace",
         agentId: "codex",
-        cwd: "/home/bob/clawd",
+        cwd: "/home/bob/joopo",
         mode: "session",
         thread: true,
       },
@@ -1977,7 +1977,7 @@ describe("spawnAcpDirect", () => {
     expect(hoisted.sessionBindingBindMock).toHaveBeenCalledWith(
       expect.objectContaining({
         metadata: expect.objectContaining({
-          introText: expect.stringContaining("cwd: /home/bob/clawd"),
+          introText: expect.stringContaining("cwd: /home/bob/joopo"),
         }),
       }),
     );

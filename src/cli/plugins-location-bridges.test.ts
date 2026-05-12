@@ -61,9 +61,9 @@ function makeRegistry(pluginId: string): PluginManifestRegistry {
         activation: {},
         startup: {},
         packageInstall: {
-          clawhubSpec: `clawhub:@joopo/${pluginId}`,
+          joopohubSpec: `joopohub:@joopo/${pluginId}`,
           npmSpec: `@joopo/${pluginId}`,
-          defaultChoice: "clawhub",
+          defaultChoice: "joopohub",
         },
       },
     ],
@@ -90,9 +90,9 @@ describe("listPersistedBundledPluginLocationBridges", () => {
         startup: startupInfo,
         compat: [],
         packageInstall: {
-          defaultChoice: "clawhub",
-          clawhub: {
-            spec: "clawhub:@joopo/diagnostics-otel",
+          defaultChoice: "joopohub",
+          joopohub: {
+            spec: "joopohub:@joopo/diagnostics-otel",
             packageName: "@joopo/diagnostics-otel",
             exactVersion: false,
           },
@@ -117,7 +117,7 @@ describe("listPersistedBundledPluginLocationBridges", () => {
         pluginId: "diagnostics-otel",
         preferredSource: "npm",
         npmSpec: "@joopo/diagnostics-otel",
-        clawhubSpec: "clawhub:@joopo/diagnostics-otel",
+        joopohubSpec: "joopohub:@joopo/diagnostics-otel",
         channelIds: ["diagnostics-otel"],
       },
     ]);
@@ -136,9 +136,9 @@ describe("listPersistedBundledPluginLocationBridges", () => {
         startup: startupInfo,
         compat: [],
         packageInstall: {
-          defaultChoice: "clawhub",
-          clawhub: {
-            spec: "clawhub:@joopo/diagnostics-otel",
+          defaultChoice: "joopohub",
+          joopohub: {
+            spec: "joopohub:@joopo/diagnostics-otel",
             packageName: "@joopo/diagnostics-otel",
             exactVersion: false,
           },
@@ -156,7 +156,7 @@ describe("listPersistedBundledPluginLocationBridges", () => {
         pluginId: "diagnostics-otel",
         preferredSource: "npm",
         npmSpec: "@joopo/diagnostics-otel",
-        clawhubSpec: "clawhub:@joopo/diagnostics-otel",
+        joopohubSpec: "joopohub:@joopo/diagnostics-otel",
         channelIds: ["diagnostics-otel"],
       },
     ]);

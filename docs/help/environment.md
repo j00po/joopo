@@ -103,17 +103,17 @@ Both resolve from process env at activation time. SecretRef details are document
 
 ## Path-related env vars
 
-| Variable                 | Purpose                                                                                                                                                                          |
-| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `JOOPO_HOME`          | Override the home directory used for all internal path resolution (`~/.joopo/`, agent dirs, sessions, credentials). Useful when running Joopo as a dedicated service user. |
-| `JOOPO_STATE_DIR`     | Override the state directory (default `~/.joopo`).                                                                                                                            |
-| `JOOPO_CONFIG_PATH`   | Override the config file path (default `~/.joopo/joopo.json`).                                                                                                             |
-| `JOOPO_INCLUDE_ROOTS` | Path-list of directories where `$include` directives may resolve files outside the config directory (default: none — `$include` is confined to the config dir). Tilde-expanded.  |
+| Variable              | Purpose                                                                                                                                                                         |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `JOOPO_HOME`          | Override the home directory used for all internal path resolution (`~/.joopo/`, agent dirs, sessions, credentials). Useful when running Joopo as a dedicated service user.      |
+| `JOOPO_STATE_DIR`     | Override the state directory (default `~/.joopo`).                                                                                                                              |
+| `JOOPO_CONFIG_PATH`   | Override the config file path (default `~/.joopo/joopo.json`).                                                                                                                  |
+| `JOOPO_INCLUDE_ROOTS` | Path-list of directories where `$include` directives may resolve files outside the config directory (default: none — `$include` is confined to the config dir). Tilde-expanded. |
 
 ## Logging
 
-| Variable             | Purpose                                                                                                                                                                                      |
-| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Variable          | Purpose                                                                                                                                                                                      |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `JOOPO_LOG_LEVEL` | Override log level for both file and console (e.g. `debug`, `trace`). Takes precedence over `logging.level` and `logging.consoleLevel` in config. Invalid values are ignored with a warning. |
 
 ### `JOOPO_HOME`
@@ -160,13 +160,13 @@ Do not rely on writing only to `~/.joopo/.env` for this variable; Node reads
 ## Legacy environment variables
 
 Joopo only reads `JOOPO_*` environment variables. The legacy
-`CLAWDBOT_*` and `MOLTBOT_*` prefixes from earlier releases are silently
+`JOOPOBOT_*` and `MOLTBOT_*` prefixes from earlier releases are silently
 ignored.
 
 If any are still set on the Gateway process at startup, Joopo emits a
 single Node deprecation warning (`JOOPO_LEGACY_ENV_VARS`) listing the
 detected prefixes and the total count. Rename each value by replacing the
-legacy prefix with `JOOPO_` (for example `CLAWDBOT_GATEWAY_TOKEN` →
+legacy prefix with `JOOPO_` (for example `JOOPOBOT_GATEWAY_TOKEN` →
 `JOOPO_GATEWAY_TOKEN`); the old names take no effect.
 
 ## Related

@@ -1,5 +1,5 @@
 export type InstallRecordBase = {
-  source: "npm" | "archive" | "path" | "clawhub" | "git";
+  source: "npm" | "archive" | "path" | "joopohub" | "git";
   spec?: string;
   sourcePath?: string;
   installPath?: string;
@@ -11,10 +11,10 @@ export type InstallRecordBase = {
   shasum?: string;
   resolvedAt?: string;
   installedAt?: string;
-  clawhubUrl?: string;
-  clawhubPackage?: string;
-  clawhubFamily?: "code-plugin" | "bundle-plugin";
-  clawhubChannel?: "official" | "community" | "private";
+  joopohubUrl?: string;
+  joopohubPackage?: string;
+  joopohubFamily?: "code-plugin" | "bundle-plugin";
+  joopohubChannel?: "official" | "community" | "private";
   artifactKind?: "legacy-zip" | "npm-pack";
   artifactFormat?: "zip" | "tgz";
   npmIntegrity?: string;

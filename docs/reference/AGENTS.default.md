@@ -77,13 +77,13 @@ cp docs/reference/AGENTS.default.md ~/.joopo/workspace/AGENTS.md
 
 ## Backup tip (recommended)
 
-If you treat this workspace as Clawd's "memory", make it a git repo (ideally private) so `AGENTS.md` and your memory files are backed up.
+If you treat this workspace as Joopo's "memory", make it a git repo (ideally private) so `AGENTS.md` and your memory files are backed up.
 
 ```bash
 cd ~/.joopo/workspace
 git init
 git add AGENTS.md
-git commit -m "Add Clawd workspace"
+git commit -m "Add Joopo workspace"
 # Optional: add a private remote + push
 ```
 

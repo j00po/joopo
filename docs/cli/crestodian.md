@@ -73,7 +73,7 @@ models
 set default model openai/gpt-5.5
 plugins list
 plugins search slack
-plugin install clawhub:joopo-codex-app-server
+plugin install joopohub:joopo-codex-app-server
 plugin uninstall joopo-codex-app-server
 talk to work agent
 talk to agent for ~/Projects/work
@@ -104,7 +104,7 @@ Read-only operations can run immediately:
 - show overview
 - list agents
 - list installed plugins
-- search ClawHub plugins
+- search JoopoHub plugins
 - show model/backend status
 - run status or health checks
 - check Gateway reachability
@@ -122,7 +122,7 @@ you pass `--yes` for a direct command:
 - change the default model
 - start, stop, or restart the Gateway
 - create agents
-- install plugins from ClawHub or npm
+- install plugins from JoopoHub or npm
 - uninstall plugins
 - run doctor repairs that rewrite config or state
 

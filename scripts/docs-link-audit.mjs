@@ -5,7 +5,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import { resolveClawHubRepoPath, syncClawHubDocsTree } from "./docs-sync-publish.mjs";
+import { resolveJoopoHubRepoPath, syncJoopoHubDocsTree } from "./docs-sync-publish.mjs";
 
 const ROOT = process.cwd();
 const DOCS_DIR = path.join(ROOT, "docs");
@@ -124,13 +124,13 @@ function buildAuditIndex(docsDir = DOCS_DIR, options = {}) {
     routes.add(normalizeRoute(permalink));
   }
 
-  if (options.allowExternalClawHubRoutes === true) {
+  if (options.allowExternalJoopoHubRoutes === true) {
     for (const page of collectNavPageEntries(docsConfig.navigation || [])) {
       if (isGeneratedTranslatedDoc(page)) {
         continue;
       }
       const route = normalizeRoute(page);
-      if (route === "/clawhub" || route.startsWith("/clawhub/")) {
+      if (route === "/joopohub" || route.startsWith("/joopohub/")) {
         addRoute(routes, page);
       }
     }
@@ -277,20 +277,20 @@ export function sanitizeDocsConfigForEnglishOnly(value) {
 function prepareMirroredDocsDir(sourceDir = DOCS_DIR) {
   const sourceRoot = path.resolve(sourceDir);
   if (sourceRoot !== path.resolve(DOCS_DIR)) {
-    return { dir: sourceRoot, mirroredClawHub: false, cleanup: () => {} };
+    return { dir: sourceRoot, mirroredJoopoHub: false, cleanup: () => {} };
   }
 
-  const clawhubRepo = resolveClawHubRepoPath("", { required: false });
-  if (!clawhubRepo) {
-    return { dir: sourceRoot, mirroredClawHub: false, cleanup: () => {} };
+  const joopohubRepo = resolveJoopoHubRepoPath("", { required: false });
+  if (!joopohubRepo) {
+    return { dir: sourceRoot, mirroredJoopoHub: false, cleanup: () => {} };
   }
 
   const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "joopo-docs-link-audit-"));
   fs.cpSync(sourceRoot, tempDir, { recursive: true });
-  syncClawHubDocsTree(tempDir, { repoPath: clawhubRepo, required: false });
+  syncJoopoHubDocsTree(tempDir, { repoPath: joopohubRepo, required: false });
   return {
     dir: tempDir,
-    mirroredClawHub: true,
+    mirroredJoopoHub: true,
     cleanup: () => fs.rmSync(tempDir, { recursive: true, force: true }),
   };
 }
@@ -370,7 +370,7 @@ export function resolveMintlifyAnchorAuditInvocation(params) {
 export function auditDocsLinks(options = {}) {
   const docsDir = options.docsDir ?? DOCS_DIR;
   const index = buildAuditIndex(docsDir, {
-    allowExternalClawHubRoutes: options.allowExternalClawHubRoutes === true,
+    allowExternalJoopoHubRoutes: options.allowExternalJoopoHubRoutes === true,
   });
   /** @type {{file: string; line: number; link: string; reason: string}[]} */
   const broken = [];
@@ -543,7 +543,7 @@ export function runDocsLinkAuditCli(options = {}) {
   try {
     const { checked, broken } = auditDocsLinks({
       docsDir: mirroredDocsDir.dir,
-      allowExternalClawHubRoutes: !mirroredDocsDir.mirroredClawHub,
+      allowExternalJoopoHubRoutes: !mirroredDocsDir.mirroredJoopoHub,
     });
     console.log(`checked_internal_links=${checked}`);
     console.log(`broken_links=${broken.length}`);

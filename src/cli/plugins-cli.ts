@@ -114,7 +114,7 @@ export function registerPluginsCli(program: Command) {
 
   plugins
     .command("search")
-    .description("Search ClawHub plugin packages")
+    .description("Search JoopoHub plugin packages")
     .argument("[query...]", "Search query")
     .option("--limit <n>", "Max results", (value) => Number.parseInt(value, 10))
     .option("--json", "Print JSON", false)
@@ -240,7 +240,7 @@ export function registerPluginsCli(program: Command) {
   plugins
     .command("install")
     .description(
-      "Install a plugin or hook pack (path, archive, npm spec, git repo, clawhub:package, or marketplace entry)",
+      "Install a plugin or hook pack (path, archive, npm spec, git repo, joopohub:package, or marketplace entry)",
     )
     .argument(
       "<path-or-spec-or-plugin>",

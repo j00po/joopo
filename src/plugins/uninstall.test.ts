@@ -1393,25 +1393,25 @@ describe("uninstallPlugin", () => {
     await expect(fs.access(installPath)).rejects.toThrow();
   });
 
-  it("deletes managed ClawHub install directories", async () => {
+  it("deletes managed JoopoHub install directories", async () => {
     const stateDir = path.join(tempDir, "state");
     const extensionsDir = path.join(stateDir, "extensions");
     const installPath = resolvePluginInstallDir("clawpack-demo", extensionsDir);
     await fs.mkdir(installPath, { recursive: true });
-    await fs.writeFile(path.join(installPath, "index.js"), "// clawhub plugin");
+    await fs.writeFile(path.join(installPath, "index.js"), "// joopohub plugin");
 
     const result = await uninstallPlugin({
       config: createPluginConfig({
         entries: createSinglePluginEntries("clawpack-demo"),
         installs: {
           "clawpack-demo": {
-            source: "clawhub",
-            spec: "clawhub:clawpack-demo@2026.5.1-beta.2",
+            source: "joopohub",
+            spec: "joopohub:clawpack-demo@2026.5.1-beta.2",
             installPath,
-            clawhubUrl: "https://clawhub.ai",
-            clawhubPackage: "clawpack-demo",
-            clawhubFamily: "code-plugin",
-            clawhubChannel: "official",
+            joopohubUrl: "https://joopohub.ai",
+            joopohubPackage: "clawpack-demo",
+            joopohubFamily: "code-plugin",
+            joopohubChannel: "official",
             artifactKind: "npm-pack",
             artifactFormat: "tgz",
             npmIntegrity: "sha512-clawpack",
@@ -1624,7 +1624,7 @@ describe("resolveUninstallDirectoryTarget", () => {
     ).toBe(installPath);
   });
 
-  it("uses configured installPath when ClawHub installed it under the managed extensions root", () => {
+  it("uses configured installPath when JoopoHub installed it under the managed extensions root", () => {
     const stateDir = path.join(os.tmpdir(), "joopo-uninstall-safe");
     const extensionsDir = path.join(stateDir, "extensions");
     const installPath = resolvePluginInstallDir("clawpack-demo", extensionsDir);
@@ -1634,13 +1634,13 @@ describe("resolveUninstallDirectoryTarget", () => {
         pluginId: "clawpack-demo",
         hasInstall: true,
         installRecord: {
-          source: "clawhub",
-          spec: "clawhub:clawpack-demo@2026.5.1-beta.2",
+          source: "joopohub",
+          spec: "joopohub:clawpack-demo@2026.5.1-beta.2",
           installPath,
-          clawhubUrl: "https://clawhub.ai",
-          clawhubPackage: "clawpack-demo",
-          clawhubFamily: "code-plugin",
-          clawhubChannel: "official",
+          joopohubUrl: "https://joopohub.ai",
+          joopohubPackage: "clawpack-demo",
+          joopohubFamily: "code-plugin",
+          joopohubChannel: "official",
           artifactKind: "npm-pack",
           artifactFormat: "tgz",
           npmIntegrity: "sha512-clawpack",
@@ -1694,11 +1694,7 @@ describe("resolveUninstallDirectoryTarget", () => {
 
   it("uses configured installPath when it is under the recorded managed extensions root", () => {
     const currentExtensionsDir = path.join(os.tmpdir(), "joopo-uninstall-current", "extensions");
-    const recordedExtensionsDir = path.join(
-      os.tmpdir(),
-      "joopo-uninstall-recorded",
-      "extensions",
-    );
+    const recordedExtensionsDir = path.join(os.tmpdir(), "joopo-uninstall-recorded", "extensions");
     const installPath = resolvePluginInstallDir("my-plugin", recordedExtensionsDir);
 
     expect(

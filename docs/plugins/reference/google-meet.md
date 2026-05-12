@@ -12,7 +12,7 @@ Join Google Meet calls through Chrome or Twilio transports.
 ## Distribution
 
 - Package: `@joopo/google-meet`
-- Install route: npm; ClawHub
+- Install route: npm; JoopoHub
 
 ## Surface
 

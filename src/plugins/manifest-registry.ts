@@ -712,12 +712,12 @@ function isTrustedOfficialPluginInstall(params: {
     return true;
   }
   if (
-    installRecord.source === "clawhub" &&
-    officialInstall?.clawhubSpec &&
-    installRecord.clawhubChannel === "official" &&
-    (installRecord.clawhubPackage === packageName ||
-      installRecord.spec === officialInstall.clawhubSpec ||
-      installRecord.resolvedSpec === officialInstall.clawhubSpec)
+    installRecord.source === "joopohub" &&
+    officialInstall?.joopohubSpec &&
+    installRecord.joopohubChannel === "official" &&
+    (installRecord.joopohubPackage === packageName ||
+      installRecord.spec === officialInstall.joopohubSpec ||
+      installRecord.resolvedSpec === officialInstall.joopohubSpec)
   ) {
     return true;
   }

@@ -8,7 +8,7 @@ import type { SlashCommandResult } from "../slash-commands.js";
 function getConfiguredLogFiles(): string[] {
   const homeDir = getHomeDir();
   const files: string[] = [];
-  for (const cli of ["joopo", "clawdbot", "moltbot"]) {
+  for (const cli of ["joopo", "joopobot", "moltbot"]) {
     try {
       const cfgPath = path.join(homeDir, `.${cli}`, `${cli}.json`);
       const cfg = loadJsonFile<{ logging?: { file?: unknown } }>(cfgPath);
@@ -53,12 +53,12 @@ function collectCandidateLogDirs(): string[] {
     if (!value) {
       continue;
     }
-    if (/STATE_DIR$/i.test(key) && /(JOOPO|CLAWDBOT|MOLTBOT)/i.test(key)) {
+    if (/STATE_DIR$/i.test(key) && /(JOOPO|JOOPOBOT|MOLTBOT)/i.test(key)) {
       pushStateDir(value);
     }
   }
 
-  for (const name of [".joopo", ".clawdbot", ".moltbot", "joopo", "clawdbot", "moltbot"]) {
+  for (const name of [".joopo", ".joopobot", ".moltbot", "joopo", "joopobot", "moltbot"]) {
     pushDir(path.join(homeDir, name));
     pushDir(path.join(homeDir, name, "logs"));
   }
@@ -78,7 +78,7 @@ function collectCandidateLogDirs(): string[] {
         if (!entry.isDirectory()) {
           continue;
         }
-        if (!/(joopo|clawdbot|moltbot)/i.test(entry.name)) {
+        if (!/(joopo|joopobot|moltbot)/i.test(entry.name)) {
           continue;
         }
         const base = path.join(root, entry.name);
@@ -91,7 +91,7 @@ function collectCandidateLogDirs(): string[] {
   }
 
   if (!isWindows()) {
-    for (const name of ["joopo", "clawdbot", "moltbot"]) {
+    for (const name of ["joopo", "joopobot", "moltbot"]) {
       pushDir(path.join("/var/log", name));
     }
   }
@@ -112,7 +112,7 @@ function collectCandidateLogDirs(): string[] {
     tmpRoots.add("/tmp");
   }
   for (const tmpRoot of tmpRoots) {
-    for (const name of ["joopo", "clawdbot", "moltbot"]) {
+    for (const name of ["joopo", "joopobot", "moltbot"]) {
       pushDir(path.join(tmpRoot, name));
     }
   }
@@ -177,7 +177,7 @@ function collectRecentLogFiles(logDirs: string[]): LogCandidate[] {
     pushFile(path.join(dir, "gateway.log"), dir);
     pushFile(path.join(dir, "gateway.err.log"), dir);
     pushFile(path.join(dir, "joopo.log"), dir);
-    pushFile(path.join(dir, "clawdbot.log"), dir);
+    pushFile(path.join(dir, "joopobot.log"), dir);
     pushFile(path.join(dir, "moltbot.log"), dir);
 
     try {
@@ -189,7 +189,7 @@ function collectRecentLogFiles(logDirs: string[]): LogCandidate[] {
         if (!/\.(log|txt)$/i.test(entry.name)) {
           continue;
         }
-        if (!/(gateway|joopo|clawdbot|moltbot)/i.test(entry.name)) {
+        if (!/(gateway|joopo|joopobot|moltbot)/i.test(entry.name)) {
           continue;
         }
         pushFile(path.join(dir, entry.name), dir);

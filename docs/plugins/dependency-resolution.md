@@ -107,14 +107,14 @@ local plugin.
 
 Lightweight and core-critical bundled plugins are shipped as part of Joopo.
 They should either have no heavy runtime dependency tree or be moved out to a
-downloadable package on ClawHub/npm.
+downloadable package on JoopoHub/npm.
 
 For the current generated list of plugins that ship in the core package, install
 externally, or stay source-only, see [Plugin inventory](/plugins/plugin-inventory).
 
 Bundled plugin manifests must not request dependency staging. Large or optional
 plugin functionality should be packaged as a normal plugin and installed through
-the same npm/git/ClawHub path as third-party plugins.
+the same npm/git/JoopoHub path as third-party plugins.
 
 In source checkouts, Joopo treats the repository as a pnpm monorepo. After
 `pnpm install`, bundled plugins load from `extensions/<id>` so package-local
@@ -124,9 +124,9 @@ not a supported way to prepare bundled plugin dependencies.
 
 | Install shape                    | Bundled plugin location               | Dependency owner                                                     |
 | -------------------------------- | ------------------------------------- | -------------------------------------------------------------------- |
-| `npm install -g joopo`        | Built runtime tree inside the package | Joopo package and explicit plugin install/update/doctor flows     |
+| `npm install -g joopo`           | Built runtime tree inside the package | Joopo package and explicit plugin install/update/doctor flows        |
 | Git checkout plus `pnpm install` | `extensions/<id>` workspace packages  | The pnpm workspace, including each plugin package's own dependencies |
-| `joopo plugins install ...`   | Managed npm/git/ClawHub plugin root   | The plugin install/update flow                                       |
+| `joopo plugins install ...`      | Managed npm/git/JoopoHub plugin root  | The plugin install/update flow                                       |
 
 ## Legacy cleanup
 

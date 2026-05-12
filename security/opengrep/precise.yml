@@ -1514,7 +1514,7 @@ rules:
       - typescript
       - javascript
     severity: WARNING
-    message: Workspace .env runtime-control blocklist looks incomplete. Guard helpers should block JOOPO_GATEWAY_URL/PORT, JOOPO_UPDATE_*, JOOPO_SKIP_*, and ClawHub/browser-control variables, not just auth keys and _BASE_URL redirects.
+    message: Workspace .env runtime-control blocklist looks incomplete. Guard helpers should block JOOPO_GATEWAY_URL/PORT, JOOPO_UPDATE_*, JOOPO_SKIP_*, and JoopoHub/browser-control variables, not just auth keys and _BASE_URL redirects.
     patterns:
       - pattern-either:
           - pattern: |
@@ -1526,8 +1526,8 @@ rules:
       - pattern-not-regex: JOOPO_BROWSER_EXECUTABLE_PATH
       - pattern-not-regex: JOOPO_SKIP_
       - pattern-not-regex: JOOPO_UPDATE_
-      - pattern-not-regex: JOOPO_CLAWHUB_
-      - pattern-not-regex: CLAWHUB_
+      - pattern-not-regex: JOOPO_JOOPOHUB_
+      - pattern-not-regex: JOOPOHUB_
     metadata:
       ghsa: GHSA-7WV4-CC7P-JHXC
       advisory-url: https://github.com/joopo/joopo/security/advisories/GHSA-7WV4-CC7P-JHXC

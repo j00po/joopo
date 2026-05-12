@@ -3,23 +3,23 @@ import path from "node:path";
 import { resolveBundledInstallPlanForCatalogEntry } from "../cli/plugin-install-plan.js";
 import { assertConfigWriteAllowedInCurrentMode } from "../config/nix-mode-write-guard.js";
 import type { JoopoConfig } from "../config/types.joopo.js";
-import { parseClawHubPluginSpec } from "../infra/clawhub-spec.js";
+import { parseJoopoHubPluginSpec } from "../infra/joopohub-spec.js";
 import { parseRegistryNpmSpec } from "../infra/npm-registry-spec.js";
 import { normalizeUpdateChannel, resolveRegistryUpdateChannel } from "../infra/update-channels.js";
 import {
   findBundledPluginSourceInMap,
   resolveBundledPluginSources,
 } from "../plugins/bundled-sources.js";
-import { buildClawHubPluginInstallRecordFields } from "../plugins/clawhub-install-records.js";
-import { CLAWHUB_INSTALL_ERROR_CODE } from "../plugins/clawhub.js";
 import { enablePluginInConfig, type PluginEnableResult } from "../plugins/enable.js";
 import {
-  resolveClawHubInstallSpecsForUpdateChannel,
+  resolveJoopoHubInstallSpecsForUpdateChannel,
   resolveNpmInstallSpecsForUpdateChannel,
 } from "../plugins/install-channel-specs.js";
 import { resolveDefaultPluginExtensionsDir } from "../plugins/install-paths.js";
 import { installPluginFromNpmSpec } from "../plugins/install.js";
 import { buildNpmResolutionInstallFields, recordPluginInstall } from "../plugins/installs.js";
+import { buildJoopoHubPluginInstallRecordFields } from "../plugins/joopohub-install-records.js";
+import { JOOPOHUB_INSTALL_ERROR_CODE } from "../plugins/joopohub.js";
 import type { PluginPackageInstall } from "../plugins/manifest.js";
 import type { RuntimeEnv } from "../runtime.js";
 import { sanitizeTerminalText } from "../terminal/safe-text.js";
@@ -27,9 +27,9 @@ import { withTimeout } from "../utils/with-timeout.js";
 import { VERSION } from "../version.js";
 import type { WizardPrompter } from "../wizard/prompts.js";
 
-type InstallChoice = "clawhub" | "npm" | "local" | "skip";
-type InstallPluginFromClawHubResult = Awaited<
-  ReturnType<(typeof import("../plugins/clawhub.js"))["installPluginFromClawHub"]>
+type InstallChoice = "joopohub" | "npm" | "local" | "skip";
+type InstallPluginFromJoopoHubResult = Awaited<
+  ReturnType<(typeof import("../plugins/joopohub.js"))["installPluginFromJoopoHub"]>
 >;
 const ONBOARDING_PLUGIN_INSTALL_TIMEOUT_MS = 5 * 60 * 1000;
 const ONBOARDING_PLUGIN_INSTALL_WATCHDOG_TIMEOUT_MS = ONBOARDING_PLUGIN_INSTALL_TIMEOUT_MS + 5_000;
@@ -50,10 +50,10 @@ export type OnboardingPluginInstallResult = {
   status: OnboardingPluginInstallStatus;
 };
 
-function shouldFallbackClawHubToNpm(result: { ok: false; code?: string }): boolean {
+function shouldFallbackJoopoHubToNpm(result: { ok: false; code?: string }): boolean {
   return (
-    result.code === CLAWHUB_INSTALL_ERROR_CODE.PACKAGE_NOT_FOUND ||
-    result.code === CLAWHUB_INSTALL_ERROR_CODE.VERSION_NOT_FOUND
+    result.code === JOOPOHUB_INSTALL_ERROR_CODE.PACKAGE_NOT_FOUND ||
+    result.code === JOOPOHUB_INSTALL_ERROR_CODE.VERSION_NOT_FOUND
   );
 }
 
@@ -270,13 +270,13 @@ function resolveNpmSpecForOnboarding(install: PluginPackageInstall): string | nu
   return parsed ? npmSpec : null;
 }
 
-function resolveClawHubSpecForOnboarding(install: PluginPackageInstall): string | null {
-  const clawhubSpec = install.clawhubSpec?.trim();
-  if (!clawhubSpec) {
+function resolveJoopoHubSpecForOnboarding(install: PluginPackageInstall): string | null {
+  const joopohubSpec = install.joopohubSpec?.trim();
+  if (!joopohubSpec) {
     return null;
   }
-  const parsed = parseClawHubPluginSpec(clawhubSpec);
-  return parsed ? clawhubSpec : null;
+  const parsed = parseJoopoHubPluginSpec(joopohubSpec);
+  return parsed ? joopohubSpec : null;
 }
 
 function resolveInstallDefaultChoice(params: {
@@ -284,20 +284,20 @@ function resolveInstallDefaultChoice(params: {
   entry: OnboardingPluginInstallEntry;
   localPath?: string | null;
   bundledLocalPath?: string | null;
-  hasClawHubSpec: boolean;
+  hasJoopoHubSpec: boolean;
   hasNpmSpec: boolean;
 }): InstallChoice {
-  const { cfg, entry, localPath, bundledLocalPath, hasClawHubSpec, hasNpmSpec } = params;
-  const hasRemoteSpec = hasClawHubSpec || hasNpmSpec;
+  const { cfg, entry, localPath, bundledLocalPath, hasJoopoHubSpec, hasNpmSpec } = params;
+  const hasRemoteSpec = hasJoopoHubSpec || hasNpmSpec;
   const entryDefault = entry.install.defaultChoice;
   const remoteDefault = (): InstallChoice => {
-    if (entryDefault === "clawhub" && hasClawHubSpec) {
-      return "clawhub";
+    if (entryDefault === "joopohub" && hasJoopoHubSpec) {
+      return "joopohub";
     }
     if (entryDefault === "npm" && hasNpmSpec) {
       return "npm";
     }
-    return hasNpmSpec ? "npm" : "clawhub";
+    return hasNpmSpec ? "npm" : "joopohub";
   };
   if (!hasRemoteSpec) {
     return localPath ? "local" : "skip";
@@ -333,9 +333,9 @@ async function promptInstallChoice(params: {
    *  (e.g. they just picked the channel in a previous menu). */
   autoConfirmSingleSource?: boolean;
   effectiveNpmSpec?: string | null;
-  effectiveClawHubSpec?: string | null;
+  effectiveJoopoHubSpec?: string | null;
 }): Promise<InstallChoice> {
-  const rawClawHubSpec = resolveClawHubSpecForOnboarding(params.entry.install);
+  const rawJoopoHubSpec = resolveJoopoHubSpecForOnboarding(params.entry.install);
   const rawNpmSpec = resolveNpmSpecForOnboarding(params.entry.install);
   // When the plugin already ships bundled with the host (i.e. lives under
   // `extensions/<id>` and is discovered via `resolveBundledPluginSources`),
@@ -345,19 +345,19 @@ async function promptInstallChoice(params: {
   // case is misleading; those catalog specs only exist as fallback metadata for
   // non-bundled builds. Hide them so bundled channels like Tlon look identical
   // to Twitch / Slack in the menu.
-  const clawhubSpec = params.bundledLocalPath
+  const joopohubSpec = params.bundledLocalPath
     ? null
-    : (params.effectiveClawHubSpec ?? rawClawHubSpec);
+    : (params.effectiveJoopoHubSpec ?? rawJoopoHubSpec);
   const npmSpec = params.bundledLocalPath ? null : (params.effectiveNpmSpec ?? rawNpmSpec);
   const safeLabel = sanitizeTerminalText(params.entry.label);
-  const safeClawHubSpec = clawhubSpec ? sanitizeTerminalText(clawhubSpec) : null;
+  const safeJoopoHubSpec = joopohubSpec ? sanitizeTerminalText(joopohubSpec) : null;
   const safeNpmSpec = npmSpec ? sanitizeTerminalText(npmSpec) : null;
   const safeLocalPath = params.localPath ? sanitizeTerminalText(params.localPath) : null;
   const options: Array<{ value: InstallChoice; label: string; hint?: string }> = [];
-  if (safeClawHubSpec) {
+  if (safeJoopoHubSpec) {
     options.push({
-      value: "clawhub",
-      label: `Download from ClawHub (${safeClawHubSpec})`,
+      value: "joopohub",
+      label: `Download from JoopoHub (${safeJoopoHubSpec})`,
     });
   }
   if (safeNpmSpec) {
@@ -376,8 +376,8 @@ async function promptInstallChoice(params: {
 
   if (params.autoConfirmSingleSource) {
     const realSources: InstallChoice[] = [];
-    if (safeClawHubSpec) {
-      realSources.push("clawhub");
+    if (safeJoopoHubSpec) {
+      realSources.push("joopohub");
     }
     if (safeNpmSpec) {
       realSources.push("npm");
@@ -394,20 +394,20 @@ async function promptInstallChoice(params: {
 
   const initialValue =
     params.defaultChoice === "local" && !params.localPath
-      ? clawhubSpec
-        ? "clawhub"
+      ? joopohubSpec
+        ? "joopohub"
         : npmSpec
           ? "npm"
           : "skip"
-      : params.defaultChoice === "clawhub" && !clawhubSpec
+      : params.defaultChoice === "joopohub" && !joopohubSpec
         ? npmSpec
           ? "npm"
           : params.localPath
             ? "local"
             : "skip"
         : params.defaultChoice === "npm" && !npmSpec
-          ? clawhubSpec
-            ? "clawhub"
+          ? joopohubSpec
+            ? "joopohub"
             : params.localPath
               ? "local"
               : "skip"
@@ -475,7 +475,7 @@ const PROGRESS_BAR_MAX_PERCENT = 99;
 
 /**
  * Maps a verbose install log line (e.g. `Downloading @scope/pkg@1.2.3 from
- * ClawHub…`, `Extracting /tmp/…/wecom-…-2026.4.23.tgz…`, `Installing to
+ * JoopoHub…`, `Extracting /tmp/…/wecom-…-2026.4.23.tgz…`, `Installing to
  * /home/.../plugins/demo…`) to a short verb suitable for a progress label.
  *
  * Falls back to the raw message when no known verb prefix is recognised so
@@ -497,7 +497,7 @@ function shortenInstallLabel(message: string): string {
     [/^Linking\b/i, "Linking"],
     [/^Linked\b/i, "Linking"],
     [/^Compatibility\b/i, "Resolving"],
-    [/^ClawHub\b/i, "Resolving"],
+    [/^JoopoHub\b/i, "Resolving"],
   ];
   for (const [pattern, label] of patterns) {
     if (pattern.test(trimmed)) {
@@ -648,16 +648,16 @@ async function installPluginFromNpmSpecWithProgress(params: {
   }
 }
 
-async function installPluginFromClawHubSpecWithProgress(params: {
+async function installPluginFromJoopoHubSpecWithProgress(params: {
   entry: OnboardingPluginInstallEntry;
-  clawhubSpec: string;
+  joopohubSpec: string;
   prompter: WizardPrompter;
   runtime: RuntimeEnv;
 }): Promise<
   | { status: "timed_out" }
   | {
       status: "completed";
-      result: InstallPluginFromClawHubResult;
+      result: InstallPluginFromJoopoHubResult;
     }
 > {
   const safeLabel = sanitizeTerminalText(params.entry.label);
@@ -673,10 +673,10 @@ async function installPluginFromClawHubSpecWithProgress(params: {
   };
 
   try {
-    const { installPluginFromClawHub } = await import("../plugins/clawhub.js");
+    const { installPluginFromJoopoHub } = await import("../plugins/joopohub.js");
     const result = await withTimeout(
-      installPluginFromClawHub({
-        spec: params.clawhubSpec,
+      installPluginFromJoopoHub({
+        spec: params.joopohubSpec,
         timeoutMs: ONBOARDING_PLUGIN_INSTALL_TIMEOUT_MS,
         extensionsDir: resolveDefaultPluginExtensionsDir(),
         expectedPluginId: params.entry.pluginId,
@@ -738,15 +738,15 @@ export async function ensureOnboardingPluginInstalled(params: {
       workspaceDir,
       allowLocal,
     });
-  const clawhubSpec = resolveClawHubSpecForOnboarding(entry.install);
+  const joopohubSpec = resolveJoopoHubSpecForOnboarding(entry.install);
   const npmSpec = resolveNpmSpecForOnboarding(entry.install);
   const updateChannel = resolveRegistryUpdateChannel({
     configChannel: normalizeUpdateChannel(next.update?.channel),
     currentVersion: VERSION,
   });
-  const clawhubSpecs = clawhubSpec
-    ? resolveClawHubInstallSpecsForUpdateChannel({
-        spec: clawhubSpec,
+  const joopohubSpecs = joopohubSpec
+    ? resolveJoopoHubInstallSpecsForUpdateChannel({
+        spec: joopohubSpec,
         updateChannel,
       })
     : null;
@@ -756,14 +756,14 @@ export async function ensureOnboardingPluginInstalled(params: {
         updateChannel,
       })
     : null;
-  const clawhubInstallSpec = clawhubSpecs?.installSpec ?? clawhubSpec;
+  const joopohubInstallSpec = joopohubSpecs?.installSpec ?? joopohubSpec;
   const npmInstallSpec = npmSpecs?.installSpec ?? npmSpec;
   const defaultChoice = resolveInstallDefaultChoice({
     cfg: next,
     entry,
     localPath,
     bundledLocalPath,
-    hasClawHubSpec: Boolean(clawhubSpec),
+    hasJoopoHubSpec: Boolean(joopohubSpec),
     hasNpmSpec: Boolean(npmSpec),
   });
   const choice =
@@ -776,7 +776,7 @@ export async function ensureOnboardingPluginInstalled(params: {
           defaultChoice,
           prompter,
           autoConfirmSingleSource: params.autoConfirmSingleSource,
-          effectiveClawHubSpec: clawhubInstallSpec,
+          effectiveJoopoHubSpec: joopohubInstallSpec,
           effectiveNpmSpec: npmInstallSpec,
         });
 
@@ -825,10 +825,10 @@ export async function ensureOnboardingPluginInstalled(params: {
   }
 
   let shouldTryNpm = choice === "npm";
-  if (choice === "clawhub" && clawhubInstallSpec) {
-    const installOutcome = await installPluginFromClawHubSpecWithProgress({
+  if (choice === "joopohub" && joopohubInstallSpec) {
+    const installOutcome = await installPluginFromJoopoHubSpecWithProgress({
       entry,
-      clawhubSpec: clawhubInstallSpec,
+      joopohubSpec: joopohubInstallSpec,
       prompter,
       runtime,
     });
@@ -836,13 +836,13 @@ export async function ensureOnboardingPluginInstalled(params: {
     if (installOutcome.status === "timed_out") {
       await prompter.note(
         [
-          `Installing ${sanitizeTerminalText(clawhubInstallSpec)} timed out after ${formatDurationLabel(ONBOARDING_PLUGIN_INSTALL_TIMEOUT_MS)}.`,
+          `Installing ${sanitizeTerminalText(joopohubInstallSpec)} timed out after ${formatDurationLabel(ONBOARDING_PLUGIN_INSTALL_TIMEOUT_MS)}.`,
           "Returning to selection.",
         ].join("\n"),
         "Plugin install",
       );
       runtime.error?.(
-        `Plugin install timed out after ${ONBOARDING_PLUGIN_INSTALL_TIMEOUT_MS}ms: ${sanitizeTerminalText(clawhubInstallSpec)}`,
+        `Plugin install timed out after ${ONBOARDING_PLUGIN_INSTALL_TIMEOUT_MS}ms: ${sanitizeTerminalText(joopohubInstallSpec)}`,
       );
       return {
         cfg: next,
@@ -872,8 +872,8 @@ export async function ensureOnboardingPluginInstalled(params: {
       next = enableResult.config;
       next = recordPluginInstall(next, {
         pluginId: result.pluginId,
-        ...buildClawHubPluginInstallRecordFields(result.clawhub),
-        spec: clawhubSpecs?.recordSpec ?? clawhubInstallSpec,
+        ...buildJoopoHubPluginInstallRecordFields(result.joopohub),
+        spec: joopohubSpecs?.recordSpec ?? joopohubInstallSpec,
         installPath: result.targetDir,
       });
       return {
@@ -886,13 +886,13 @@ export async function ensureOnboardingPluginInstalled(params: {
 
     await prompter.note(
       [
-        `Failed to install ${sanitizeTerminalText(clawhubInstallSpec)}: ${summarizeInstallError(result.error)}`,
+        `Failed to install ${sanitizeTerminalText(joopohubInstallSpec)}: ${summarizeInstallError(result.error)}`,
         "Returning to selection.",
       ].join("\n"),
       "Plugin install",
     );
 
-    if (!npmInstallSpec || !shouldFallbackClawHubToNpm(result)) {
+    if (!npmInstallSpec || !shouldFallbackJoopoHubToNpm(result)) {
       runtime.error?.(`Plugin install failed: ${sanitizeTerminalText(result.error)}`);
       return {
         cfg: next,

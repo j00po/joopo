@@ -37,10 +37,7 @@ vi.mock("../channels/plugins/bundled.js", async () => {
     return boundAccountId ?? cfg.channels?.telegram?.defaultAccount ?? "default";
   }
 
-  function detectTelegramAllowFromMigration(params: {
-    cfg: JoopoConfig;
-    env: NodeJS.ProcessEnv;
-  }) {
+  function detectTelegramAllowFromMigration(params: { cfg: JoopoConfig; env: NodeJS.ProcessEnv }) {
     const root = params.env.JOOPO_STATE_DIR;
     if (!root) {
       return [];
@@ -286,7 +283,7 @@ const DIR_LINK_TYPE = process.platform === "win32" ? "junction" : "dir";
 function getStateDirMigrationPaths(root: string) {
   return {
     targetDir: path.join(root, ".joopo"),
-    legacyDir: path.join(root, ".clawdbot"),
+    legacyDir: path.join(root, ".joopobot"),
   };
 }
 

@@ -90,7 +90,7 @@ describe("scripts/lib/plugin-prerelease-test-plan.mjs", () => {
     ]);
   });
 
-  it("uses kitchen-sink npm and ClawHub scenarios as the registry install canary", () => {
+  it("uses kitchen-sink npm and JoopoHub scenarios as the registry install canary", () => {
     const lane = getDockerLane("kitchen-sink-plugin");
     const script = readFileSync("scripts/e2e/kitchen-sink-plugin-docker.sh", "utf8");
     const sweepScript = readFileSync("scripts/e2e/lib/kitchen-sink-plugin/sweep.sh", "utf8");
@@ -112,10 +112,10 @@ describe("scripts/lib/plugin-prerelease-test-plan.mjs", () => {
     expect(script).toContain("npm-latest-conformance");
     expect(script).toContain("npm-latest-adversarial");
     expect(script).toContain("npm:@joopo/kitchen-sink@beta");
-    expect(script).toContain("clawhub:@joopo/kitchen-sink@latest");
-    expect(script).toContain("clawhub:@joopo/kitchen-sink@beta");
+    expect(script).toContain("joopohub:@joopo/kitchen-sink@latest");
+    expect(script).toContain("joopohub:@joopo/kitchen-sink@beta");
     expect(script).toContain(
-      "npm-to-clawhub|clawhub:@joopo/kitchen-sink@latest|joopo-kitchen-sink-fixture|clawhub|success|basic||${KITCHEN_SINK_NPM_SPEC}",
+      "npm-to-joopohub|joopohub:@joopo/kitchen-sink@latest|joopo-kitchen-sink-fixture|joopohub|success|basic||${KITCHEN_SINK_NPM_SPEC}",
     );
     expect(script).toContain("scripts/e2e/lib/kitchen-sink-plugin/sweep.sh");
     expect(sweepScript).toContain('plugins install "$KITCHEN_SINK_SPEC"');
@@ -140,21 +140,21 @@ describe("scripts/lib/plugin-prerelease-test-plan.mjs", () => {
     expect(sweepScript).toContain("run_failure_scenario");
     expect(assertionsScript).toContain("assertCutoverPreinstalled");
     expect(assertionsScript).toContain("record.source !== source");
-    expect(assertionsScript).toContain("record.clawhubPackage !== packageName");
+    expect(assertionsScript).toContain("record.joopohubPackage !== packageName");
     expect(assertionsScript).toContain("record.clawpackSha256");
     expect(assertionsScript).toContain("record.artifactKind");
     expect(assertionsScript).toContain("record.npmIntegrity");
-    expect(assertionsScript).toContain("assertClawHubExternalInstallContract");
+    expect(assertionsScript).toContain("assertJoopoHubExternalInstallContract");
     expect(assertionsScript).toContain("expectedErrorMessages");
     expect(assertionsScript).toContain(
       'const INVALID_PROBE_DIAGNOSTIC_SURFACE_MODES = new Set(["full", "conformance", "adversarial"]);',
     );
     expect(assertionsScript).toContain("!INVALID_PROBE_DIAGNOSTIC_SURFACE_MODES.has(surfaceMode)");
-    expect(readFileSync("scripts/e2e/lib/clawhub-fixture-server.cjs", "utf8")).toContain(
+    expect(readFileSync("scripts/e2e/lib/joopohub-fixture-server.cjs", "utf8")).toContain(
       'from "joopo/plugin-sdk/plugin-entry"',
     );
-    expect(readFileSync("scripts/e2e/lib/clawhub-fixture-server.cjs", "utf8")).toContain(
-      "X-ClawHub-Artifact-Sha256",
+    expect(readFileSync("scripts/e2e/lib/joopohub-fixture-server.cjs", "utf8")).toContain(
+      "X-JoopoHub-Artifact-Sha256",
     );
     expect(script).toContain("docker stats --no-stream");
     expect(sweepScript).toContain("scan_logs_for_unexpected_errors");
@@ -163,9 +163,9 @@ describe("scripts/lib/plugin-prerelease-test-plan.mjs", () => {
   it("keeps the generic plugin Docker lane as an external install contract canary", () => {
     const lane = getDockerLane("plugins");
     const sweepScript = readFileSync("scripts/e2e/lib/plugins/sweep.sh", "utf8");
-    const clawhubScript = readFileSync("scripts/e2e/lib/plugins/clawhub.sh", "utf8");
+    const joopohubScript = readFileSync("scripts/e2e/lib/plugins/joopohub.sh", "utf8");
     const assertionsScript = readFileSync("scripts/e2e/lib/plugins/assertions.mjs", "utf8");
-    const fixtureServer = readFileSync("scripts/e2e/lib/clawhub-fixture-server.cjs", "utf8");
+    const fixtureServer = readFileSync("scripts/e2e/lib/joopohub-fixture-server.cjs", "utf8");
     const prereleasePlan = createPluginPrereleaseTestPlan();
 
     expect(lane).toEqual(
@@ -177,9 +177,9 @@ describe("scripts/lib/plugin-prerelease-test-plan.mjs", () => {
       }),
     );
     expect(prereleasePlan.surfaces).toContain("external-install-boundary");
-    expect(sweepScript).toContain("run_plugins_clawhub_scenario");
-    expect(clawhubScript).toContain('plugins install "$CLAWHUB_PLUGIN_SPEC"');
-    expect(assertionsScript).toContain("assertClawHubExternalInstallContract");
+    expect(sweepScript).toContain("run_plugins_joopohub_scenario");
+    expect(joopohubScript).toContain('plugins install "$JOOPOHUB_PLUGIN_SPEC"');
+    expect(assertionsScript).toContain("assertJoopoHubExternalInstallContract");
     expect(assertionsScript).toContain('node_modules", "joopo');
     expect(fixtureServer).toContain('"is-number": "7.0.0"');
     expect(fixtureServer).toContain('joopo: ">=2026.4.11"');

@@ -82,8 +82,8 @@ import type {
 import type { ExecApprovalRequest } from "./controllers/exec-approval.ts";
 import type { ExecApprovalsFile, ExecApprovalsSnapshot } from "./controllers/exec-approvals.ts";
 import type {
-  ClawHubSearchResult,
-  ClawHubSkillDetail,
+  JoopoHubSearchResult,
+  JoopoHubSkillDetail,
   SkillMessage,
 } from "./controllers/skills.ts";
 import { importCustomThemeFromUrl } from "./custom-theme.ts";
@@ -519,16 +519,16 @@ export class JoopoApp extends LitElement {
   @state() skillsBusyKey: string | null = null;
   @state() skillMessages: Record<string, SkillMessage> = {};
   @state() skillsDetailKey: string | null = null;
-  @state() clawhubSearchQuery = "";
-  @state() clawhubSearchResults: ClawHubSearchResult[] | null = null;
-  @state() clawhubSearchLoading = false;
-  @state() clawhubSearchError: string | null = null;
-  @state() clawhubDetail: ClawHubSkillDetail | null = null;
-  @state() clawhubDetailSlug: string | null = null;
-  @state() clawhubDetailLoading = false;
-  @state() clawhubDetailError: string | null = null;
-  @state() clawhubInstallSlug: string | null = null;
-  @state() clawhubInstallMessage: { kind: "success" | "error"; text: string } | null = null;
+  @state() joopohubSearchQuery = "";
+  @state() joopohubSearchResults: JoopoHubSearchResult[] | null = null;
+  @state() joopohubSearchLoading = false;
+  @state() joopohubSearchError: string | null = null;
+  @state() joopohubDetail: JoopoHubSkillDetail | null = null;
+  @state() joopohubDetailSlug: string | null = null;
+  @state() joopohubDetailLoading = false;
+  @state() joopohubDetailError: string | null = null;
+  @state() joopohubInstallSlug: string | null = null;
+  @state() joopohubInstallMessage: { kind: "success" | "error"; text: string } | null = null;
 
   @state() healthLoading = false;
   @state() healthResult: HealthSummary | null = null;

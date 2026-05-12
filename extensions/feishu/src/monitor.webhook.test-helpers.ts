@@ -1,7 +1,7 @@
 import { createServer } from "node:http";
 import type { AddressInfo } from "node:net";
 import { vi } from "vitest";
-import type { ClawdbotConfig } from "../runtime-api.js";
+import type { JoopobotConfig } from "../runtime-api.js";
 import type { monitorFeishuProvider } from "./monitor.js";
 
 const WEBHOOK_READY_MAX_ATTEMPTS = 200;
@@ -40,7 +40,7 @@ export function buildWebhookConfig(params: {
   port: number;
   verificationToken?: string;
   encryptKey?: string;
-}): ClawdbotConfig {
+}): JoopobotConfig {
   return {
     channels: {
       feishu: {
@@ -60,7 +60,7 @@ export function buildWebhookConfig(params: {
         },
       },
     },
-  } as ClawdbotConfig;
+  } as JoopobotConfig;
 }
 
 export async function withRunningWebhookMonitor(

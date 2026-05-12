@@ -217,9 +217,9 @@ describe("parseCrestodianOperation", () => {
       kind: "plugin-install",
       spec: "npm:@joopo/demo",
     });
-    expect(parseCrestodianOperation("plugin install clawhub:joopo-demo")).toEqual({
+    expect(parseCrestodianOperation("plugin install joopohub:joopo-demo")).toEqual({
       kind: "plugin-install",
-      spec: "clawhub:joopo-demo",
+      spec: "joopohub:joopo-demo",
     });
     expect(parseCrestodianOperation("plugin uninstall joopo-demo")).toEqual({
       kind: "plugin-uninstall",
@@ -398,38 +398,34 @@ describe("parseCrestodianOperation", () => {
     });
 
     const plan = await executeCrestodianOperation(
-      { kind: "plugin-install", spec: "clawhub:joopo-demo" },
+      { kind: "plugin-install", spec: "joopohub:joopo-demo" },
       runtime,
       { deps: { runPluginInstall } },
     );
     expect(plan).toMatchObject({
       applied: false,
-      message: "Plan: install plugin clawhub:joopo-demo. Say yes to apply.",
+      message: "Plan: install plugin joopohub:joopo-demo. Say yes to apply.",
     });
     expect(runPluginInstall).not.toHaveBeenCalled();
 
     await expect(
-      executeCrestodianOperation(
-        { kind: "plugin-install", spec: "clawhub:joopo-demo" },
-        runtime,
-        {
-          approved: true,
-          deps: { runPluginInstall },
-          auditDetails: { rescue: true },
-        },
-      ),
+      executeCrestodianOperation({ kind: "plugin-install", spec: "joopohub:joopo-demo" }, runtime, {
+        approved: true,
+        deps: { runPluginInstall },
+        auditDetails: { rescue: true },
+      }),
     ).resolves.toMatchObject({ applied: true });
 
-    expect(runPluginInstall).toHaveBeenCalledWith("clawhub:joopo-demo", expect.any(Object));
+    expect(runPluginInstall).toHaveBeenCalledWith("joopohub:joopo-demo", expect.any(Object));
     expect(lines.join("\n")).toContain("[crestodian] done: plugin.install");
     const auditPath = path.join(tempDir, "audit", "crestodian.jsonl");
     const audit = JSON.parse((await fs.readFile(auditPath, "utf8")).trim());
     expect(audit).toMatchObject({
       operation: "plugin.install",
-      summary: "Installed plugin clawhub:joopo-demo",
+      summary: "Installed plugin joopohub:joopo-demo",
       details: {
         rescue: true,
-        spec: "clawhub:joopo-demo",
+        spec: "joopohub:joopo-demo",
       },
     });
   });

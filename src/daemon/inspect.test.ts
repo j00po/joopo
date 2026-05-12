@@ -45,12 +45,12 @@ Restart=on-failure
 WantedBy=default.target
 `;
 
-const CLAWDBOT_GATEWAY_CONTENTS = `\
+const JOOPOBOT_GATEWAY_CONTENTS = `\
 [Unit]
-Description=Clawdbot Gateway
+Description=Joopobot Gateway
 [Service]
-ExecStart=/usr/bin/node /opt/clawdbot/dist/entry.js gateway --port 18789
-Environment=HOME=/home/clawdbot
+ExecStart=/usr/bin/node /opt/joopobot/dist/entry.js gateway --port 18789
+Environment=HOME=/home/joopobot
 `;
 
 const COMPANION_SERVICE_CONTENTS = `\
@@ -80,8 +80,8 @@ describe("detectMarkerLineWithGateway", () => {
     expect(detectMarkerLineWithGateway(GATEWAY_SERVICE_CONTENTS)).toBe("joopo");
   });
 
-  it("returns clawdbot for a clawdbot gateway unit", () => {
-    expect(detectMarkerLineWithGateway(CLAWDBOT_GATEWAY_CONTENTS)).toBe("clawdbot");
+  it("returns joopobot for a joopobot gateway unit", () => {
+    expect(detectMarkerLineWithGateway(JOOPOBOT_GATEWAY_CONTENTS)).toBe("joopobot");
   });
 
   it("handles line continuations — marker and gateway split across physical lines", () => {
@@ -138,22 +138,22 @@ describe("findExtraGatewayServices (linux / scanSystemdDir) — real filesystem"
   );
 
   it.skipIf(!isLinux)(
-    "reports a legacy clawdbot-gateway service as an extra gateway service",
+    "reports a legacy joopobot-gateway service as an extra gateway service",
     async () => {
       const tmpHome = await fs.mkdtemp(path.join(os.tmpdir(), "joopo-test-"));
       const systemdDir = path.join(tmpHome, ".config", "systemd", "user");
-      const unitPath = path.join(systemdDir, "clawdbot-gateway.service");
+      const unitPath = path.join(systemdDir, "joopobot-gateway.service");
       try {
         await fs.mkdir(systemdDir, { recursive: true });
-        await fs.writeFile(unitPath, CLAWDBOT_GATEWAY_CONTENTS);
+        await fs.writeFile(unitPath, JOOPOBOT_GATEWAY_CONTENTS);
         const result = await findExtraGatewayServices({ HOME: tmpHome });
         expect(result).toEqual([
           {
             platform: "linux",
-            label: "clawdbot-gateway.service",
+            label: "joopobot-gateway.service",
             detail: `unit: ${unitPath}`,
             scope: "user",
-            marker: "clawdbot",
+            marker: "joopobot",
             legacy: true,
           },
         ]);
@@ -182,31 +182,28 @@ describe("findExtraGatewayServices (linux / scanSystemdDir) — real filesystem"
     },
   );
 
-  it.skipIf(!isLinux)(
-    "reports custom-named gateway units that execute joopo gateway",
-    async () => {
-      const tmpHome = await fs.mkdtemp(path.join(os.tmpdir(), "joopo-test-"));
-      const systemdDir = path.join(tmpHome, ".config", "systemd", "user");
-      const unitPath = path.join(systemdDir, "custom-joopo.service");
-      try {
-        await fs.mkdir(systemdDir, { recursive: true });
-        await fs.writeFile(unitPath, CUSTOM_JOOPO_GATEWAY_CONTENTS);
-        const result = await findExtraGatewayServices({ HOME: tmpHome });
-        expect(result).toEqual([
-          {
-            platform: "linux",
-            label: "custom-joopo.service",
-            detail: `unit: ${unitPath}`,
-            scope: "user",
-            marker: "joopo",
-            legacy: false,
-          },
-        ]);
-      } finally {
-        await fs.rm(tmpHome, { recursive: true, force: true });
-      }
-    },
-  );
+  it.skipIf(!isLinux)("reports custom-named gateway units that execute joopo gateway", async () => {
+    const tmpHome = await fs.mkdtemp(path.join(os.tmpdir(), "joopo-test-"));
+    const systemdDir = path.join(tmpHome, ".config", "systemd", "user");
+    const unitPath = path.join(systemdDir, "custom-joopo.service");
+    try {
+      await fs.mkdir(systemdDir, { recursive: true });
+      await fs.writeFile(unitPath, CUSTOM_JOOPO_GATEWAY_CONTENTS);
+      const result = await findExtraGatewayServices({ HOME: tmpHome });
+      expect(result).toEqual([
+        {
+          platform: "linux",
+          label: "custom-joopo.service",
+          detail: `unit: ${unitPath}`,
+          scope: "user",
+          marker: "joopo",
+          legacy: false,
+        },
+      ]);
+    } finally {
+      await fs.rm(tmpHome, { recursive: true, force: true });
+    }
+  });
 });
 
 describe("findExtraGatewayServices (darwin / scanLaunchdDir) — real filesystem", () => {
@@ -340,8 +337,8 @@ describe("findExtraGatewayServices (win32)", () => {
         "TaskName: Joopo Gateway",
         "Task To Run: C:\\Program Files\\Joopo\\joopo.exe gateway run",
         "",
-        "TaskName: Clawdbot Legacy",
-        "Task To Run: C:\\clawdbot\\clawdbot.exe run",
+        "TaskName: Joopobot Legacy",
+        "Task To Run: C:\\joopobot\\joopobot.exe run",
         "",
         "TaskName: Other Task",
         "Task To Run: C:\\tools\\helper.exe",
@@ -354,10 +351,10 @@ describe("findExtraGatewayServices (win32)", () => {
     expect(result).toEqual([
       {
         platform: "win32",
-        label: "Clawdbot Legacy",
-        detail: "task: Clawdbot Legacy, run: C:\\clawdbot\\clawdbot.exe run",
+        label: "Joopobot Legacy",
+        detail: "task: Joopobot Legacy, run: C:\\joopobot\\joopobot.exe run",
         scope: "system",
-        marker: "clawdbot",
+        marker: "joopobot",
         legacy: true,
       },
     ]);
