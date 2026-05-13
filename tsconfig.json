@@ -23,6 +23,8 @@
       "joopo/plugin-sdk": ["./src/plugin-sdk/index.ts"],
       "joopo/plugin-sdk/*": ["./src/plugin-sdk/*.ts"],
       "@joopo/sdk": ["./packages/sdk/src/index.ts"],
+      "@joopo/fs-safe": ["./packages/fs-safe/src/index.ts"],
+      "@joopo/fs-safe/*": ["./packages/fs-safe/src/*.ts"],
       "@joopo/plugin-sdk": ["./src/plugin-sdk/index.ts"],
       "@joopo/plugin-sdk/*": ["./src/plugin-sdk/*.ts"],
       "joopo/plugin-sdk/account-id": ["./src/plugin-sdk/account-id.ts"],

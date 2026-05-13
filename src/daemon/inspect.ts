@@ -25,7 +25,7 @@ export type FindExtraGatewayServicesOptions = {
   deep?: boolean;
 };
 
-const EXTRA_MARKERS = ["joopo", "joopobot"] as const;
+const EXTRA_MARKERS = ["joopobot", "joopo"] as const;
 const SYSTEMD_REFERENCE_ONLY_KEYS = new Set([
   "after",
   "before",
