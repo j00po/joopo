@@ -87,7 +87,7 @@ jobs:
           close-issue-reason: not_planned
           close-pr-message: |
             Closing due to inactivity.
-            If you believe this PR should be revived, post in #clawtributors on Discord to talk to a maintainer.
+            If you believe this PR should be revived, post in #contributors on Discord to talk to a maintainer.
             That channel is the escape hatch for high-quality PRs that get auto-closed.
       - name: Mark stale assigned issues (primary)
         id: assigned-issue-stale-primary
@@ -135,7 +135,7 @@ jobs:
             Please add updates or it will be closed.
           close-pr-message: |
             Closing due to inactivity.
-            If you believe this PR should be revived, post in #clawtributors on Discord to talk to a maintainer.
+            If you believe this PR should be revived, post in #contributors on Discord to talk to a maintainer.
             That channel is the escape hatch for high-quality PRs that get auto-closed.
       - name: Check stale state cache
         id: stale-state
@@ -191,7 +191,7 @@ jobs:
           close-issue-reason: not_planned
           close-pr-message: |
             Closing due to inactivity.
-            If you believe this PR should be revived, post in #clawtributors on Discord to talk to a maintainer.
+            If you believe this PR should be revived, post in #contributors on Discord to talk to a maintainer.
             That channel is the escape hatch for high-quality PRs that get auto-closed.
       - name: Mark stale assigned issues (fallback)
         if: (steps.assigned-issue-stale-primary.outcome == 'failure' || steps.stale-state.outputs.has_state == 'true') && steps.app-token-fallback.outputs.token != ''
@@ -237,7 +237,7 @@ jobs:
             Please add updates or it will be closed.
           close-pr-message: |
             Closing due to inactivity.
-            If you believe this PR should be revived, post in #clawtributors on Discord to talk to a maintainer.
+            If you believe this PR should be revived, post in #contributors on Discord to talk to a maintainer.
             That channel is the escape hatch for high-quality PRs that get auto-closed.
 
   backfill-stale-closures:
@@ -315,7 +315,7 @@ jobs:
             ].join("\n");
             const prCloseMessage = [
               "Closing due to inactivity.",
-              "If you believe this PR should be revived, post in #clawtributors on Discord to talk to a maintainer.",
+              "If you believe this PR should be revived, post in #contributors on Discord to talk to a maintainer.",
               "That channel is the escape hatch for high-quality PRs that get auto-closed.",
             ].join("\n");
 

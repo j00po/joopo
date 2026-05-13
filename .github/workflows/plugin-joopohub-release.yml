@@ -1,10 +1,10 @@
-name: Plugin ClawHub Release
+name: Plugin JoopoHub Release
 
 on:
   workflow_dispatch:
     inputs:
       publish_scope:
-        description: Publish the selected plugins or all ClawHub-publishable plugins from the workflow ref
+        description: Publish the selected plugins or all JoopoHub-publishable plugins from the workflow ref
         required: true
         default: selected
         type: choice
@@ -22,20 +22,20 @@ on:
         type: string
 
 concurrency:
-  group: plugin-clawhub-release-${{ github.event_name == 'workflow_dispatch' && inputs.ref || github.sha }}
+  group: plugin-joopohub-release-${{ github.event_name == 'workflow_dispatch' && inputs.ref || github.sha }}
   cancel-in-progress: false
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
   NODE_VERSION: "24.x"
   PNPM_VERSION: "10.32.1"
-  CLAWHUB_REGISTRY: "https://clawhub.ai"
-  CLAWHUB_REPOSITORY: "joopo/clawhub"
-  # Pinned to a reviewed ClawHub commit so release behavior stays reproducible.
-  CLAWHUB_REF: "facf20ceb6cc459e2872d941e71335a784bbc55c"
+  JOOPOHUB_REGISTRY: "https://joopohub.ai"
+  JOOPOHUB_REPOSITORY: "joopo/joopohub"
+  # Pinned to a reviewed JoopoHub commit so release behavior stays reproducible.
+  JOOPOHUB_REF: "facf20ceb6cc459e2872d941e71335a784bbc55c"
 
 jobs:
-  preview_plugins_clawhub:
+  preview_plugins_joopohub:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -93,7 +93,7 @@ jobs:
               exit 0
             fi
           done < <(git for-each-ref --format='%(refname)' refs/remotes/origin/release)
-          echo "Plugin ClawHub publishes must target a commit reachable from main or release/*." >&2
+          echo "Plugin JoopoHub publishes must target a commit reachable from main or release/*." >&2
           exit 1
 
       - name: Validate publishable plugin metadata
@@ -109,11 +109,11 @@ jobs:
             if [[ -n "${RELEASE_PLUGINS}" ]]; then
               release_args+=(--plugins "${RELEASE_PLUGINS}")
             fi
-            pnpm release:plugins:clawhub:check -- "${release_args[@]}"
+            pnpm release:plugins:joopohub:check -- "${release_args[@]}"
           elif [[ -n "${BASE_REF}" ]]; then
-            pnpm release:plugins:clawhub:check -- --base-ref "${BASE_REF}" --head-ref "${HEAD_REF}"
+            pnpm release:plugins:joopohub:check -- --base-ref "${BASE_REF}" --head-ref "${HEAD_REF}"
           else
-            pnpm release:plugins:clawhub:check
+            pnpm release:plugins:joopohub:check
           fi
 
       - name: Resolve plugin release plan
@@ -123,7 +123,7 @@ jobs:
           RELEASE_PLUGINS: ${{ github.event_name == 'workflow_dispatch' && inputs.plugins || '' }}
           BASE_REF: ${{ github.event_name != 'workflow_dispatch' && github.event.before || '' }}
           HEAD_REF: ${{ steps.ref.outputs.sha }}
-          CLAWHUB_REGISTRY: ${{ env.CLAWHUB_REGISTRY }}
+          JOOPOHUB_REGISTRY: ${{ env.JOOPOHUB_REGISTRY }}
         run: |
           set -euo pipefail
           mkdir -p .local
@@ -132,22 +132,22 @@ jobs:
             if [[ -n "${RELEASE_PLUGINS}" ]]; then
               plan_args+=(--plugins "${RELEASE_PLUGINS}")
             fi
-            node --import tsx scripts/plugin-clawhub-release-plan.ts "${plan_args[@]}" > .local/plugin-clawhub-release-plan.json
+            node --import tsx scripts/plugin-joopohub-release-plan.ts "${plan_args[@]}" > .local/plugin-joopohub-release-plan.json
           elif [[ -n "${BASE_REF}" ]]; then
-            node --import tsx scripts/plugin-clawhub-release-plan.ts --base-ref "${BASE_REF}" --head-ref "${HEAD_REF}" > .local/plugin-clawhub-release-plan.json
+            node --import tsx scripts/plugin-joopohub-release-plan.ts --base-ref "${BASE_REF}" --head-ref "${HEAD_REF}" > .local/plugin-joopohub-release-plan.json
           else
-            node --import tsx scripts/plugin-clawhub-release-plan.ts > .local/plugin-clawhub-release-plan.json
+            node --import tsx scripts/plugin-joopohub-release-plan.ts > .local/plugin-joopohub-release-plan.json
           fi
 
-          cat .local/plugin-clawhub-release-plan.json
+          cat .local/plugin-joopohub-release-plan.json
 
-          candidate_count="$(jq -r '.candidates | length' .local/plugin-clawhub-release-plan.json)"
-          skipped_published_count="$(jq -r '.skippedPublished | length' .local/plugin-clawhub-release-plan.json)"
+          candidate_count="$(jq -r '.candidates | length' .local/plugin-joopohub-release-plan.json)"
+          skipped_published_count="$(jq -r '.skippedPublished | length' .local/plugin-joopohub-release-plan.json)"
           has_candidates="false"
           if [[ "${candidate_count}" != "0" ]]; then
             has_candidates="true"
           fi
-          matrix_json="$(jq -c '.candidates' .local/plugin-clawhub-release-plan.json)"
+          matrix_json="$(jq -c '.candidates' .local/plugin-joopohub-release-plan.json)"
 
           {
             echo "candidate_count=${candidate_count}"
@@ -157,26 +157,26 @@ jobs:
           } >> "$GITHUB_OUTPUT"
 
           echo "Plugin release candidates:"
-          jq -r '.candidates[]? | "- \(.packageName)@\(.version) [\(.publishTag)] from \(.packageDir)"' .local/plugin-clawhub-release-plan.json
+          jq -r '.candidates[]? | "- \(.packageName)@\(.version) [\(.publishTag)] from \(.packageDir)"' .local/plugin-joopohub-release-plan.json
 
           echo "Already published / skipped:"
-          jq -r '.skippedPublished[]? | "- \(.packageName)@\(.version)"' .local/plugin-clawhub-release-plan.json
+          jq -r '.skippedPublished[]? | "- \(.packageName)@\(.version)"' .local/plugin-joopohub-release-plan.json
 
       - name: Fail manual publish when target versions already exist
         if: github.event_name == 'workflow_dispatch' && inputs.publish_scope == 'selected' && steps.plan.outputs.skipped_published_count != '0'
         run: |
-          echo "::error::One or more selected plugin versions already exist on ClawHub. Bump the version before running a real publish."
+          echo "::error::One or more selected plugin versions already exist on JoopoHub. Bump the version before running a real publish."
           exit 1
 
-      - name: Verify Joopo ClawHub package ownership
+      - name: Verify Joopo JoopoHub package ownership
         if: steps.plan.outputs.has_candidates == 'true'
         env:
-          CLAWHUB_REGISTRY: ${{ env.CLAWHUB_REGISTRY }}
-        run: node --import tsx scripts/plugin-clawhub-owner-preflight.ts .local/plugin-clawhub-release-plan.json
+          JOOPOHUB_REGISTRY: ${{ env.JOOPOHUB_REGISTRY }}
+        run: node --import tsx scripts/plugin-joopohub-owner-preflight.ts .local/plugin-joopohub-release-plan.json
 
   preview_plugin_pack:
-    needs: preview_plugins_clawhub
-    if: needs.preview_plugins_clawhub.outputs.has_candidates == 'true'
+    needs: preview_plugins_joopohub
+    if: needs.preview_plugins_joopohub.outputs.has_candidates == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -184,7 +184,7 @@ jobs:
       fail-fast: false
       max-parallel: 12
       matrix:
-        plugin: ${{ fromJson(needs.preview_plugins_clawhub.outputs.matrix) }}
+        plugin: ${{ fromJson(needs.preview_plugins_joopohub.outputs.matrix) }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -195,7 +195,7 @@ jobs:
 
       - name: Checkout target revision
         env:
-          TARGET_SHA: ${{ needs.preview_plugins_clawhub.outputs.ref_revision }}
+          TARGET_SHA: ${{ needs.preview_plugins_joopohub.outputs.ref_revision }}
         run: |
           set -euo pipefail
           git fetch --no-tags origin \
@@ -211,33 +211,33 @@ jobs:
           install-bun: "true"
           install-deps: "true"
 
-      - name: Checkout ClawHub CLI source
+      - name: Checkout JoopoHub CLI source
         uses: actions/checkout@v6
         with:
           persist-credentials: false
-          repository: ${{ env.CLAWHUB_REPOSITORY }}
+          repository: ${{ env.JOOPOHUB_REPOSITORY }}
           ref: main
-          path: clawhub-source
+          path: joopohub-source
           fetch-depth: 0
 
-      - name: Checkout pinned ClawHub CLI revision
-        working-directory: clawhub-source
+      - name: Checkout pinned JoopoHub CLI revision
+        working-directory: joopohub-source
         env:
-          CLAWHUB_REF: ${{ env.CLAWHUB_REF }}
-        run: git checkout --detach "${CLAWHUB_REF}"
+          JOOPOHUB_REF: ${{ env.JOOPOHUB_REF }}
+        run: git checkout --detach "${JOOPOHUB_REF}"
 
-      - name: Install ClawHub CLI dependencies
-        working-directory: clawhub-source
+      - name: Install JoopoHub CLI dependencies
+        working-directory: joopohub-source
         run: bun install --frozen-lockfile
 
-      - name: Bootstrap ClawHub CLI
+      - name: Bootstrap JoopoHub CLI
         run: |
-          cat > "$RUNNER_TEMP/clawhub" <<'EOF'
+          cat > "$RUNNER_TEMP/joopohub" <<'EOF'
           #!/usr/bin/env bash
           set -euo pipefail
-          exec bun "$GITHUB_WORKSPACE/clawhub-source/packages/clawhub/src/cli.ts" "$@"
+          exec bun "$GITHUB_WORKSPACE/joopohub-source/packages/joopohub/src/cli.ts" "$@"
           EOF
-          chmod +x "$RUNNER_TEMP/clawhub"
+          chmod +x "$RUNNER_TEMP/joopohub"
           echo "$RUNNER_TEMP" >> "$GITHUB_PATH"
 
       - name: Verify package-local runtime build
@@ -245,19 +245,19 @@ jobs:
 
       - name: Preview publish command
         env:
-          CLAWHUB_REGISTRY: ${{ env.CLAWHUB_REGISTRY }}
+          JOOPOHUB_REGISTRY: ${{ env.JOOPOHUB_REGISTRY }}
           SOURCE_REPO: ${{ github.repository }}
-          SOURCE_COMMIT: ${{ needs.preview_plugins_clawhub.outputs.ref_revision }}
+          SOURCE_COMMIT: ${{ needs.preview_plugins_joopohub.outputs.ref_revision }}
           SOURCE_REF: ${{ github.ref }}
           PACKAGE_TAG: ${{ matrix.plugin.publishTag }}
           PACKAGE_DIR: ${{ matrix.plugin.packageDir }}
-        run: bash scripts/plugin-clawhub-publish.sh --dry-run "${PACKAGE_DIR}"
+        run: bash scripts/plugin-joopohub-publish.sh --dry-run "${PACKAGE_DIR}"
 
-  publish_plugins_clawhub:
-    needs: [preview_plugins_clawhub, preview_plugin_pack]
-    if: github.event_name == 'workflow_dispatch' && needs.preview_plugins_clawhub.outputs.has_candidates == 'true'
+  publish_plugins_joopohub:
+    needs: [preview_plugins_joopohub, preview_plugin_pack]
+    if: github.event_name == 'workflow_dispatch' && needs.preview_plugins_joopohub.outputs.has_candidates == 'true'
     runs-on: ubuntu-latest
-    environment: clawhub-plugin-release
+    environment: joopohub-plugin-release
     permissions:
       contents: read
       id-token: write
@@ -265,7 +265,7 @@ jobs:
       fail-fast: false
       max-parallel: 12
       matrix:
-        plugin: ${{ fromJson(needs.preview_plugins_clawhub.outputs.matrix) }}
+        plugin: ${{ fromJson(needs.preview_plugins_joopohub.outputs.matrix) }}
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -276,7 +276,7 @@ jobs:
 
       - name: Checkout target revision
         env:
-          TARGET_SHA: ${{ needs.preview_plugins_clawhub.outputs.ref_revision }}
+          TARGET_SHA: ${{ needs.preview_plugins_joopohub.outputs.ref_revision }}
         run: |
           set -euo pipefail
           git fetch --no-tags origin \
@@ -292,56 +292,56 @@ jobs:
           install-bun: "true"
           install-deps: "true"
 
-      - name: Checkout ClawHub CLI source
+      - name: Checkout JoopoHub CLI source
         uses: actions/checkout@v6
         with:
           persist-credentials: false
-          repository: ${{ env.CLAWHUB_REPOSITORY }}
+          repository: ${{ env.JOOPOHUB_REPOSITORY }}
           ref: main
-          path: clawhub-source
+          path: joopohub-source
           fetch-depth: 0
 
-      - name: Checkout pinned ClawHub CLI revision
-        working-directory: clawhub-source
+      - name: Checkout pinned JoopoHub CLI revision
+        working-directory: joopohub-source
         env:
-          CLAWHUB_REF: ${{ env.CLAWHUB_REF }}
-        run: git checkout --detach "${CLAWHUB_REF}"
+          JOOPOHUB_REF: ${{ env.JOOPOHUB_REF }}
+        run: git checkout --detach "${JOOPOHUB_REF}"
 
-      - name: Install ClawHub CLI dependencies
-        working-directory: clawhub-source
+      - name: Install JoopoHub CLI dependencies
+        working-directory: joopohub-source
         run: bun install --frozen-lockfile
 
-      - name: Bootstrap ClawHub CLI
+      - name: Bootstrap JoopoHub CLI
         run: |
-          cat > "$RUNNER_TEMP/clawhub" <<'EOF'
+          cat > "$RUNNER_TEMP/joopohub" <<'EOF'
           #!/usr/bin/env bash
           set -euo pipefail
-          exec bun "$GITHUB_WORKSPACE/clawhub-source/packages/clawhub/src/cli.ts" "$@"
+          exec bun "$GITHUB_WORKSPACE/joopohub-source/packages/joopohub/src/cli.ts" "$@"
           EOF
-          chmod +x "$RUNNER_TEMP/clawhub"
+          chmod +x "$RUNNER_TEMP/joopohub"
           echo "$RUNNER_TEMP" >> "$GITHUB_PATH"
 
-      - name: Write ClawHub token config
+      - name: Write JoopoHub token config
         env:
-          CLAWHUB_TOKEN: ${{ secrets.CLAWHUB_TOKEN }}
-          CLAWHUB_REGISTRY: ${{ env.CLAWHUB_REGISTRY }}
+          JOOPOHUB_TOKEN: ${{ secrets.JOOPOHUB_TOKEN }}
+          JOOPOHUB_REGISTRY: ${{ env.JOOPOHUB_REGISTRY }}
         run: |
           set -euo pipefail
-          if [[ -z "${CLAWHUB_TOKEN}" ]]; then
-            echo "No CLAWHUB_TOKEN secret configured; publish will rely on GitHub OIDC trusted publishing."
+          if [[ -z "${JOOPOHUB_TOKEN}" ]]; then
+            echo "No JOOPOHUB_TOKEN secret configured; publish will rely on GitHub OIDC trusted publishing."
             exit 0
           fi
           node --input-type=module <<'EOF'
           import { writeFileSync } from "node:fs";
           import { join } from "node:path";
 
-          const path = join(process.env.RUNNER_TEMP, "clawhub-config.json");
+          const path = join(process.env.RUNNER_TEMP, "joopohub-config.json");
           writeFileSync(
             path,
             `${JSON.stringify(
               {
-                registry: process.env.CLAWHUB_REGISTRY,
-                token: process.env.CLAWHUB_TOKEN,
+                registry: process.env.JOOPOHUB_REGISTRY,
+                token: process.env.JOOPOHUB_TOKEN,
               },
               null,
               2,
@@ -349,18 +349,18 @@ jobs:
           );
           console.log(path);
           EOF
-          echo "CLAWHUB_CONFIG_PATH=${RUNNER_TEMP}/clawhub-config.json" >> "$GITHUB_ENV"
+          echo "JOOPOHUB_CONFIG_PATH=${RUNNER_TEMP}/joopohub-config.json" >> "$GITHUB_ENV"
 
       - name: Ensure version is not already published
         env:
           PACKAGE_NAME: ${{ matrix.plugin.packageName }}
           PACKAGE_VERSION: ${{ matrix.plugin.version }}
-          CLAWHUB_REGISTRY: ${{ env.CLAWHUB_REGISTRY }}
+          JOOPOHUB_REGISTRY: ${{ env.JOOPOHUB_REGISTRY }}
         run: |
           set -euo pipefail
           encoded_name="$(node -e 'console.log(encodeURIComponent(process.env.PACKAGE_NAME ?? ""))')"
           encoded_version="$(node -e 'console.log(encodeURIComponent(process.env.PACKAGE_VERSION ?? ""))')"
-          url="${CLAWHUB_REGISTRY%/}/api/v1/packages/${encoded_name}/versions/${encoded_version}"
+          url="${JOOPOHUB_REGISTRY%/}/api/v1/packages/${encoded_name}/versions/${encoded_version}"
           status=""
           for attempt in $(seq 1 8); do
             status="$(curl --silent --show-error --output /dev/null --write-out '%{http_code}' "${url}")"
@@ -368,27 +368,27 @@ jobs:
               break
             fi
             if [[ "${status}" == "429" || "${status}" =~ ^5 ]]; then
-              echo "ClawHub availability check returned ${status} for ${PACKAGE_NAME}@${PACKAGE_VERSION}; retrying (${attempt}/8)."
+              echo "JoopoHub availability check returned ${status} for ${PACKAGE_NAME}@${PACKAGE_VERSION}; retrying (${attempt}/8)."
               sleep 60
               continue
             fi
             break
           done
           if [[ "${status}" =~ ^2 ]]; then
-            echo "${PACKAGE_NAME}@${PACKAGE_VERSION} is already published on ClawHub."
+            echo "${PACKAGE_NAME}@${PACKAGE_VERSION} is already published on JoopoHub."
             exit 1
           fi
           if [[ "${status}" != "404" ]]; then
-            echo "Unexpected ClawHub response (${status}) for ${PACKAGE_NAME}@${PACKAGE_VERSION}."
+            echo "Unexpected JoopoHub response (${status}) for ${PACKAGE_NAME}@${PACKAGE_VERSION}."
             exit 1
           fi
 
       - name: Publish
         env:
-          CLAWHUB_REGISTRY: ${{ env.CLAWHUB_REGISTRY }}
+          JOOPOHUB_REGISTRY: ${{ env.JOOPOHUB_REGISTRY }}
           SOURCE_REPO: ${{ github.repository }}
-          SOURCE_COMMIT: ${{ needs.preview_plugins_clawhub.outputs.ref_revision }}
+          SOURCE_COMMIT: ${{ needs.preview_plugins_joopohub.outputs.ref_revision }}
           SOURCE_REF: ${{ github.ref }}
           PACKAGE_TAG: ${{ matrix.plugin.publishTag }}
           PACKAGE_DIR: ${{ matrix.plugin.packageDir }}
-        run: bash scripts/plugin-clawhub-publish.sh --publish "${PACKAGE_DIR}"
+        run: bash scripts/plugin-joopohub-publish.sh --publish "${PACKAGE_DIR}"

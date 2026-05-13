@@ -1742,17 +1742,17 @@ jobs:
         with:
           install-bun: "false"
 
-      - name: Checkout ClawHub docs source
+      - name: Checkout JoopoHub docs source
         uses: actions/checkout@v6
         with:
-          repository: joopo/clawhub
-          path: clawhub-source
+          repository: joopo/joopohub
+          path: joopohub-source
           fetch-depth: 1
           persist-credentials: false
 
       - name: Check docs
         env:
-          JOOPO_DOCS_SYNC_CLAWHUB_REPO: ${{ github.workspace }}/clawhub-source
+          JOOPO_DOCS_SYNC_JOOPOHUB_REPO: ${{ github.workspace }}/joopohub-source
         run: pnpm check:docs
 
   skills-python:

@@ -22,11 +22,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Checkout ClawHub docs source
+      - name: Checkout JoopoHub docs source
         uses: actions/checkout@v6
         with:
-          repository: joopo/clawhub
-          path: clawhub-source
+          repository: joopo/joopohub
+          path: joopohub-source
           fetch-depth: 1
           persist-credentials: false
           token: ${{ secrets.JOOPO_DOCS_SYNC_TOKEN || github.token }}
@@ -57,14 +57,14 @@ jobs:
 
       - name: Sync docs into publish repo
         run: |
-          clawhub_sha="$(git -C "$GITHUB_WORKSPACE/clawhub-source" rev-parse HEAD)"
+          joopohub_sha="$(git -C "$GITHUB_WORKSPACE/joopohub-source" rev-parse HEAD)"
           node scripts/docs-sync-publish.mjs \
             --target "$GITHUB_WORKSPACE/publish" \
             --source-repo "$GITHUB_REPOSITORY" \
             --source-sha "$GITHUB_SHA" \
-            --clawhub-repo "$GITHUB_WORKSPACE/clawhub-source" \
-            --clawhub-source-repo "joopo/clawhub" \
-            --clawhub-source-sha "$clawhub_sha"
+            --joopohub-repo "$GITHUB_WORKSPACE/joopohub-source" \
+            --joopohub-source-repo "joopo/joopohub" \
+            --joopohub-source-sha "$joopohub_sha"
 
       - name: Install docs MDX checker dependency
         working-directory: publish

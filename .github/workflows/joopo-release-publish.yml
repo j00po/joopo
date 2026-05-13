@@ -33,12 +33,12 @@ on:
         required: false
         type: string
       publish_joopo_npm:
-        description: Publish the Joopo npm package after plugin npm succeeds; ClawHub may still run
+        description: Publish the Joopo npm package after plugin npm succeeds; JoopoHub may still run
         required: true
         default: true
         type: boolean
-      wait_for_clawhub:
-        description: Wait for ClawHub plugin publish before marking this workflow complete
+      wait_for_joopohub:
+        description: Wait for JoopoHub plugin publish before marking this workflow complete
         required: true
         default: false
         type: boolean
@@ -171,7 +171,7 @@ jobs:
           PLUGIN_PUBLISH_SCOPE: ${{ inputs.plugin_publish_scope }}
           PLUGINS: ${{ inputs.plugins }}
           PUBLISH_JOOPO_NPM: ${{ inputs.publish_joopo_npm && 'true' || 'false' }}
-          WAIT_FOR_CLAWHUB: ${{ inputs.wait_for_clawhub && 'true' || 'false' }}
+          WAIT_FOR_JOOPOHUB: ${{ inputs.wait_for_joopohub && 'true' || 'false' }}
         run: |
           set -euo pipefail
 
@@ -316,32 +316,32 @@ jobs:
             echo "- Workflow ref: \`${CHILD_WORKFLOW_REF}\`"
             echo "- Release tag: \`${RELEASE_TAG}\`"
             echo "- Release SHA: \`${TARGET_SHA}\`"
-            echo "- Plugin npm and ClawHub publish: dispatched in parallel"
+            echo "- Plugin npm and JoopoHub publish: dispatched in parallel"
             if [[ "${PUBLISH_JOOPO_NPM}" == "true" ]]; then
-              echo "- Joopo npm publish: starts after plugin npm succeeds; ClawHub may still be running"
+              echo "- Joopo npm publish: starts after plugin npm succeeds; JoopoHub may still be running"
             else
               echo "- Joopo npm publish: skipped by input"
             fi
-            if [[ "${WAIT_FOR_CLAWHUB}" == "true" ]]; then
-              echo "- Workflow completion waits for ClawHub"
+            if [[ "${WAIT_FOR_JOOPOHUB}" == "true" ]]; then
+              echo "- Workflow completion waits for JoopoHub"
             else
-              echo "- Workflow completion does not wait for ClawHub; monitor the dispatched ClawHub run separately"
+              echo "- Workflow completion does not wait for JoopoHub; monitor the dispatched JoopoHub run separately"
             fi
           } >> "$GITHUB_STEP_SUMMARY"
 
           npm_args=(-f publish_scope="${PLUGIN_PUBLISH_SCOPE}" -f ref="${TARGET_SHA}")
-          clawhub_args=(-f publish_scope="${PLUGIN_PUBLISH_SCOPE}" -f ref="${TARGET_SHA}")
+          joopohub_args=(-f publish_scope="${PLUGIN_PUBLISH_SCOPE}" -f ref="${TARGET_SHA}")
           if [[ -n "${PLUGINS}" ]]; then
             npm_args+=(-f plugins="${PLUGINS}")
-            clawhub_args+=(-f plugins="${PLUGINS}")
+            joopohub_args+=(-f plugins="${PLUGINS}")
           fi
 
           plugin_npm_run_id="$(dispatch_workflow plugin-npm-release.yml "${npm_args[@]}")"
-          plugin_clawhub_run_id="$(dispatch_workflow plugin-clawhub-release.yml "${clawhub_args[@]}")"
+          plugin_joopohub_run_id="$(dispatch_workflow plugin-joopohub-release.yml "${joopohub_args[@]}")"
 
           if ! wait_for_run plugin-npm-release.yml "${plugin_npm_run_id}"; then
-            echo "Plugin npm publish failed; cancelling ClawHub publish child ${plugin_clawhub_run_id}." >&2
-            gh run cancel --repo "$GITHUB_REPOSITORY" "${plugin_clawhub_run_id}" >/dev/null 2>&1 || true
+            echo "Plugin npm publish failed; cancelling JoopoHub publish child ${plugin_joopohub_run_id}." >&2
+            gh run cancel --repo "$GITHUB_REPOSITORY" "${plugin_joopohub_run_id}" >/dev/null 2>&1 || true
             exit 1
           fi
 
@@ -356,15 +356,15 @@ jobs:
             echo "- Joopo npm publish: skipped by input" >> "$GITHUB_STEP_SUMMARY"
           fi
 
-          clawhub_result=""
-          clawhub_pid=""
-          if [[ "${WAIT_FOR_CLAWHUB}" == "true" ]]; then
-            clawhub_result="$RUNNER_TEMP/clawhub-result.txt"
+          joopohub_result=""
+          joopohub_pid=""
+          if [[ "${WAIT_FOR_JOOPOHUB}" == "true" ]]; then
+            joopohub_result="$RUNNER_TEMP/joopohub-result.txt"
             wait_run_pid=""
-            wait_for_run_background plugin-clawhub-release.yml "${plugin_clawhub_run_id}" "${clawhub_result}"
-            clawhub_pid="${wait_run_pid}"
+            wait_for_run_background plugin-joopohub-release.yml "${plugin_joopohub_run_id}" "${joopohub_result}"
+            joopohub_pid="${wait_run_pid}"
           else
-            echo "- plugin-clawhub-release.yml: not awaited (${plugin_clawhub_run_id})" >> "$GITHUB_STEP_SUMMARY"
+            echo "- plugin-joopohub-release.yml: not awaited (${plugin_joopohub_run_id})" >> "$GITHUB_STEP_SUMMARY"
           fi
 
           joopo_result=""
@@ -377,13 +377,13 @@ jobs:
           fi
 
           failed=0
-          if [[ -n "${clawhub_pid}" ]] && ! wait "${clawhub_pid}"; then
+          if [[ -n "${joopohub_pid}" ]] && ! wait "${joopohub_pid}"; then
             failed=1
           fi
           if [[ -n "${joopo_pid}" ]] && ! wait "${joopo_pid}"; then
             failed=1
           fi
-          if [[ -f "${clawhub_result}" && "$(cat "${clawhub_result}")" != "success" ]]; then
+          if [[ -f "${joopohub_result}" && "$(cat "${joopohub_result}")" != "success" ]]; then
             failed=1
           fi
           if [[ -n "${joopo_result}" && -f "${joopo_result}" && "$(cat "${joopo_result}")" != "success" ]]; then
