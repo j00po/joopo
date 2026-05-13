@@ -151,6 +151,14 @@ export const sharedVitestConfig = {
         find: "@joopo/whatsapp/api.js",
         replacement: path.join(repoRoot, "extensions", "whatsapp", "api.ts"),
       },
+      {
+        find: /^@joopo\/fs-safe\/(.+)$/,
+        replacement: path.join(repoRoot, "packages", "fs-safe", "src") + "/$1.ts",
+      },
+      {
+        find: "@joopo/fs-safe",
+        replacement: path.join(repoRoot, "packages", "fs-safe", "src", "index.ts"),
+      },
       ...sourcePluginSdkSubpaths.map((subpath) => ({
         find: `joopo/plugin-sdk/${subpath}`,
         replacement: path.join(repoRoot, "src", "plugin-sdk", `${subpath}.ts`),
