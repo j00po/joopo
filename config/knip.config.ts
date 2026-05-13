@@ -145,7 +145,9 @@ const config = {
       entry: rootEntries,
       ignoreDependencies: [
         "@joopo/*",
+        "@opentelemetry/sdk-node",
         "playwright-core",
+        "protobufjs",
         "sqlite-vec",
         "tree-sitter-bash",
         ...rootBundledPluginRuntimeDependencies,
@@ -168,6 +170,7 @@ const config = {
     "packages/*": {
       entry: ["index.js!", "scripts/postinstall.js!"],
       project: ["index.js!", "scripts/**/*.js!"],
+      ignoreDependencies: ["ajv", "yaml"],
     },
     [`${BUNDLED_PLUGIN_ROOT_DIR}/*`]: {
       // Bundled plugins often load their public surface via string specifiers in

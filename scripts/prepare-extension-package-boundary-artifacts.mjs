@@ -66,6 +66,14 @@ const WHATSAPP_DTS_INPUTS = [
 ];
 const WHATSAPP_DTS_STAMP = "dist/plugin-sdk/extensions/whatsapp/.boundary-dts.stamp";
 const WHATSAPP_DTS_REQUIRED_OUTPUTS = ["dist/plugin-sdk/extensions/whatsapp/api.d.ts"];
+const FS_SAFE_INPUTS = ["packages/fs-safe/tsconfig.json", "packages/fs-safe/src"];
+const FS_SAFE_STAMP = "packages/fs-safe/dist/.boundary-build.stamp";
+const FS_SAFE_REQUIRED_OUTPUTS = [
+  "packages/fs-safe/dist/config.js",
+  "packages/fs-safe/dist/config.d.ts",
+  "packages/fs-safe/dist/output.d.ts",
+  "packages/fs-safe/dist/temp.d.ts",
+];
 const ENTRY_SHIMS_INPUTS = [
   "scripts/write-plugin-sdk-entry-dts.ts",
   "scripts/lib/plugin-sdk-entrypoints.json",
@@ -297,6 +305,12 @@ async function main(argv = process.argv.slice(2)) {
         outputPaths: [PACKAGE_DTS_STAMP, ...PACKAGE_DTS_REQUIRED_OUTPUTS],
         includeFile: isRelevantTypeInput,
       }) && !hasMissingOutput(PACKAGE_DTS_REQUIRED_OUTPUTS);
+    const fsSafeFresh =
+      isArtifactSetFresh({
+        inputPaths: FS_SAFE_INPUTS,
+        outputPaths: [FS_SAFE_STAMP, ...FS_SAFE_REQUIRED_OUTPUTS],
+        includeFile: isRelevantTypeInput,
+      }) && !hasMissingOutput(FS_SAFE_REQUIRED_OUTPUTS);
     const entryShimsFresh = isArtifactSetFresh({
       inputPaths: [
         ...ENTRY_SHIMS_INPUTS,
@@ -332,6 +346,31 @@ async function main(argv = process.argv.slice(2)) {
 
     const prerequisiteSteps = [];
     const dependentSteps = [];
+    if (!fsSafeFresh) {
+      removeIncrementalStateForMissingOutput({
+        outputPaths: FS_SAFE_REQUIRED_OUTPUTS,
+        tsBuildInfoPath: "packages/fs-safe/dist/.boundary-tsbuildinfo",
+      });
+      prerequisiteSteps.push({
+        label: "fs-safe boundary build",
+        args: [
+          runTsgoScript,
+          "-p",
+          "packages/fs-safe/tsconfig.json",
+          "--noEmit",
+          "false",
+          "--declaration",
+          "true",
+          "--tsBuildInfoFile",
+          "packages/fs-safe/dist/.boundary-tsbuildinfo",
+        ],
+        env: { JOOPO_TSGO_HEAVY_CHECK_LOCK_HELD: "1" },
+        timeoutMs: 300_000,
+        stampPath: FS_SAFE_STAMP,
+      });
+    } else {
+      process.stdout.write("[fs-safe boundary build] fresh; skipping\n");
+    }
     if (mode === "all") {
       if (!rootDtsFresh) {
         removeIncrementalStateForMissingOutput({

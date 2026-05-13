@@ -4,5 +4,13 @@
     "tsBuildInfoFile": ".artifacts/tsgo-cache/core.tsbuildinfo"
   },
   "include": ["src/**/*", "ui/**/*", "packages/**/*"],
-  "exclude": ["node_modules", "dist", "**/dist/**", "**/*.test.ts", "**/*.test.tsx", "test/**"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/dist/**",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "test/**",
+    "packages/joopobot-lobster/**"
+  ]
 }

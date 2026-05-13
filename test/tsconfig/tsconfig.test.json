@@ -14,5 +14,5 @@
     "../../packages/**/*.test.ts",
     "../../packages/**/*.test.tsx"
   ],
-  "exclude": ["../../node_modules", "../../dist", "../../**/dist/**"]
+  "exclude": ["../../node_modules", "../../dist", "../../**/dist/**", "../../packages/joopobot-lobster/**"]
 }

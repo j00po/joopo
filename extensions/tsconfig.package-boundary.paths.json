@@ -39,6 +39,8 @@
       "@joopo/discord/api.js": ["../dist/plugin-sdk/extensions/discord/api.d.ts"],
       "@joopo/slack/api.js": ["../dist/plugin-sdk/extensions/slack/api.d.ts"],
       "@joopo/whatsapp/api.js": ["../dist/plugin-sdk/extensions/whatsapp/api.d.ts"],
+      "@joopo/fs-safe": ["../packages/fs-safe/dist/index.d.ts"],
+      "@joopo/fs-safe/*": ["../packages/fs-safe/dist/*.d.ts"],
       "@joopo/*.js": ["../packages/plugin-sdk/dist/extensions/*.d.ts", "../extensions/*"],
       "@joopo/*": ["../packages/plugin-sdk/dist/extensions/*", "../extensions/*"],
       "@joopo/plugin-sdk/*": ["../dist/plugin-sdk/src/plugin-sdk/*.d.ts"]
