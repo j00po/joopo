@@ -8,8 +8,13 @@ export function coerceIdentityValue(
   if (!trimmed) {
     return undefined;
   }
+  if (maxLength <= 0) {
+    return "";
+  }
   if (trimmed.length <= maxLength) {
     return trimmed;
   }
-  return trimmed.slice(0, maxLength);
+  const truncated = trimmed.slice(0, maxLength);
+  const lastSpace = truncated.lastIndexOf(" ");
+  return lastSpace > 0 ? truncated.slice(0, lastSpace) : truncated;
 }
