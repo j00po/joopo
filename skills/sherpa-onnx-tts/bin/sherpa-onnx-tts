@@ -1,0 +1,11 @@
+#!/usr/bin/env node
+
+const runtimeDir = process.env.SHERPA_ONNX_RUNTIME_DIR;
+const modelDir = process.env.SHERPA_ONNX_MODEL_DIR;
+
+if (!runtimeDir || !modelDir) {
+  process.stderr.write(
+    "Missing runtime/model directory.\nUsage: sherpa-onnx-tts -o <output.wav> <text>\n",
+  );
+  process.exit(1);
+}
