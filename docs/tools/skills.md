@@ -143,7 +143,7 @@ Configured skill roots also support one grouping level, such as
 kept under a shared folder without broad recursive scanning.
 
 JoopoHub skill pages expose the latest security scan state before install,
-with scanner detail pages for VirusTotal, ClawScan, and static analysis.
+with scanner detail pages for VirusTotal, JoopoScan, and static analysis.
 `joopo skills install <slug>` remains only the install path; publishers
 recover false positives through the JoopoHub dashboard or
 `joopohub skill rescan <slug>`.

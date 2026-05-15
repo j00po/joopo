@@ -5,7 +5,7 @@ read_when:
   - You need to understand why a CI job did or did not run
   - You are debugging a failing GitHub Actions check
   - You are coordinating a release validation run or rerun
-  - You are changing ClawSweeper dispatch or GitHub activity forwarding
+  - You are changing JoopoSweeper dispatch or GitHub activity forwarding
 ---
 
 Joopo CI runs on every push to `main` and every pull request. The `preflight` job classifies the diff and turns expensive lanes off when only unrelated areas changed. Manual `workflow_dispatch` runs intentionally bypass smart scoping and fan out the full graph for release candidates and broad validation. Android lanes stay opt-in through `include_android`. Release-only plugin coverage lives in the separate [`Plugin Prerelease`](#plugin-prerelease) workflow and only runs from [`Full Release Validation`](#full-release-validation) or an explicit manual dispatch.
@@ -62,20 +62,20 @@ Android CI runs both `testPlayDebugUnitTest` and `testThirdPartyDebugUnitTest` a
 
 The `check-dependencies` shard runs `pnpm deadcode:dependencies` (a production Knip dependency-only pass pinned to the latest Knip version, with pnpm's minimum release age disabled for the `dlx` install) and `pnpm deadcode:unused-files`, which compares Knip's production unused-file findings against `scripts/deadcode-unused-files.allowlist.mjs`. The unused-file guard fails when a PR adds a new unreviewed unused file or leaves a stale allowlist entry, while preserving intentional dynamic plugin, generated, build, live-test, and package bridge surfaces that Knip cannot resolve statically.
 
-## ClawSweeper activity forwarding
+## JoopoSweeper activity forwarding
 
-`.github/workflows/clawsweeper-dispatch.yml` is the target-side bridge from Joopo repository activity into ClawSweeper. It does not check out or execute untrusted pull request code. The workflow creates a GitHub App token from `CLAWSWEEPER_APP_PRIVATE_KEY`, then dispatches compact `repository_dispatch` payloads to `joopo/clawsweeper`.
+`.github/workflows/jooposweeper-dispatch.yml` is the target-side bridge from Joopo repository activity into JoopoSweeper. It does not check out or execute untrusted pull request code. The workflow creates a GitHub App token from `JOOPOSWEEPER_APP_PRIVATE_KEY`, then dispatches compact `repository_dispatch` payloads to `joopo/jooposweeper`.
 
 The workflow has four lanes:
 
-- `clawsweeper_item` for exact issue and pull request review requests;
-- `clawsweeper_comment` for explicit ClawSweeper commands in issue comments;
-- `clawsweeper_commit_review` for commit-level review requests on `main` pushes;
-- `github_activity` for general GitHub activity that the ClawSweeper agent may inspect.
+- `jooposweeper_item` for exact issue and pull request review requests;
+- `jooposweeper_comment` for explicit JoopoSweeper commands in issue comments;
+- `jooposweeper_commit_review` for commit-level review requests on `main` pushes;
+- `github_activity` for general GitHub activity that the JoopoSweeper agent may inspect.
 
-The `github_activity` lane forwards normalized metadata only: event type, action, actor, repository, item number, URL, title, state, and short excerpts for comments or reviews when present. It intentionally avoids forwarding the full webhook body. The receiving workflow in `joopo/clawsweeper` is `.github/workflows/github-activity.yml`, which posts the normalized event to the Joopo Gateway hook for the ClawSweeper agent.
+The `github_activity` lane forwards normalized metadata only: event type, action, actor, repository, item number, URL, title, state, and short excerpts for comments or reviews when present. It intentionally avoids forwarding the full webhook body. The receiving workflow in `joopo/jooposweeper` is `.github/workflows/github-activity.yml`, which posts the normalized event to the Joopo Gateway hook for the JoopoSweeper agent.
 
-General activity is observation, not delivery-by-default. The ClawSweeper agent receives the Discord target in its prompt and should post to `#clawsweeper` only when the event is surprising, actionable, risky, or operationally useful. Routine opens, edits, bot churn, duplicate webhook noise, and normal review traffic should result in `NO_REPLY`.
+General activity is observation, not delivery-by-default. The JoopoSweeper agent receives the Discord target in its prompt and should post to `#jooposweeper` only when the event is surprising, actionable, risky, or operationally useful. Routine opens, edits, bot churn, duplicate webhook noise, and normal review traffic should result in `NO_REPLY`.
 
 Treat GitHub titles, comments, bodies, review text, branch names, and commit messages as untrusted data throughout this path. They are input for summarization and triage, not instructions for the workflow or agent runtime.
 
@@ -152,7 +152,7 @@ The workflow installs OCM from a pinned release and Kova from `joopo/Kova` at th
 
 The mock-provider lane also runs Joopo-native source probes after the Kova pass: gateway boot timing and memory across default, hook, and 50-plugin startup cases; repeated mock-OpenAI `channel-chat-baseline` hello loops; and CLI startup commands against the booted gateway. The source probe Markdown summary lives at `source/index.md` in the report bundle, with raw JSON beside it.
 
-Every lane uploads GitHub artifacts. When `CLAWGRIT_REPORTS_TOKEN` is configured, the workflow also commits `report.json`, `report.md`, bundles, `index.md`, and source-probe artifacts into `joopo/clawgrit-reports` under `joopo-performance/<tested-ref>/<run-id>-<attempt>/<lane>/`. The current tested-ref pointer is written as `joopo-performance/<tested-ref>/latest-<lane>.json`.
+Every lane uploads GitHub artifacts. When `JOOPOGRIT_REPORTS_TOKEN` is configured, the workflow also commits `report.json`, `report.md`, bundles, `index.md`, and source-probe artifacts into `joopo/joopogrit-reports` under `joopo-performance/<tested-ref>/<run-id>-<attempt>/<lane>/`. The current tested-ref pointer is written as `joopo-performance/<tested-ref>/latest-<lane>.json`.
 
 ## Full Release Validation
 

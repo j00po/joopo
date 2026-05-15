@@ -459,9 +459,9 @@ function assertJoopoHubArtifactMetadata(record, pluginId) {
       `missing JoopoHub artifact metadata for ${pluginId}: ${JSON.stringify(record)}`,
     );
   }
-  if (!record.clawpackSha256 || typeof record.clawpackSize !== "number") {
+  if (!record.joopopackSha256 || typeof record.joopopackSize !== "number") {
     throw new Error(
-      `missing JoopoHub ClawPack metadata for ${pluginId}: ${JSON.stringify(record)}`,
+      `missing JoopoHub JoopoPack metadata for ${pluginId}: ${JSON.stringify(record)}`,
     );
   }
   if (!record.npmIntegrity || !record.npmShasum || !record.npmTarballName) {

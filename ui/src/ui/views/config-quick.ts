@@ -122,7 +122,7 @@ export type QuickSettingsProps = {
 
 type ThemeOption = { id: ThemeName; label: string };
 const BUILTIN_THEME_OPTIONS: ThemeOption[] = [
-  { id: "claw", label: "Claw" },
+  { id: "claw", label: "Joopo" },
   { id: "knot", label: "Knot" },
   { id: "dash", label: "Dash" },
 ];

@@ -1,4 +1,4 @@
-# ClawDock <!-- omit in toc -->
+# JoopoDock <!-- omit in toc -->
 
 Stop typing `docker-compose` commands. Just type `joopoock-start`.
 
@@ -41,7 +41,7 @@ echo 'source ~/.joopoock/joopoock-helpers.sh' >> ~/.zshrc && source ~/.zshrc
 
 Canonical docs page: https://docs.joopo.ai/install/joopoock
 
-If you previously installed ClawDock from `scripts/shell-helpers/joopoock-helpers.sh`, rerun the install command above. The old raw GitHub path has been removed.
+If you previously installed JoopoDock from `scripts/shell-helpers/joopoock-helpers.sh`, rerun the install command above. The old raw GitHub path has been removed.
 
 **See what you get:**
 
@@ -49,7 +49,7 @@ If you previously installed ClawDock from `scripts/shell-helpers/joopoock-helper
 joopoock-help
 ```
 
-On first command, ClawDock auto-detects your Joopo directory:
+On first command, JoopoDock auto-detects your Joopo directory:
 
 - Checks common paths (`~/joopo`, `~/workspace/joopo`, etc.)
 - If found, asks you to confirm
@@ -147,7 +147,7 @@ The Docker setup uses three config files on the host. The container never stores
 | `docker-compose.yml`       | Defines `joopo-gateway` and `joopo-cli` services, bind-mounts, ports |
 | `scripts/docker/setup.sh`  | First-time setup — builds image, creates `.env` from `.env.example`  |
 | `.env.example`             | Template for `<project>/.env` with all supported vars and docs       |
-| `docker-compose.extra.yml` | Optional overrides — auto-loaded by ClawDock helpers if present      |
+| `docker-compose.extra.yml` | Optional overrides — auto-loaded by JoopoDock helpers if present     |
 
 ### Config Files
 

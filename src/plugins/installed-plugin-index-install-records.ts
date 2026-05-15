@@ -57,10 +57,10 @@ function normalizeInstallRecord(
   setInstallStringField(normalized, "npmIntegrity", record.npmIntegrity);
   setInstallStringField(normalized, "npmShasum", record.npmShasum);
   setInstallStringField(normalized, "npmTarballName", record.npmTarballName);
-  setInstallStringField(normalized, "clawpackSha256", record.clawpackSha256);
-  setInstallNumberField(normalized, "clawpackSpecVersion", record.clawpackSpecVersion);
-  setInstallStringField(normalized, "clawpackManifestSha256", record.clawpackManifestSha256);
-  setInstallNumberField(normalized, "clawpackSize", record.clawpackSize);
+  setInstallStringField(normalized, "joopopackSha256", record.joopopackSha256);
+  setInstallNumberField(normalized, "joopopackSpecVersion", record.joopopackSpecVersion);
+  setInstallStringField(normalized, "joopopackManifestSha256", record.joopopackManifestSha256);
+  setInstallNumberField(normalized, "joopopackSize", record.joopopackSize);
   setInstallStringField(normalized, "gitUrl", record.gitUrl);
   setInstallStringField(normalized, "gitRef", record.gitRef);
   setInstallStringField(normalized, "gitCommit", record.gitCommit);

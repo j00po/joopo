@@ -105,10 +105,10 @@ function createJoopoHubInstallResult(params: {
       version: params.version,
       integrity: "sha256-abc",
       resolvedAt: "2026-03-22T00:00:00.000Z",
-      clawpackSha256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      clawpackSpecVersion: 1,
-      clawpackManifestSha256: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-      clawpackSize: 4096,
+      joopopackSha256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      joopopackSpecVersion: 1,
+      joopopackManifestSha256: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      joopopackSize: 4096,
     },
   };
 }
@@ -532,10 +532,10 @@ describe("plugins cli install", () => {
         joopohubPackage: "demo",
         joopohubFamily: "code-plugin",
         joopohubChannel: "official",
-        clawpackSha256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        clawpackSpecVersion: 1,
-        clawpackManifestSha256: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-        clawpackSize: 4096,
+        joopopackSha256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        joopopackSpecVersion: 1,
+        joopopackManifestSha256: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        joopopackSize: 4096,
       }),
     });
     expect(writeConfigFile).toHaveBeenCalledWith(enabledCfg);
@@ -732,10 +732,10 @@ describe("plugins cli install", () => {
         installPath: cliInstallPath("demo"),
         version: "1.2.3",
         joopohubPackage: "demo",
-        clawpackSha256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        clawpackSpecVersion: 1,
-        clawpackManifestSha256: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-        clawpackSize: 4096,
+        joopopackSha256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        joopopackSpecVersion: 1,
+        joopopackManifestSha256: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        joopopackSize: 4096,
       }),
     });
   });

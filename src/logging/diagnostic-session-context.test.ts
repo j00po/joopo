@@ -38,8 +38,8 @@ describe("diagnostic session context", () => {
   });
 
   it("parses cron run session keys", () => {
-    expect(parseCronRunSessionKey("agent:clawblocker:cron:job-123:run:run-456")).toEqual({
-      agentId: "clawblocker",
+    expect(parseCronRunSessionKey("agent:joopoblocker:cron:job-123:run:run-456")).toEqual({
+      agentId: "joopoblocker",
       cronJobId: "job-123",
       cronRunId: "run-456",
     });
@@ -54,7 +54,7 @@ describe("diagnostic session context", () => {
         jobs: [{ id: "job-123", name: "Twitter Mention Moderation Agent" }],
       }),
     );
-    writeJsonl(path.join(stateDir, "agents", "clawblocker", "sessions", "run-456.jsonl"), [
+    writeJsonl(path.join(stateDir, "agents", "joopoblocker", "sessions", "run-456.jsonl"), [
       { message: { role: "user", content: "run" } },
       {
         message: {
@@ -65,7 +65,7 @@ describe("diagnostic session context", () => {
     ]);
 
     const context = resolveCronSessionDiagnosticContext({
-      sessionKey: "agent:clawblocker:cron:job-123:run:run-456",
+      sessionKey: "agent:joopoblocker:cron:job-123:run:run-456",
     });
 
     expect(formatCronSessionDiagnosticFields(context)).toContain("cronJobId=job-123");

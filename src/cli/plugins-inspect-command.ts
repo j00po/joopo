@@ -92,17 +92,17 @@ function formatInstallLines(install: PluginInstallRecord | undefined): string[] 
   if (install.npmTarballName) {
     lines.push(`Npm tarball: ${install.npmTarballName}`);
   }
-  if (install.clawpackSha256) {
-    lines.push(`ClawPack sha256: ${install.clawpackSha256}`);
+  if (install.joopopackSha256) {
+    lines.push(`JoopoPack sha256: ${install.joopopackSha256}`);
   }
-  if (install.clawpackSpecVersion !== undefined) {
-    lines.push(`ClawPack spec: ${install.clawpackSpecVersion}`);
+  if (install.joopopackSpecVersion !== undefined) {
+    lines.push(`JoopoPack spec: ${install.joopopackSpecVersion}`);
   }
-  if (install.clawpackManifestSha256) {
-    lines.push(`ClawPack manifest sha256: ${install.clawpackManifestSha256}`);
+  if (install.joopopackManifestSha256) {
+    lines.push(`JoopoPack manifest sha256: ${install.joopopackManifestSha256}`);
   }
-  if (install.clawpackSize !== undefined) {
-    lines.push(`ClawPack size: ${install.clawpackSize} bytes`);
+  if (install.joopopackSize !== undefined) {
+    lines.push(`JoopoPack size: ${install.joopopackSize} bytes`);
   }
   if (install.installedAt) {
     lines.push(`Installed at: ${install.installedAt}`);

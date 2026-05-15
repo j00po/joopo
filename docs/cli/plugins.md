@@ -186,7 +186,7 @@ joopo plugins install npm:joopo-codex-app-server
 joopo plugins install npm:@scope/plugin-name@1.0.1
 ```
 
-Joopo checks the advertised plugin API / minimum gateway compatibility before install. When the selected JoopoHub version publishes a ClawPack artifact, Joopo downloads the versioned npm-pack `.tgz`, verifies the JoopoHub digest header and the artifact digest, then installs it through the normal archive path. Older JoopoHub versions without ClawPack metadata still install through the legacy package archive verification path. Recorded installs keep their JoopoHub source metadata, artifact kind, npm integrity, npm shasum, tarball name, and ClawPack digest facts for later updates.
+Joopo checks the advertised plugin API / minimum gateway compatibility before install. When the selected JoopoHub version publishes a JoopoPack artifact, Joopo downloads the versioned npm-pack `.tgz`, verifies the JoopoHub digest header and the artifact digest, then installs it through the normal archive path. Older JoopoHub versions without JoopoPack metadata still install through the legacy package archive verification path. Recorded installs keep their JoopoHub source metadata, artifact kind, npm integrity, npm shasum, tarball name, and JoopoPack digest facts for later updates.
 Unversioned JoopoHub installs keep an unversioned recorded spec so `joopo plugins update` can follow newer JoopoHub releases; explicit version or tag selectors such as `joopohub:pkg@1.2.3` and `joopohub:pkg@beta` remain pinned to that selector.
 
 #### Marketplace shorthand

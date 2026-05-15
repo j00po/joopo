@@ -222,14 +222,11 @@ Minimal `~/.joopo/joopo.json` (model + defaults):
 
 [![Star History Chart](https://api.star-history.com/svg?repos=joopo/joopo&type=date&legend=top-left)](https://www.star-history.com/#joopo/joopo&type=date&legend=top-left)
 
-## Babuli
+## About
 
-Joopo was built for **Babuli**, a space lobster AI assistant. 🦞
-by Peter Steinberger and the community.
+Joopo is a personal AI assistant built by the community.
 
 - [joopo.ai](https://joopo.ai)
-- [soul.md](https://soul.md)
-- [steipete.me](https://steipete.me)
 - [@joopo](https://x.com/joopo)
 
 ## Community
@@ -239,7 +236,6 @@ AI/vibe-coded PRs welcome! 🤖
 
 Special thanks to [Mario Zechner](https://mariozechner.at/) for his support and for
 [pi-mono](https://github.com/badlogic/pi-mono).
-Special thanks to Adam Doppelt for the lobster.bot domain.
 
 Thanks to all contributors:
 

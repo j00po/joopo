@@ -166,7 +166,7 @@ describe("docker build helper", () => {
     const updateChannel = readFileSync(UPDATE_CHANNEL_SWITCH_DOCKER_E2E_PATH, "utf8");
     const pluginsSweep = readFileSync(PLUGINS_DOCKER_SWEEP_PATH, "utf8");
     const pluginsMarketplace = readFileSync(PLUGINS_DOCKER_MARKETPLACE_PATH, "utf8");
-    const pluginsClawhub = readFileSync(PLUGINS_DOCKER_JOOPOHUB_PATH, "utf8");
+    const pluginsJoopohub = readFileSync(PLUGINS_DOCKER_JOOPOHUB_PATH, "utf8");
     const pluginsAssertions = readFileSync(PLUGINS_DOCKER_ASSERTIONS_PATH, "utf8");
     const pluginUpdateScenario = readFileSync(PLUGIN_UPDATE_SCENARIO_PATH, "utf8");
     const pluginUpdateProbe = readFileSync(PLUGIN_UPDATE_PROBE_PATH, "utf8");
@@ -178,7 +178,7 @@ describe("docker build helper", () => {
       updateChannelAssertions,
       pluginsSweep,
       pluginsMarketplace,
-      pluginsClawhub,
+      pluginsJoopohub,
       pluginsAssertions,
       pluginUpdateScenario,
       pluginUpdateProbe,
@@ -311,7 +311,7 @@ describe("docker build helper", () => {
     expect(joopohub).toContain('plugins update "$JOOPOHUB_PLUGIN_ID"');
     expect(joopohub).toContain("joopohub:@joopo/kitchen-sink");
     expect(assertions).toContain("joopohub-updated");
-    expect(assertions).toContain("record.clawpackSha256");
+    expect(assertions).toContain("record.joopopackSha256");
     expect(assertions).toContain("record.artifactKind");
     expect(assertions).toContain("record.npmIntegrity");
   });

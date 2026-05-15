@@ -227,8 +227,8 @@ function assertJoopoHubArtifactMetadata(record) {
   if (record.artifactKind !== "npm-pack" || record.artifactFormat !== "tgz") {
     throw new Error(`missing kitchen-sink JoopoHub artifact metadata: ${JSON.stringify(record)}`);
   }
-  if (!record.clawpackSha256 || typeof record.clawpackSize !== "number") {
-    throw new Error(`missing kitchen-sink ClawPack metadata: ${JSON.stringify(record)}`);
+  if (!record.joopopackSha256 || typeof record.joopopackSize !== "number") {
+    throw new Error(`missing kitchen-sink JoopoPack metadata: ${JSON.stringify(record)}`);
   }
   if (!record.npmIntegrity || !record.npmShasum || !record.npmTarballName) {
     throw new Error(`missing kitchen-sink npm artifact metadata: ${JSON.stringify(record)}`);

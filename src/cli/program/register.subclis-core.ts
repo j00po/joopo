@@ -193,9 +193,9 @@ const entrySpecs: readonly CommandGroupDescriptorSpec<SubCliRegistrar>[] = [
       exportName: "registerQrCli",
     },
     {
-      commandNames: ["clawbot"],
-      loadModule: () => import("../clawbot-cli.js"),
-      exportName: "registerClawbotCli",
+      commandNames: ["joopobot"],
+      loadModule: () => import("../joopobot-cli.js"),
+      exportName: "registerJoopobotCli",
     },
   ]),
   {

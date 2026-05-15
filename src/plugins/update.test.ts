@@ -98,17 +98,17 @@ function createSuccessfulJoopoHubUpdateResult(params?: {
       joopohubFamily: "code-plugin" as const,
       joopohubChannel: "official" as const,
       version: params?.version ?? "2026.5.1-beta.2",
-      integrity: "sha256-clawpack",
+      integrity: "sha256-joopopack",
       resolvedAt: "2026-05-01T00:00:00.000Z",
       artifactKind: "npm-pack" as const,
       artifactFormat: "tgz" as const,
-      npmIntegrity: "sha512-clawpack",
+      npmIntegrity: "sha512-joopopack",
       npmShasum: "2".repeat(40),
       npmTarballName: `${params?.joopohubPackage ?? "legacy-chat"}-${params?.version ?? "2026.5.1-beta.2"}.tgz`,
-      clawpackSha256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      clawpackSpecVersion: 1,
-      clawpackManifestSha256: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-      clawpackSize: 4096,
+      joopopackSha256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      joopopackSpecVersion: 1,
+      joopopackManifestSha256: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      joopopackSize: 4096,
     },
   };
 }
@@ -2040,10 +2040,10 @@ describe("updateNpmInstalledPlugins", () => {
         npmTarballName: "demo-1.2.4.tgz",
         integrity: "sha256-next",
         resolvedAt: "2026-03-22T00:00:00.000Z",
-        clawpackSha256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        clawpackSpecVersion: 1,
-        clawpackManifestSha256: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-        clawpackSize: 4096,
+        joopopackSha256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        joopopackSpecVersion: 1,
+        joopopackManifestSha256: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        joopopackSize: 4096,
       },
     });
 
@@ -2083,10 +2083,10 @@ describe("updateNpmInstalledPlugins", () => {
       npmShasum: "1".repeat(40),
       npmTarballName: "demo-1.2.4.tgz",
       integrity: "sha256-next",
-      clawpackSha256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      clawpackSpecVersion: 1,
-      clawpackManifestSha256: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-      clawpackSize: 4096,
+      joopopackSha256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      joopopackSpecVersion: 1,
+      joopopackManifestSha256: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      joopopackSize: 4096,
     });
   });
 
@@ -2989,20 +2989,20 @@ describe("syncPluginsForUpdateChannel", () => {
       spec: "joopohub:legacy-chat@2026.5.1-beta.2",
       installPath: "/tmp/joopo-plugins/legacy-chat",
       version: "2026.5.1-beta.2",
-      integrity: "sha256-clawpack",
+      integrity: "sha256-joopopack",
       joopohubUrl: "https://joopohub.ai",
       joopohubPackage: "legacy-chat",
       joopohubFamily: "code-plugin",
       joopohubChannel: "official",
       artifactKind: "npm-pack",
       artifactFormat: "tgz",
-      npmIntegrity: "sha512-clawpack",
+      npmIntegrity: "sha512-joopopack",
       npmShasum: "2".repeat(40),
       npmTarballName: "legacy-chat-2026.5.1-beta.2.tgz",
-      clawpackSha256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-      clawpackSpecVersion: 1,
-      clawpackManifestSha256: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-      clawpackSize: 4096,
+      joopopackSha256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      joopopackSpecVersion: 1,
+      joopopackManifestSha256: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      joopopackSize: 4096,
     });
   });
 
@@ -3194,7 +3194,7 @@ describe("syncPluginsForUpdateChannel", () => {
     installPluginFromJoopoHubMock.mockResolvedValue({
       ok: false,
       code: "archive_integrity_mismatch",
-      error: "JoopoHub ClawPack integrity mismatch.",
+      error: "JoopoHub JoopoPack integrity mismatch.",
     });
     const config: JoopoConfig = {
       channels: {
@@ -3232,7 +3232,7 @@ describe("syncPluginsForUpdateChannel", () => {
     expect(result.changed).toBe(false);
     expect(result.config).toBe(config);
     expect(result.summary.errors).toEqual([
-      "Failed to update legacy-chat: JoopoHub ClawPack integrity mismatch. (JoopoHub joopohub:legacy-chat@2026.5.1-beta.2).",
+      "Failed to update legacy-chat: JoopoHub JoopoPack integrity mismatch. (JoopoHub joopohub:legacy-chat@2026.5.1-beta.2).",
     ]);
   });
 

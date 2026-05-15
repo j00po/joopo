@@ -14,32 +14,32 @@ const packageName = "@joopo/kitchen-sink";
 const pluginId = "joopo-kitchen-sink-fixture";
 
 const buildArtifactSummary = ({
-  clawpackSha256,
-  clawpackSize,
+  joopopackSha256,
+  joopopackSize,
   npmIntegrity,
   npmShasum,
   npmTarballName,
 }) => ({
   kind: "npm-pack",
   format: "tgz",
-  sha256: clawpackSha256,
-  size: clawpackSize,
+  sha256: joopopackSha256,
+  size: joopopackSize,
   npmIntegrity,
   npmShasum,
   npmTarballName,
 });
 
-const buildClawPackSummary = ({
-  clawpackSha256,
-  clawpackSize,
+const buildJoopoPackSummary = ({
+  joopopackSha256,
+  joopopackSize,
   npmIntegrity,
   npmShasum,
   npmTarballName,
 }) => ({
   available: true,
   format: "tgz",
-  sha256: clawpackSha256,
-  size: clawpackSize,
+  sha256: joopopackSha256,
+  size: joopopackSize,
   npmIntegrity,
   npmShasum,
   npmTarballName,
@@ -74,8 +74,8 @@ async function buildNpmPackArtifact(fixture) {
     const archive = await fs.promises.readFile(archivePath);
     return {
       archive,
-      clawpackSha256: crypto.createHash("sha256").update(archive).digest("hex"),
-      clawpackSize: archive.length,
+      joopopackSha256: crypto.createHash("sha256").update(archive).digest("hex"),
+      joopopackSize: archive.length,
       npmIntegrity: `sha512-${crypto.createHash("sha512").update(archive).digest("base64")}`,
       npmShasum: crypto.createHash("sha1").update(archive).digest("hex"),
       npmTarballName,
@@ -186,7 +186,7 @@ export default definePluginEntry({
       },
     },
     packageDetail(artifact) {
-      const clawpack = buildClawPackSummary(artifact);
+      const joopopack = buildJoopoPackSummary(artifact);
       const packageArtifact = buildArtifactSummary(artifact);
       const packageDetail = {
         package: {
@@ -222,7 +222,7 @@ export default definePluginEntry({
             scanStatus: "passed",
           },
           artifact: packageArtifact,
-          clawpack,
+          joopopack,
         },
       };
       return {
@@ -243,7 +243,7 @@ export default definePluginEntry({
             capabilities: packageDetail.package.capabilities,
             verification: packageDetail.package.verification,
             artifact: packageArtifact,
-            clawpack,
+            joopopack,
           },
         },
         betaStatus: 404,
@@ -300,7 +300,7 @@ export default definePluginEntry({
         pluginApiRange: ">=2026.4.26",
         minGatewayVersion: "2026.4.26",
       };
-      const clawpack = buildClawPackSummary(artifact);
+      const joopopack = buildJoopoPackSummary(artifact);
       const packageArtifact = buildArtifactSummary(artifact);
       return {
         packageDetail: {
@@ -316,7 +316,7 @@ export default definePluginEntry({
             updatedAt: 0,
             compatibility,
             artifact: packageArtifact,
-            clawpack,
+            joopopack,
           },
         },
         versionDetail: {
@@ -327,7 +327,7 @@ export default definePluginEntry({
             sha256hash: artifact.sha256hash,
             compatibility,
             artifact: packageArtifact,
-            clawpack,
+            joopopack,
           },
         },
       };
@@ -352,10 +352,10 @@ async function main() {
 
   const archive = await zip.generateAsync({ type: "nodebuffer", compression: "DEFLATE" });
   const sha256hash = crypto.createHash("sha256").update(archive).digest("hex");
-  const clawpack = await buildNpmPackArtifact(fixture);
+  const joopopack = await buildNpmPackArtifact(fixture);
   const { packageDetail, versionDetail, betaStatus } = fixture.packageDetail({
     sha256hash,
-    ...clawpack,
+    ...joopopack,
   });
 
   const json = (response, value, status = 200) => {
@@ -374,9 +374,9 @@ async function main() {
       artifactKind: "npm-pack",
       packageName,
       version: fixture.version,
-      artifactSha256: clawpack.clawpackSha256,
-      npmIntegrity: clawpack.npmIntegrity,
-      npmShasum: clawpack.npmShasum,
+      artifactSha256: joopopack.joopopackSha256,
+      npmIntegrity: joopopack.npmIntegrity,
+      npmShasum: joopopack.npmShasum,
     },
   };
 
@@ -426,13 +426,13 @@ async function main() {
     ) {
       response.writeHead(200, {
         "content-type": "application/octet-stream",
-        "content-length": String(clawpack.archive.length),
+        "content-length": String(joopopack.archive.length),
         "X-JoopoHub-Artifact-Type": "npm-pack-tarball",
-        "X-JoopoHub-Artifact-Sha256": clawpack.clawpackSha256,
-        "X-JoopoHub-Npm-Integrity": clawpack.npmIntegrity,
-        "X-JoopoHub-Npm-Shasum": clawpack.npmShasum,
+        "X-JoopoHub-Artifact-Sha256": joopopack.joopopackSha256,
+        "X-JoopoHub-Npm-Integrity": joopopack.npmIntegrity,
+        "X-JoopoHub-Npm-Shasum": joopopack.npmShasum,
       });
-      response.end(clawpack.archive);
+      response.end(joopopack.archive);
       return;
     }
     response.writeHead(404, { "content-type": "text/plain" });

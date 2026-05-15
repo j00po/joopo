@@ -113,7 +113,7 @@ export type JoopoHubPackageArtifactResolverResponse = {
         sha256hash?: string | null;
         compatibility?: JoopoHubPackageCompatibility | null;
         artifact?: JoopoHubPackageArtifactSummary | null;
-        clawpack?: JoopoHubPackageClawPackSummary | null;
+        joopopack?: JoopoHubPackageJoopoPackSummary | null;
       } & Record<string, unknown>)
     | string
     | null;
@@ -130,7 +130,7 @@ export type JoopoHubPackageSecurityResponse = {
   scanState?: JoopoHubArtifactScanState | null;
   moderationState?: JoopoHubArtifactModerationState | null;
 };
-export type JoopoHubPackageClawPackSummary = {
+export type JoopoHubPackageJoopoPackSummary = {
   available: boolean;
   specVersion?: number | null;
   format?: string | null;
@@ -150,7 +150,7 @@ export type JoopoHubPackageClawPackSummary = {
 export type JoopoHubPackageReadinessPhase =
   | "planned"
   | "published"
-  | "clawpack-ready"
+  | "joopopack-ready"
   | "legacy-zip-only"
   | "metadata-ready"
   | "blocked"
@@ -189,11 +189,11 @@ export type JoopoHubPackageListItem = {
   capabilityTags?: string[];
   executesCode?: boolean;
   verificationTier?: string | null;
-  clawpackAvailable?: boolean;
+  joopopackAvailable?: boolean;
   hostTargetKeys?: string[];
   environmentFlags?: string[];
   artifact?: JoopoHubPackageArtifactSummary | null;
-  clawpack?: JoopoHubPackageClawPackSummary;
+  joopopack?: JoopoHubPackageJoopoPackSummary;
 };
 export type JoopoHubPackageDetail = {
   package:
@@ -222,7 +222,7 @@ export type JoopoHubPackageDetail = {
           scanStatus?: string;
         } | null;
         artifact?: JoopoHubPackageArtifactSummary | null;
-        clawpack?: JoopoHubPackageClawPackSummary;
+        joopopack?: JoopoHubPackageJoopoPackSummary;
       })
     | null;
   owner?: {
@@ -262,7 +262,7 @@ export type JoopoHubPackageVersion = {
         : never
       : never;
     artifact?: JoopoHubPackageArtifactSummary | null;
-    clawpack?: JoopoHubPackageClawPackSummary;
+    joopopack?: JoopoHubPackageJoopoPackSummary;
   } | null;
 };
 
@@ -330,9 +330,9 @@ export type JoopoHubDownloadResult = {
   archivePath: string;
   integrity: string;
   sha256Hex: string;
-  artifact: "archive" | "clawpack";
-  clawpackHeaderSha256?: string;
-  clawpackHeaderSpecVersion?: number;
+  artifact: "archive" | "joopopack";
+  joopopackHeaderSha256?: string;
+  joopopackHeaderSpecVersion?: number;
   npmIntegrity?: string;
   npmShasum?: string;
   npmTarballName?: string;
@@ -884,15 +884,15 @@ export async function downloadJoopoHubPackageArchive(params: {
   name: string;
   version?: string;
   tag?: string;
-  artifact?: "archive" | "clawpack";
+  artifact?: "archive" | "joopopack";
   baseUrl?: string;
   token?: string;
   timeoutMs?: number;
   fetchImpl?: FetchLike;
 }): Promise<JoopoHubDownloadResult> {
-  if (params.artifact === "clawpack") {
+  if (params.artifact === "joopopack") {
     if (!params.version) {
-      throw new Error("ClawPack package downloads require an explicit version.");
+      throw new Error("JoopoPack package downloads require an explicit version.");
     }
     const { response, url, hasToken } = await joopohubRequest({
       baseUrl: params.baseUrl,
@@ -912,17 +912,17 @@ export async function downloadJoopoHubPackageArchive(params: {
     const npmShasum = formatSha1Hex(bytes);
     const headerSha256 = normalizeJoopoHubSha256Hex(
       response.headers.get("X-JoopoHub-Artifact-Sha256") ??
-        response.headers.get("X-JoopoHub-ClawPack-Sha256") ??
+        response.headers.get("X-JoopoHub-JoopoPack-Sha256") ??
         "",
     );
     if (!headerSha256) {
       throw new Error(
-        `JoopoHub ClawPack download for "${params.name}@${params.version}" is missing X-JoopoHub-Artifact-Sha256.`,
+        `JoopoHub JoopoPack download for "${params.name}@${params.version}" is missing X-JoopoHub-Artifact-Sha256.`,
       );
     }
     if (headerSha256 !== sha256Hex) {
       throw new Error(
-        `JoopoHub ClawPack download for "${params.name}@${params.version}" declared sha256 ${headerSha256}, got ${sha256Hex}.`,
+        `JoopoHub JoopoPack download for "${params.name}@${params.version}" declared sha256 ${headerSha256}, got ${sha256Hex}.`,
       );
     }
     const headerNpmIntegrity = normalizeHeaderValue(
@@ -930,22 +930,22 @@ export async function downloadJoopoHubPackageArchive(params: {
     );
     if (headerNpmIntegrity && headerNpmIntegrity !== npmIntegrity) {
       throw new Error(
-        `JoopoHub ClawPack download for "${params.name}@${params.version}" declared npm integrity ${headerNpmIntegrity}, got ${npmIntegrity}.`,
+        `JoopoHub JoopoPack download for "${params.name}@${params.version}" declared npm integrity ${headerNpmIntegrity}, got ${npmIntegrity}.`,
       );
     }
     const headerNpmShasum = normalizeHeaderValue(response.headers.get("X-JoopoHub-Npm-Shasum"));
     if (headerNpmShasum && headerNpmShasum !== npmShasum) {
       throw new Error(
-        `JoopoHub ClawPack download for "${params.name}@${params.version}" declared npm shasum ${headerNpmShasum}, got ${npmShasum}.`,
+        `JoopoHub JoopoPack download for "${params.name}@${params.version}" declared npm shasum ${headerNpmShasum}, got ${npmShasum}.`,
       );
     }
     const npmTarballName =
       normalizeHeaderValue(response.headers.get("X-JoopoHub-Npm-Tarball-Name")) ??
       safePackageTarballName(params.name, params.version);
-    const rawSpecVersion = response.headers.get("X-JoopoHub-ClawPack-Spec-Version");
+    const rawSpecVersion = response.headers.get("X-JoopoHub-JoopoPack-Spec-Version");
     const specVersion = rawSpecVersion ? Number.parseInt(rawSpecVersion, 10) : undefined;
     const target = await createTempDownloadTarget({
-      prefix: "joopo-joopohub-clawpack",
+      prefix: "joopo-joopohub-joopopack",
       fileName: npmTarballName,
       tmpDir: os.tmpdir(),
     });
@@ -954,10 +954,10 @@ export async function downloadJoopoHubPackageArchive(params: {
       archivePath: target.path,
       integrity: normalizeJoopoHubSha256Integrity(sha256Hex) ?? formatSha256Integrity(bytes),
       sha256Hex,
-      artifact: "clawpack",
-      clawpackHeaderSha256: headerSha256,
+      artifact: "joopopack",
+      joopopackHeaderSha256: headerSha256,
       ...(typeof specVersion === "number" && Number.isSafeInteger(specVersion) && specVersion >= 0
-        ? { clawpackHeaderSpecVersion: specVersion }
+        ? { joopopackHeaderSpecVersion: specVersion }
         : {}),
       npmIntegrity,
       npmShasum,

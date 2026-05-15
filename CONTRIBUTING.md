@@ -1,6 +1,6 @@
 # Contributing to Joopo
 
-Welcome to the lobster tank! 🦞
+Welcome to Joopo! ⚡
 
 ## Quick Links
 
@@ -17,7 +17,7 @@ Welcome to the lobster tank! 🦞
 - **Frank Yang** - PR triage, Agents, Gateway, Channels
   - GitHub: [@frankekn](https://github.com/frankekn) · X: [@frankekn](https://x.com/frankekn)
 
-- **Shadow** - Discord subsystem, Discord admin, Clawhub, all community moderation
+- **Shadow** - Discord subsystem, Discord admin, Joopohub, all community moderation
   - GitHub: [@thewilloftheshadow](https://github.com/thewilloftheshadow) · X: [@4shadowed](https://x.com/4shadowed)
 
 - **Vignesh** - Memory (QMD), formal modeling, TUI, IRC, and Lobster

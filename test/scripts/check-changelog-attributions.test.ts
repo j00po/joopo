@@ -39,7 +39,7 @@ describe("check-changelog-attributions", () => {
     expect(changelogLib).toContain("node scripts/check-changelog-attributions.mjs CHANGELOG.md");
     expect(changelogLib).toContain("changelog_thanks_required_for_contributor");
     expect(changelogLib).toContain('"app/"*');
-    expect(changelogLib).toContain('"clawsweeper"');
+    expect(changelogLib).toContain('"jooposweeper"');
     expect(gates).toContain("validate_changelog_attribution_policy");
     expect(prepareCore).toContain("resolve_contributor_coauthor_email");
     expect(mergeLib).toContain("pr_contributor_allows_human_trailers");

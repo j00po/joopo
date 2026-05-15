@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# ClawDock - Docker helpers for Joopo
+# JoopoDock - Docker helpers for Joopo
 # Inspired by Simon Willison's "Running Joopo in Docker"
 # https://til.simonwillison.net/llms/joopo-docker
 #
@@ -447,7 +447,7 @@ joopoock-approve() {
 
 # Show all available joopoock helper commands
 joopoock-help() {
-  echo -e "\n${_CLR_BOLD}${_CLR_CYAN}🦞 ClawDock - Docker Helpers for Joopo${_CLR_RESET}\n"
+  echo -e "\n${_CLR_BOLD}${_CLR_CYAN}🦞 JoopoDock - Docker Helpers for Joopo${_CLR_RESET}\n"
 
   echo -e "${_CLR_BOLD}${_CLR_MAGENTA}⚡ Basic Operations${_CLR_RESET}"
   echo -e "  $(_cmd joopoock-start)       ${_CLR_DIM}Start the gateway${_CLR_RESET}"

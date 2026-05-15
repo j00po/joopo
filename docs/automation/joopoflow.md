@@ -1,9 +1,9 @@
 ---
 summary: "Redirect to Task Flow"
-title: "ClawFlow"
+title: "JoopoFlow"
 ---
 
-ClawFlow was renamed to [Task flow](/automation/taskflow).
+JoopoFlow was renamed to [Task flow](/automation/taskflow).
 
 ## Related
 

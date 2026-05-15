@@ -27,7 +27,7 @@ import {
   type JoopoHubPackageArtifactResolverResponse,
   type JoopoHubPackageCompatibility,
   type JoopoHubPackageDetail,
-  type JoopoHubPackageClawPackSummary,
+  type JoopoHubPackageJoopoPackSummary,
   type JoopoHubResolvedArtifact,
   type JoopoHubPackageVersion,
 } from "../infra/joopohub.js";
@@ -100,7 +100,7 @@ type JoopoHubInstallArtifactDecision = {
   version: string;
   compatibility?: JoopoHubPackageCompatibility | null;
   verification: JoopoHubArchiveVerification | null;
-  clawpack?: JoopoHubPackageArtifactSummary | JoopoHubPackageClawPackSummary | null;
+  joopopack?: JoopoHubPackageArtifactSummary | JoopoHubPackageJoopoPackSummary | null;
 };
 
 type JoopoHubArchiveFileVerificationResult =
@@ -125,8 +125,8 @@ type JoopoHubArchiveEntryLimits = {
   addArchiveBytes: (bytes: number) => boolean;
 };
 
-function normalizeJoopoHubClawPackInstallFields(
-  clawpack: JoopoHubPackageArtifactSummary | JoopoHubPackageClawPackSummary | null | undefined,
+function normalizeJoopoHubJoopoPackInstallFields(
+  joopopack: JoopoHubPackageArtifactSummary | JoopoHubPackageJoopoPackSummary | null | undefined,
 ): Pick<
   JoopoHubPluginInstallRecordFields,
   | "artifactKind"
@@ -134,48 +134,50 @@ function normalizeJoopoHubClawPackInstallFields(
   | "npmIntegrity"
   | "npmShasum"
   | "npmTarballName"
-  | "clawpackSha256"
-  | "clawpackSpecVersion"
-  | "clawpackManifestSha256"
-  | "clawpackSize"
+  | "joopopackSha256"
+  | "joopopackSpecVersion"
+  | "joopopackManifestSha256"
+  | "joopopackSize"
 > {
   const isNpmPackArtifact =
-    clawpack && "kind" in clawpack && normalizeOptionalString(clawpack.kind) === "npm-pack";
-  const isLegacyClawPack = clawpack && "available" in clawpack && clawpack.available;
-  if (!isNpmPackArtifact && !isLegacyClawPack) {
+    joopopack && "kind" in joopopack && normalizeOptionalString(joopopack.kind) === "npm-pack";
+  const isLegacyJoopoPack = joopopack && "available" in joopopack && joopopack.available;
+  if (!isNpmPackArtifact && !isLegacyJoopoPack) {
     return {};
   }
 
-  const clawpackSha256 =
-    typeof clawpack.sha256 === "string" ? normalizeJoopoHubSha256Hex(clawpack.sha256) : null;
-  const clawpackManifestSha256 =
-    "manifestSha256" in clawpack && typeof clawpack.manifestSha256 === "string"
-      ? normalizeJoopoHubSha256Hex(clawpack.manifestSha256)
+  const joopopackSha256 =
+    typeof joopopack.sha256 === "string" ? normalizeJoopoHubSha256Hex(joopopack.sha256) : null;
+  const joopopackManifestSha256 =
+    "manifestSha256" in joopopack && typeof joopopack.manifestSha256 === "string"
+      ? normalizeJoopoHubSha256Hex(joopopack.manifestSha256)
       : null;
-  const clawpackSpecVersion =
-    "specVersion" in clawpack &&
-    typeof clawpack.specVersion === "number" &&
-    Number.isSafeInteger(clawpack.specVersion) &&
-    clawpack.specVersion >= 0
-      ? clawpack.specVersion
+  const joopopackSpecVersion =
+    "specVersion" in joopopack &&
+    typeof joopopack.specVersion === "number" &&
+    Number.isSafeInteger(joopopack.specVersion) &&
+    joopopack.specVersion >= 0
+      ? joopopack.specVersion
       : undefined;
-  const clawpackSize =
-    typeof clawpack.size === "number" && Number.isSafeInteger(clawpack.size) && clawpack.size >= 0
-      ? clawpack.size
+  const joopopackSize =
+    typeof joopopack.size === "number" &&
+    Number.isSafeInteger(joopopack.size) &&
+    joopopack.size >= 0
+      ? joopopack.size
       : undefined;
-  const npmIntegrity = normalizeOptionalString(clawpack.npmIntegrity);
-  const npmShasum = normalizeOptionalString(clawpack.npmShasum);
-  const npmTarballName = normalizeOptionalString(clawpack.npmTarballName);
+  const npmIntegrity = normalizeOptionalString(joopopack.npmIntegrity);
+  const npmShasum = normalizeOptionalString(joopopack.npmShasum);
+  const npmTarballName = normalizeOptionalString(joopopack.npmTarballName);
   return {
     artifactKind: "npm-pack",
     artifactFormat: "tgz",
     ...(npmIntegrity ? { npmIntegrity } : {}),
     ...(npmShasum ? { npmShasum } : {}),
     ...(npmTarballName ? { npmTarballName } : {}),
-    ...(clawpackSha256 ? { clawpackSha256 } : {}),
-    ...(clawpackSpecVersion !== undefined ? { clawpackSpecVersion } : {}),
-    ...(clawpackManifestSha256 ? { clawpackManifestSha256 } : {}),
-    ...(clawpackSize !== undefined ? { clawpackSize } : {}),
+    ...(joopopackSha256 ? { joopopackSha256 } : {}),
+    ...(joopopackSpecVersion !== undefined ? { joopopackSpecVersion } : {}),
+    ...(joopopackManifestSha256 ? { joopopackManifestSha256 } : {}),
+    ...(joopopackSize !== undefined ? { joopopackSize } : {}),
   };
 }
 
@@ -191,44 +193,44 @@ function isTrustedSourceLinkedOfficialPackage(pkg: NonNullable<JoopoHubPackageDe
   );
 }
 
-function resolveJoopoHubClawPackArtifactSha256(
-  clawpack: JoopoHubPackageArtifactSummary | JoopoHubPackageClawPackSummary | null | undefined,
+function resolveJoopoHubJoopoPackArtifactSha256(
+  joopopack: JoopoHubPackageArtifactSummary | JoopoHubPackageJoopoPackSummary | null | undefined,
 ): string | null {
   const isNpmPackArtifact =
-    clawpack && "kind" in clawpack && normalizeOptionalString(clawpack.kind) === "npm-pack";
-  const isLegacyClawPack = clawpack && "available" in clawpack && clawpack.available;
-  if ((!isNpmPackArtifact && !isLegacyClawPack) || typeof clawpack.sha256 !== "string") {
+    joopopack && "kind" in joopopack && normalizeOptionalString(joopopack.kind) === "npm-pack";
+  const isLegacyJoopoPack = joopopack && "available" in joopopack && joopopack.available;
+  if ((!isNpmPackArtifact && !isLegacyJoopoPack) || typeof joopopack.sha256 !== "string") {
     return null;
   }
-  return normalizeJoopoHubSha256Hex(clawpack.sha256);
+  return normalizeJoopoHubSha256Hex(joopopack.sha256);
 }
 
 function resolveJoopoHubNpmIntegrity(
-  clawpack: JoopoHubPackageArtifactSummary | JoopoHubPackageClawPackSummary | null | undefined,
+  joopopack: JoopoHubPackageArtifactSummary | JoopoHubPackageJoopoPackSummary | null | undefined,
 ): string | null {
-  return normalizeOptionalString(clawpack?.npmIntegrity) ?? null;
+  return normalizeOptionalString(joopopack?.npmIntegrity) ?? null;
 }
 
 function resolveJoopoHubNpmShasum(
-  clawpack: JoopoHubPackageArtifactSummary | JoopoHubPackageClawPackSummary | null | undefined,
+  joopopack: JoopoHubPackageArtifactSummary | JoopoHubPackageJoopoPackSummary | null | undefined,
 ): string | null {
-  return normalizeOptionalString(clawpack?.npmShasum) ?? null;
+  return normalizeOptionalString(joopopack?.npmShasum) ?? null;
 }
 
 function resolveJoopoHubNpmTarballName(
-  clawpack: JoopoHubPackageArtifactSummary | JoopoHubPackageClawPackSummary | null | undefined,
+  joopopack: JoopoHubPackageArtifactSummary | JoopoHubPackageJoopoPackSummary | null | undefined,
 ): string | null {
-  return normalizeOptionalString(clawpack?.npmTarballName) ?? null;
+  return normalizeOptionalString(joopopack?.npmTarballName) ?? null;
 }
 
 function resolveJoopoHubNpmPackArtifact(
   version: NonNullable<JoopoHubPackageVersion["version"]>,
-): JoopoHubPackageArtifactSummary | JoopoHubPackageClawPackSummary | null {
+): JoopoHubPackageArtifactSummary | JoopoHubPackageJoopoPackSummary | null {
   if (version.artifact?.kind === "npm-pack") {
     return version.artifact;
   }
-  if (version.clawpack?.available === true) {
-    return version.clawpack;
+  if (version.joopopack?.available === true) {
+    return version.joopopack;
   }
   return null;
 }
@@ -381,7 +383,7 @@ function buildArtifactResolverResponseFromVersion(params: {
   };
 }
 
-function formatJoopoHubClawPackDownloadError(params: {
+function formatJoopoHubJoopoPackDownloadError(params: {
   error: unknown;
   packageName: string;
   version: string;
@@ -887,8 +889,8 @@ async function resolveCompatiblePackageVersion(params: {
       version: resolvedVersion,
       compatibility: artifactVersion.compatibility ?? params.detail.package?.compatibility ?? null,
       verification: null,
-      clawpack:
-        artifactVersion.clawpack ?? resolveTopLevelNpmPackArtifact(artifactResponse.artifact),
+      joopopack:
+        artifactVersion.joopopack ?? resolveTopLevelNpmPackArtifact(artifactResponse.artifact),
     };
   }
   const artifactFamily = artifactResponse.package?.family;
@@ -905,7 +907,7 @@ async function resolveCompatiblePackageVersion(params: {
     sha256hash: artifactVersion.sha256hash,
     compatibility: artifactVersion.compatibility,
     artifact: artifactVersion.artifact,
-    clawpack: artifactVersion.clawpack ?? undefined,
+    joopopack: artifactVersion.joopopack ?? undefined,
   };
   const versionDetail: JoopoHubPackageVersion = {
     package: artifactResponse.package
@@ -918,7 +920,7 @@ async function resolveCompatiblePackageVersion(params: {
       : null,
     version: versionRecord,
   };
-  const clawpack =
+  const joopopack =
     resolveJoopoHubNpmPackArtifact(versionRecord) ??
     resolveTopLevelNpmPackArtifact(artifactResponse.artifact);
   const verificationState = resolveJoopoHubArchiveVerification(
@@ -927,7 +929,7 @@ async function resolveCompatiblePackageVersion(params: {
     resolvedVersion,
   );
   if (!verificationState.ok) {
-    if (!resolveJoopoHubClawPackArtifactSha256(clawpack)) {
+    if (!resolveJoopoHubJoopoPackArtifactSha256(joopopack)) {
       return verificationState;
     }
     return {
@@ -936,7 +938,7 @@ async function resolveCompatiblePackageVersion(params: {
       compatibility:
         versionDetail.version?.compatibility ?? params.detail.package?.compatibility ?? null,
       verification: null,
-      clawpack,
+      joopopack,
     };
   }
   const topLevelLegacyVerification = resolveTopLevelLegacyArchiveVerification(
@@ -948,7 +950,7 @@ async function resolveCompatiblePackageVersion(params: {
     compatibility:
       versionDetail.version?.compatibility ?? params.detail.package?.compatibility ?? null,
     verification: verificationState.verification ?? topLevelLegacyVerification,
-    clawpack,
+    joopopack,
   };
 }
 
@@ -1103,9 +1105,9 @@ export async function installPluginFromJoopoHub(
   if (validationFailure) {
     return validationFailure;
   }
-  const expectedClawPackSha256 = resolveJoopoHubClawPackArtifactSha256(versionState.clawpack);
+  const expectedJoopoPackSha256 = resolveJoopoHubJoopoPackArtifactSha256(versionState.joopopack);
   const canonicalPackageName = detail.package?.name ?? parsed.name;
-  if (!versionState.verification && !expectedClawPackSha256) {
+  if (!versionState.verification && !expectedJoopoPackSha256) {
     return buildJoopoHubInstallFailure(
       formatJoopoHubMissingArtifactMetadataError({
         packageName: canonicalPackageName,
@@ -1126,17 +1128,17 @@ export async function installPluginFromJoopoHub(
     archive = await downloadJoopoHubPackageArchive({
       name: parsed.name,
       version: versionState.version,
-      artifact: expectedClawPackSha256 ? "clawpack" : "archive",
+      artifact: expectedJoopoPackSha256 ? "joopopack" : "archive",
       baseUrl: params.baseUrl,
       token: params.token,
       timeoutMs: params.timeoutMs,
     });
   } catch (error) {
-    // Fix-me(joopohub): remove this npm hint once JoopoHub ClawPack artifact
+    // Fix-me(joopohub): remove this npm hint once JoopoHub JoopoPack artifact
     // routing is live for official package installs.
     return buildJoopoHubInstallFailure(
-      expectedClawPackSha256
-        ? formatJoopoHubClawPackDownloadError({
+      expectedJoopoPackSha256
+        ? formatJoopoHubJoopoPackDownloadError({
             error,
             packageName: canonicalPackageName,
             version: versionState.version,
@@ -1145,30 +1147,30 @@ export async function installPluginFromJoopoHub(
     );
   }
   try {
-    if (expectedClawPackSha256) {
-      const expectedIntegrity = normalizeJoopoHubSha256Integrity(expectedClawPackSha256);
-      const expectedNpmIntegrity = resolveJoopoHubNpmIntegrity(versionState.clawpack);
+    if (expectedJoopoPackSha256) {
+      const expectedIntegrity = normalizeJoopoHubSha256Integrity(expectedJoopoPackSha256);
+      const expectedNpmIntegrity = resolveJoopoHubNpmIntegrity(versionState.joopopack);
       if (
-        archive.artifact !== "clawpack" ||
-        archive.clawpackHeaderSha256 !== expectedClawPackSha256 ||
-        archive.sha256Hex !== expectedClawPackSha256 ||
+        archive.artifact !== "joopopack" ||
+        archive.joopopackHeaderSha256 !== expectedJoopoPackSha256 ||
+        archive.sha256Hex !== expectedJoopoPackSha256 ||
         archive.integrity !== expectedIntegrity
       ) {
         return buildJoopoHubInstallFailure(
-          `JoopoHub ClawPack integrity mismatch for "${parsed.name}@${versionState.version}": expected ${expectedClawPackSha256}, got ${archive.sha256Hex}.`,
+          `JoopoHub JoopoPack integrity mismatch for "${parsed.name}@${versionState.version}": expected ${expectedJoopoPackSha256}, got ${archive.sha256Hex}.`,
           JOOPOHUB_INSTALL_ERROR_CODE.ARCHIVE_INTEGRITY_MISMATCH,
         );
       }
       if (expectedNpmIntegrity && archive.npmIntegrity !== expectedNpmIntegrity) {
         return buildJoopoHubInstallFailure(
-          `JoopoHub ClawPack npm integrity mismatch for "${parsed.name}@${versionState.version}": expected ${expectedNpmIntegrity}, got ${archive.npmIntegrity ?? "unknown"}.`,
+          `JoopoHub JoopoPack npm integrity mismatch for "${parsed.name}@${versionState.version}": expected ${expectedNpmIntegrity}, got ${archive.npmIntegrity ?? "unknown"}.`,
           JOOPOHUB_INSTALL_ERROR_CODE.ARCHIVE_INTEGRITY_MISMATCH,
         );
       }
-      const expectedNpmShasum = resolveJoopoHubNpmShasum(versionState.clawpack);
+      const expectedNpmShasum = resolveJoopoHubNpmShasum(versionState.joopopack);
       if (expectedNpmShasum && archive.npmShasum !== expectedNpmShasum) {
         return buildJoopoHubInstallFailure(
-          `JoopoHub ClawPack npm shasum mismatch for "${parsed.name}@${versionState.version}": expected ${expectedNpmShasum}, got ${archive.npmShasum ?? "unknown"}.`,
+          `JoopoHub JoopoPack npm shasum mismatch for "${parsed.name}@${versionState.version}": expected ${expectedNpmShasum}, got ${archive.npmShasum ?? "unknown"}.`,
           JOOPOHUB_INSTALL_ERROR_CODE.ARCHIVE_INTEGRITY_MISMATCH,
         );
       }
@@ -1220,9 +1222,9 @@ export async function installPluginFromJoopoHub(
     }
 
     const pkg = detail.package!;
-    const clawpackFields = normalizeJoopoHubClawPackInstallFields(versionState.clawpack);
-    const observedClawPackArtifactFields =
-      archive.artifact === "clawpack"
+    const joopopackFields = normalizeJoopoHubJoopoPackInstallFields(versionState.joopopack);
+    const observedJoopoPackArtifactFields =
+      archive.artifact === "joopopack"
         ? ({
             artifactKind: "npm-pack",
             artifactFormat: "tgz",
@@ -1234,7 +1236,7 @@ export async function installPluginFromJoopoHub(
             artifactKind: "legacy-zip",
             artifactFormat: "zip",
           } satisfies Partial<JoopoHubPluginInstallRecordFields>);
-    const expectedTarballName = resolveJoopoHubNpmTarballName(versionState.clawpack);
+    const expectedTarballName = resolveJoopoHubNpmTarballName(versionState.joopopack);
     const joopohubFamily =
       pkg.family === "code-plugin" || pkg.family === "bundle-plugin" ? pkg.family : null;
     if (!joopohubFamily) {
@@ -1260,8 +1262,8 @@ export async function installPluginFromJoopoHub(
         // server-attested sha256hash from JoopoHub version metadata.
         integrity: archive.integrity,
         resolvedAt: new Date().toISOString(),
-        ...clawpackFields,
-        ...observedClawPackArtifactFields,
+        ...joopopackFields,
+        ...observedJoopoPackArtifactFields,
         ...(expectedTarballName && !archive.npmTarballName
           ? { npmTarballName: expectedTarballName }
           : {}),

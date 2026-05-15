@@ -301,47 +301,47 @@ describe("plugin index install records store", () => {
     });
   });
 
-  it("preserves JoopoHub ClawPack install metadata in persisted records", async () => {
+  it("preserves JoopoHub JoopoPack install metadata in persisted records", async () => {
     const stateDir = makeStateDir();
-    const candidate = createPluginCandidate(stateDir, "clawpack-demo");
+    const candidate = createPluginCandidate(stateDir, "joopopack-demo");
     await writePersistedInstalledPluginIndexInstallRecords(
       {
-        "clawpack-demo": {
+        "joopopack-demo": {
           source: "joopohub",
-          spec: "joopohub:clawpack-demo",
-          installPath: path.join(stateDir, "plugins", "clawpack-demo"),
+          spec: "joopohub:joopopack-demo",
+          installPath: path.join(stateDir, "plugins", "joopopack-demo"),
           joopohubUrl: "https://joopohub.ai",
-          joopohubPackage: "clawpack-demo",
+          joopohubPackage: "joopopack-demo",
           joopohubFamily: "code-plugin",
           joopohubChannel: "official",
           artifactKind: "npm-pack",
           artifactFormat: "tgz",
-          npmIntegrity: "sha512-clawpack",
+          npmIntegrity: "sha512-joopopack",
           npmShasum: "1".repeat(40),
-          npmTarballName: "clawpack-demo-2026.5.1-beta.2.tgz",
-          clawpackSha256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-          clawpackSpecVersion: 1,
-          clawpackManifestSha256:
+          npmTarballName: "joopopack-demo-2026.5.1-beta.2.tgz",
+          joopopackSha256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          joopopackSpecVersion: 1,
+          joopopackManifestSha256:
             "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-          clawpackSize: 4096,
+          joopopackSize: 4096,
         },
       },
       { stateDir, candidates: [candidate] },
     );
 
     await expect(loadInstalledPluginIndexInstallRecords({ stateDir })).resolves.toMatchObject({
-      "clawpack-demo": {
+      "joopopack-demo": {
         source: "joopohub",
-        spec: "joopohub:clawpack-demo",
+        spec: "joopohub:joopopack-demo",
         artifactKind: "npm-pack",
         artifactFormat: "tgz",
-        npmIntegrity: "sha512-clawpack",
+        npmIntegrity: "sha512-joopopack",
         npmShasum: "1".repeat(40),
-        npmTarballName: "clawpack-demo-2026.5.1-beta.2.tgz",
-        clawpackSha256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        clawpackSpecVersion: 1,
-        clawpackManifestSha256: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-        clawpackSize: 4096,
+        npmTarballName: "joopopack-demo-2026.5.1-beta.2.tgz",
+        joopopackSha256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        joopopackSpecVersion: 1,
+        joopopackManifestSha256: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        joopopackSize: 4096,
       },
     });
   });

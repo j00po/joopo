@@ -1,12 +1,12 @@
 ---
-summary: "ClawDock shell helpers for Docker-based Joopo installs"
+summary: "JoopoDock shell helpers for Docker-based Joopo installs"
 read_when:
   - You run Joopo with Docker often and want shorter day-to-day commands
   - You want a helper layer for dashboard, logs, token setup, and pairing flows
-title: "ClawDock"
+title: "JoopoDock"
 ---
 
-ClawDock is a small shell-helper layer for Docker-based Joopo installs.
+JoopoDock is a small shell-helper layer for Docker-based Joopo installs.
 
 It gives you short commands like `joopoock-start`, `joopoock-dashboard`, and `joopoock-fix-token` instead of longer `docker compose ...` invocations.
 
@@ -21,7 +21,7 @@ mkdir -p ~/.joopoock && curl -sL https://raw.githubusercontent.com/joopo/joopo/m
 echo 'source ~/.joopoock/joopoock-helpers.sh' >> ~/.zshrc && source ~/.zshrc
 ```
 
-If you previously installed ClawDock from `scripts/shell-helpers/joopoock-helpers.sh`, reinstall from the new `scripts/joopoock/joopoock-helpers.sh` path. The old raw GitHub path was removed.
+If you previously installed JoopoDock from `scripts/shell-helpers/joopoock-helpers.sh`, reinstall from the new `scripts/joopoock/joopoock-helpers.sh` path. The old raw GitHub path was removed.
 
 ## What you get
 
@@ -88,7 +88,7 @@ joopoock-approve <request-id>
 
 ## Config and secrets
 
-ClawDock works with the same Docker config split described in [Docker](/install/docker):
+JoopoDock works with the same Docker config split described in [Docker](/install/docker):
 
 - `<project>/.env` for Docker-specific values like image name, ports, and the gateway token
 - `~/.joopo/.env` for env-backed provider keys and bot tokens

@@ -144,11 +144,11 @@ describe("stuck session recovery", () => {
           jobs: [{ id: "job-123", name: "Twitter Mention Moderation Agent" }],
         }),
       );
-      fs.mkdirSync(path.join(tempDir, "agents", "clawblocker", "sessions"), {
+      fs.mkdirSync(path.join(tempDir, "agents", "joopoblocker", "sessions"), {
         recursive: true,
       });
       fs.writeFileSync(
-        path.join(tempDir, "agents", "clawblocker", "sessions", "run-456.jsonl"),
+        path.join(tempDir, "agents", "joopoblocker", "sessions", "run-456.jsonl"),
         JSON.stringify({
           message: { role: "assistant", content: "There are 40 cached mentions." },
         }) + "\n",
@@ -159,7 +159,7 @@ describe("stuck session recovery", () => {
 
       await recoverStuckDiagnosticSession({
         sessionId: "run-456",
-        sessionKey: "agent:clawblocker:cron:job-123:run:run-456",
+        sessionKey: "agent:joopoblocker:cron:job-123:run:run-456",
         ageMs: 629_000,
         allowActiveAbort: true,
       });

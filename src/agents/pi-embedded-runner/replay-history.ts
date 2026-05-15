@@ -275,9 +275,7 @@ function isTranscriptOnlyJoopoAssistant(message: AgentMessage): boolean {
   const provider = (message as { provider?: unknown }).provider;
   const model = (message as { model?: unknown }).model;
   return (
-    provider === "joopo" &&
-    typeof model === "string" &&
-    TRANSCRIPT_ONLY_JOOPO_MODELS.has(model)
+    provider === "joopo" && typeof model === "string" && TRANSCRIPT_ONLY_JOOPO_MODELS.has(model)
   );
 }
 
@@ -439,7 +437,7 @@ function isReplayDroppableTrailingAssistant(message: AgentMessage | undefined): 
   // turn carries that synthetic provenance: without this guard, a real
   // model reply that happens to consist of exactly the sentinel string
   // would be silently removed on next replay
-  // (clawsweeper review on #77287, P2).
+  // (jooposweeper review on #77287, P2).
   if (!isStreamErrorSentinelContent(content)) {
     return false;
   }

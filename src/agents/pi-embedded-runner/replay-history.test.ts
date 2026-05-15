@@ -256,7 +256,7 @@ describe("normalizeAssistantReplayContent", () => {
     expect(out).toHaveLength(2);
   });
 
-  it("preserves a trailing real model reply whose only content happens to be the sentinel text (clawsweeper review on #77287)", () => {
+  it("preserves a trailing real model reply whose only content happens to be the sentinel text (jooposweeper review on #77287)", () => {
     // Defensive boundary: even if a model legitimately replies with the
     // exact sentinel string, the trim must require synthetic provenance
     // (stopReason: "error" or zero-usage stop) before dropping. Without
