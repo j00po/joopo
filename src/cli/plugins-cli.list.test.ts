@@ -192,13 +192,13 @@ describe("plugins cli list", () => {
         joopohubChannel: "official",
         artifactKind: "npm-pack",
         artifactFormat: "tgz",
-        npmIntegrity: "sha512-clawpack",
+        npmIntegrity: "sha512-joopopack",
         npmShasum: "1".repeat(40),
         npmTarballName: "joopo-mem0-2026.5.1.tgz",
-        clawpackSha256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-        clawpackSpecVersion: 1,
-        clawpackManifestSha256: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-        clawpackSize: 4096,
+        joopopackSha256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        joopopackSpecVersion: 1,
+        joopopackManifestSha256: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        joopopackSize: 4096,
       },
     });
     buildPluginSnapshotReport.mockReturnValue({
@@ -241,12 +241,12 @@ describe("plugins cli list", () => {
     expect(runtimeLogs.join("\n")).toContain("allowConversationAccess: true");
     expect(runtimeLogs.join("\n")).toContain("JoopoHub package: joopo-mem0");
     expect(runtimeLogs.join("\n")).toContain("Artifact kind: npm-pack");
-    expect(runtimeLogs.join("\n")).toContain("Npm integrity: sha512-clawpack");
+    expect(runtimeLogs.join("\n")).toContain("Npm integrity: sha512-joopopack");
     expect(runtimeLogs.join("\n")).toContain(
-      "ClawPack sha256: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "JoopoPack sha256: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
     );
-    expect(runtimeLogs.join("\n")).toContain("ClawPack spec: 1");
-    expect(runtimeLogs.join("\n")).toContain("ClawPack size: 4096 bytes");
+    expect(runtimeLogs.join("\n")).toContain("JoopoPack spec: 1");
+    expect(runtimeLogs.join("\n")).toContain("JoopoPack size: 4096 bytes");
   });
 
   it("runtime-inspects without repairing deps", async () => {

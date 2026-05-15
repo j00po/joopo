@@ -54,13 +54,13 @@ Mantis lives in the Joopo QA stack.
   artifact writers.
 - Crabbox owns warmed Linux machines when a remote VM is needed.
 - GitHub Actions owns the remote workflow entrypoint and artifact retention.
-- ClawSweeper owns GitHub comment routing: parsing maintainer commands,
+- JoopoSweeper owns GitHub comment routing: parsing maintainer commands,
   dispatching the workflow, and posting the final PR comment.
 - Joopo agents drive Mantis through Codex when a scenario needs agentic setup,
   debugging, or stuck-state reporting.
 
 This boundary keeps transport knowledge in Joopo, machine scheduling in
-Crabbox, and maintainer workflow glue in ClawSweeper.
+Crabbox, and maintainer workflow glue in JoopoSweeper.
 
 ## Command shape
 
@@ -306,16 +306,16 @@ ref:
 @Mantis discord status reactions baseline=origin/main candidate=HEAD
 ```
 
-ClawSweeper command examples:
+JoopoSweeper command examples:
 
 ```text
-@clawsweeper mantis discord discord-status-reactions-tool-only
-@clawsweeper verify e2e discord
+@jooposweeper mantis discord discord-status-reactions-tool-only
+@jooposweeper verify e2e discord
 ```
 
 The first command is explicit and scenario-focused. The second can later map a PR
 or issue to recommended Mantis scenarios from labels, changed files, and
-ClawSweeper review findings.
+JoopoSweeper review findings.
 
 ## Run lifecycle
 
@@ -664,6 +664,6 @@ scenarios. Expensive visual scenarios should stay opt-in.
 - Should the observer browser login use a human Discord account, a test account,
   or only bot-readable REST evidence for the first phase?
 - How long should GitHub retain Mantis artifacts for PRs?
-- When should ClawSweeper automatically recommend Mantis instead of waiting for a
+- When should JoopoSweeper automatically recommend Mantis instead of waiting for a
   maintainer command?
 - Should screenshots be redacted or cropped before upload for public PRs?

@@ -20,10 +20,10 @@ export type InstallRecordBase = {
   npmIntegrity?: string;
   npmShasum?: string;
   npmTarballName?: string;
-  clawpackSha256?: string;
-  clawpackSpecVersion?: number;
-  clawpackManifestSha256?: string;
-  clawpackSize?: number;
+  joopopackSha256?: string;
+  joopopackSpecVersion?: number;
+  joopopackManifestSha256?: string;
+  joopopackSize?: number;
   gitUrl?: string;
   gitRef?: string;
   gitCommit?: string;

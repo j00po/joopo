@@ -27,19 +27,19 @@ apply across the CLI.
 | Discovery and docs   | [`dns`](/cli/dns) · [`docs`](/cli/docs)                                                                                                                                                                                                   |
 | Pairing and channels | [`pairing`](/cli/pairing) · [`qr`](/cli/qr) · [`channels`](/cli/channels)                                                                                                                                                                 |
 | Security and plugins | [`security`](/cli/security) · [`secrets`](/cli/secrets) · [`skills`](/cli/skills) · [`plugins`](/cli/plugins) · [`proxy`](/cli/proxy)                                                                                                     |
-| Legacy aliases       | [`daemon`](/cli/daemon) (gateway service) · [`clawbot`](/cli/clawbot) (namespace)                                                                                                                                                         |
+| Legacy aliases       | [`daemon`](/cli/daemon) (gateway service) · [`joopobot`](/cli/joopobot) (namespace)                                                                                                                                                       |
 | Plugins (optional)   | [`voicecall`](/cli/voicecall) (if installed)                                                                                                                                                                                              |
 
 ## Global flags
 
-| Flag                    | Purpose                                                               |
-| ----------------------- | --------------------------------------------------------------------- |
+| Flag                    | Purpose                                                            |
+| ----------------------- | ------------------------------------------------------------------ |
 | `--dev`                 | Isolate state under `~/.joopo-dev` and shift default ports         |
 | `--profile <name>`      | Isolate state under `~/.joopo-<name>`                              |
-| `--container <name>`    | Target a named container for execution                                |
-| `--no-color`            | Disable ANSI colors (`NO_COLOR=1` is also respected)                  |
+| `--container <name>`    | Target a named container for execution                             |
+| `--no-color`            | Disable ANSI colors (`NO_COLOR=1` is also respected)               |
 | `--update`              | Shorthand for [`joopo update`](/cli/update) (source installs only) |
-| `-V`, `--version`, `-v` | Print version and exit                                                |
+| `-V`, `--version`, `-v` | Print version and exit                                             |
 
 ## Output modes
 
@@ -340,7 +340,7 @@ joopo [--dev] [--profile <name>] <command>
     list
     approve
   qr
-  clawbot
+  joopobot
     qr
   docs
   dns

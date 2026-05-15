@@ -276,7 +276,7 @@ describe("provider install catalog", () => {
         vllm: {
           source: "joopohub",
           spec: "joopohub:joopo/vllm@2026.5.2",
-          integrity: "sha256-clawpack",
+          integrity: "sha256-joopopack",
           joopohubPackage: "joopo/vllm",
         },
       },

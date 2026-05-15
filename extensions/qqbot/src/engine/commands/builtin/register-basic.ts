@@ -76,7 +76,7 @@ export function registerBasicBotCommands(registry: SlashCommandRegistry): void {
       const frameworkVersion = resolveRuntimeServiceVersion();
       const ver = getPluginVersionString();
       const lines = [
-        `🦞 Joopo 框架版本：${frameworkVersion}`,
+        `⚡ Joopo 框架版本：${frameworkVersion}`,
         `🤖 QQBot 插件版本：v${ver}`,
         `🌟 官方 GitHub 仓库：[点击前往](${QQBOT_PLUGIN_GITHUB_URL})`,
       ];

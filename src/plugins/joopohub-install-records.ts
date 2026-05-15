@@ -16,10 +16,10 @@ export type JoopoHubPluginInstallRecordFields = {
   npmIntegrity?: string;
   npmShasum?: string;
   npmTarballName?: string;
-  clawpackSha256?: string;
-  clawpackSpecVersion?: number;
-  clawpackManifestSha256?: string;
-  clawpackSize?: number;
+  joopopackSha256?: string;
+  joopopackSpecVersion?: number;
+  joopopackManifestSha256?: string;
+  joopopackSize?: number;
 };
 
 export function buildJoopoHubPluginInstallRecordFields(
@@ -40,10 +40,10 @@ export function buildJoopoHubPluginInstallRecordFields(
   | "npmIntegrity"
   | "npmShasum"
   | "npmTarballName"
-  | "clawpackSha256"
-  | "clawpackSpecVersion"
-  | "clawpackManifestSha256"
-  | "clawpackSize"
+  | "joopopackSha256"
+  | "joopopackSpecVersion"
+  | "joopopackManifestSha256"
+  | "joopopackSize"
 > {
   return {
     source: "joopohub",
@@ -60,13 +60,13 @@ export function buildJoopoHubPluginInstallRecordFields(
     ...(fields.npmIntegrity ? { npmIntegrity: fields.npmIntegrity } : {}),
     ...(fields.npmShasum ? { npmShasum: fields.npmShasum } : {}),
     ...(fields.npmTarballName ? { npmTarballName: fields.npmTarballName } : {}),
-    ...(fields.clawpackSha256 ? { clawpackSha256: fields.clawpackSha256 } : {}),
-    ...(fields.clawpackSpecVersion !== undefined
-      ? { clawpackSpecVersion: fields.clawpackSpecVersion }
+    ...(fields.joopopackSha256 ? { joopopackSha256: fields.joopopackSha256 } : {}),
+    ...(fields.joopopackSpecVersion !== undefined
+      ? { joopopackSpecVersion: fields.joopopackSpecVersion }
       : {}),
-    ...(fields.clawpackManifestSha256
-      ? { clawpackManifestSha256: fields.clawpackManifestSha256 }
+    ...(fields.joopopackManifestSha256
+      ? { joopopackManifestSha256: fields.joopopackManifestSha256 }
       : {}),
-    ...(fields.clawpackSize !== undefined ? { clawpackSize: fields.clawpackSize } : {}),
+    ...(fields.joopopackSize !== undefined ? { joopopackSize: fields.joopopackSize } : {}),
   };
 }

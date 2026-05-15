@@ -1396,36 +1396,36 @@ describe("uninstallPlugin", () => {
   it("deletes managed JoopoHub install directories", async () => {
     const stateDir = path.join(tempDir, "state");
     const extensionsDir = path.join(stateDir, "extensions");
-    const installPath = resolvePluginInstallDir("clawpack-demo", extensionsDir);
+    const installPath = resolvePluginInstallDir("joopopack-demo", extensionsDir);
     await fs.mkdir(installPath, { recursive: true });
     await fs.writeFile(path.join(installPath, "index.js"), "// joopohub plugin");
 
     const result = await uninstallPlugin({
       config: createPluginConfig({
-        entries: createSinglePluginEntries("clawpack-demo"),
+        entries: createSinglePluginEntries("joopopack-demo"),
         installs: {
-          "clawpack-demo": {
+          "joopopack-demo": {
             source: "joopohub",
-            spec: "joopohub:clawpack-demo@2026.5.1-beta.2",
+            spec: "joopohub:joopopack-demo@2026.5.1-beta.2",
             installPath,
             joopohubUrl: "https://joopohub.ai",
-            joopohubPackage: "clawpack-demo",
+            joopohubPackage: "joopopack-demo",
             joopohubFamily: "code-plugin",
             joopohubChannel: "official",
             artifactKind: "npm-pack",
             artifactFormat: "tgz",
-            npmIntegrity: "sha512-clawpack",
+            npmIntegrity: "sha512-joopopack",
             npmShasum: "1".repeat(40),
-            npmTarballName: "clawpack-demo-2026.5.1-beta.2.tgz",
-            clawpackSha256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-            clawpackSpecVersion: 1,
-            clawpackManifestSha256:
+            npmTarballName: "joopopack-demo-2026.5.1-beta.2.tgz",
+            joopopackSha256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            joopopackSpecVersion: 1,
+            joopopackManifestSha256:
               "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-            clawpackSize: 4096,
+            joopopackSize: 4096,
           },
         },
       }),
-      pluginId: "clawpack-demo",
+      pluginId: "joopopack-demo",
       deleteFiles: true,
       extensionsDir,
     });
@@ -1627,30 +1627,30 @@ describe("resolveUninstallDirectoryTarget", () => {
   it("uses configured installPath when JoopoHub installed it under the managed extensions root", () => {
     const stateDir = path.join(os.tmpdir(), "joopo-uninstall-safe");
     const extensionsDir = path.join(stateDir, "extensions");
-    const installPath = resolvePluginInstallDir("clawpack-demo", extensionsDir);
+    const installPath = resolvePluginInstallDir("joopopack-demo", extensionsDir);
 
     expect(
       resolveUninstallDirectoryTarget({
-        pluginId: "clawpack-demo",
+        pluginId: "joopopack-demo",
         hasInstall: true,
         installRecord: {
           source: "joopohub",
-          spec: "joopohub:clawpack-demo@2026.5.1-beta.2",
+          spec: "joopohub:joopopack-demo@2026.5.1-beta.2",
           installPath,
           joopohubUrl: "https://joopohub.ai",
-          joopohubPackage: "clawpack-demo",
+          joopohubPackage: "joopopack-demo",
           joopohubFamily: "code-plugin",
           joopohubChannel: "official",
           artifactKind: "npm-pack",
           artifactFormat: "tgz",
-          npmIntegrity: "sha512-clawpack",
+          npmIntegrity: "sha512-joopopack",
           npmShasum: "1".repeat(40),
-          npmTarballName: "clawpack-demo-2026.5.1-beta.2.tgz",
-          clawpackSha256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-          clawpackSpecVersion: 1,
-          clawpackManifestSha256:
+          npmTarballName: "joopopack-demo-2026.5.1-beta.2.tgz",
+          joopopackSha256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          joopopackSpecVersion: 1,
+          joopopackManifestSha256:
             "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-          clawpackSize: 4096,
+          joopopackSize: 4096,
         },
         extensionsDir,
       }),

@@ -115,7 +115,7 @@ EOF
 )"
 
 if [[ ! -f "${pack_path}" ]]; then
-  echo "ClawPack tarball not found: ${pack_path}" >&2
+  echo "JoopoPack tarball not found: ${pack_path}" >&2
   exit 1
 fi
 
@@ -141,7 +141,7 @@ if [[ -n "${source_ref}" ]]; then
   )
 fi
 
-echo "Resolved ClawPack: ${pack_path}"
+echo "Resolved JoopoPack: ${pack_path}"
 
 printf 'Publish command: JOOPOHUB_WORKDIR=%q' "${joopohub_workdir}"
 printf ' %q' "${publish_cmd[@]}"

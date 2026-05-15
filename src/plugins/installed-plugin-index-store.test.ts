@@ -421,33 +421,33 @@ describe("installed plugin index persistence", () => {
     });
   });
 
-  it("preserves JoopoHub ClawPack source facts when refreshing the manifest cache", async () => {
+  it("preserves JoopoHub JoopoPack source facts when refreshing the manifest cache", async () => {
     const stateDir = makeTempDir();
-    const installPath = path.join(stateDir, "plugins", "clawpack-demo");
+    const installPath = path.join(stateDir, "plugins", "joopopack-demo");
     await writePersistedInstalledPluginIndex(
       createIndex({
         installRecords: {
-          "clawpack-demo": {
+          "joopopack-demo": {
             source: "joopohub",
-            spec: "joopohub:clawpack-demo@2026.5.1-beta.2",
+            spec: "joopohub:joopopack-demo@2026.5.1-beta.2",
             installPath,
             version: "2026.5.1-beta.2",
             integrity: "sha256-archive",
             resolvedAt: "2026-05-01T00:00:00.000Z",
             joopohubUrl: "https://joopohub.ai",
-            joopohubPackage: "clawpack-demo",
+            joopohubPackage: "joopopack-demo",
             joopohubFamily: "code-plugin",
             joopohubChannel: "official",
             artifactKind: "npm-pack",
             artifactFormat: "tgz",
-            npmIntegrity: "sha512-clawpack",
+            npmIntegrity: "sha512-joopopack",
             npmShasum: "1".repeat(40),
-            npmTarballName: "clawpack-demo-2026.5.1-beta.2.tgz",
-            clawpackSha256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-            clawpackSpecVersion: 1,
-            clawpackManifestSha256:
+            npmTarballName: "joopopack-demo-2026.5.1-beta.2.tgz",
+            joopopackSha256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            joopopackSpecVersion: 1,
+            joopopackManifestSha256:
               "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-            clawpackSize: 4096,
+            joopopackSize: 4096,
           },
         },
         plugins: [],
@@ -468,27 +468,27 @@ describe("installed plugin index persistence", () => {
 
     const expected = {
       installRecords: {
-        "clawpack-demo": {
+        "joopopack-demo": {
           source: "joopohub",
-          spec: "joopohub:clawpack-demo@2026.5.1-beta.2",
+          spec: "joopohub:joopopack-demo@2026.5.1-beta.2",
           installPath,
           version: "2026.5.1-beta.2",
           integrity: "sha256-archive",
           resolvedAt: "2026-05-01T00:00:00.000Z",
           joopohubUrl: "https://joopohub.ai",
-          joopohubPackage: "clawpack-demo",
+          joopohubPackage: "joopopack-demo",
           joopohubFamily: "code-plugin",
           joopohubChannel: "official",
           artifactKind: "npm-pack",
           artifactFormat: "tgz",
-          npmIntegrity: "sha512-clawpack",
+          npmIntegrity: "sha512-joopopack",
           npmShasum: "1".repeat(40),
-          npmTarballName: "clawpack-demo-2026.5.1-beta.2.tgz",
-          clawpackSha256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-          clawpackSpecVersion: 1,
-          clawpackManifestSha256:
+          npmTarballName: "joopopack-demo-2026.5.1-beta.2.tgz",
+          joopopackSha256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          joopopackSpecVersion: 1,
+          joopopackManifestSha256:
             "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-          clawpackSize: 4096,
+          joopopackSize: 4096,
         },
       },
       plugins: [],

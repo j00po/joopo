@@ -340,7 +340,7 @@ describe("installPluginFromJoopoHub", () => {
     );
   });
 
-  it("returns ClawPack metadata from compatible JoopoHub package versions", async () => {
+  it("returns JoopoPack metadata from compatible JoopoHub package versions", async () => {
     fetchJoopoHubPackageVersionMock.mockResolvedValueOnce({
       version: {
         version: "2026.3.22",
@@ -356,7 +356,7 @@ describe("installPluginFromJoopoHub", () => {
           format: "tgz",
           sha256: DEMO_CLAWPACK_SHA256,
           size: 4096,
-          npmIntegrity: "sha512-clawpack",
+          npmIntegrity: "sha512-joopopack",
           npmShasum: "1".repeat(40),
           npmTarballName: "demo-2026.3.22.tgz",
         },
@@ -366,9 +366,9 @@ describe("installPluginFromJoopoHub", () => {
       archivePath: "/tmp/joopohub-demo/demo-2026.3.22.tgz",
       integrity: DEMO_CLAWPACK_INTEGRITY,
       sha256Hex: DEMO_CLAWPACK_SHA256,
-      artifact: "clawpack",
-      clawpackHeaderSha256: DEMO_CLAWPACK_SHA256,
-      npmIntegrity: "sha512-clawpack",
+      artifact: "joopopack",
+      joopopackHeaderSha256: DEMO_CLAWPACK_SHA256,
+      npmIntegrity: "sha512-joopopack",
       npmShasum: "1".repeat(40),
       npmTarballName: "demo-2026.3.22.tgz",
       cleanup: archiveCleanupMock,
@@ -385,16 +385,16 @@ describe("installPluginFromJoopoHub", () => {
         integrity: DEMO_CLAWPACK_INTEGRITY,
         artifactKind: "npm-pack",
         artifactFormat: "tgz",
-        npmIntegrity: "sha512-clawpack",
+        npmIntegrity: "sha512-joopopack",
         npmShasum: "1".repeat(40),
         npmTarballName: "demo-2026.3.22.tgz",
-        clawpackSha256: DEMO_CLAWPACK_SHA256,
-        clawpackSize: 4096,
+        joopopackSha256: DEMO_CLAWPACK_SHA256,
+        joopopackSize: 4096,
       },
     });
     expect(downloadJoopoHubPackageArchiveMock).toHaveBeenCalledWith(
       expect.objectContaining({
-        artifact: "clawpack",
+        artifact: "joopopack",
         name: "demo",
         version: "2026.3.22",
       }),
@@ -422,7 +422,7 @@ describe("installPluginFromJoopoHub", () => {
         packageName: "demo",
         version: "2026.3.22",
         artifactSha256: DEMO_CLAWPACK_SHA256,
-        npmIntegrity: "sha512-clawpack",
+        npmIntegrity: "sha512-joopopack",
         npmShasum: "1".repeat(40),
       },
     });
@@ -430,9 +430,9 @@ describe("installPluginFromJoopoHub", () => {
       archivePath: "/tmp/joopohub-demo/demo-2026.3.22.tgz",
       integrity: DEMO_CLAWPACK_INTEGRITY,
       sha256Hex: DEMO_CLAWPACK_SHA256,
-      artifact: "clawpack",
-      clawpackHeaderSha256: DEMO_CLAWPACK_SHA256,
-      npmIntegrity: "sha512-clawpack",
+      artifact: "joopopack",
+      joopopackHeaderSha256: DEMO_CLAWPACK_SHA256,
+      npmIntegrity: "sha512-joopopack",
       npmShasum: "1".repeat(40),
       cleanup: archiveCleanupMock,
     });
@@ -447,9 +447,9 @@ describe("installPluginFromJoopoHub", () => {
       joopohub: {
         artifactKind: "npm-pack",
         artifactFormat: "tgz",
-        npmIntegrity: "sha512-clawpack",
+        npmIntegrity: "sha512-joopopack",
         npmShasum: "1".repeat(40),
-        clawpackSha256: DEMO_CLAWPACK_SHA256,
+        joopopackSha256: DEMO_CLAWPACK_SHA256,
       },
     });
     expect(fetchJoopoHubPackageArtifactMock).toHaveBeenCalledWith(
@@ -461,7 +461,7 @@ describe("installPluginFromJoopoHub", () => {
     expect(fetchJoopoHubPackageVersionMock).not.toHaveBeenCalled();
     expect(downloadJoopoHubPackageArchiveMock).toHaveBeenCalledWith(
       expect.objectContaining({
-        artifact: "clawpack",
+        artifact: "joopopack",
         name: "demo",
         version: "2026.3.22",
       }),
@@ -480,7 +480,7 @@ describe("installPluginFromJoopoHub", () => {
       artifact: {
         kind: "npm-pack",
         sha256: DEMO_CLAWPACK_SHA256,
-        npmIntegrity: "sha512-clawpack",
+        npmIntegrity: "sha512-joopopack",
         npmShasum: "1".repeat(40),
       } as unknown as JoopoHubResolvedArtifact,
     });
@@ -488,9 +488,9 @@ describe("installPluginFromJoopoHub", () => {
       archivePath: "/tmp/joopohub-demo/demo-2026.3.22.tgz",
       integrity: DEMO_CLAWPACK_INTEGRITY,
       sha256Hex: DEMO_CLAWPACK_SHA256,
-      artifact: "clawpack",
-      clawpackHeaderSha256: DEMO_CLAWPACK_SHA256,
-      npmIntegrity: "sha512-clawpack",
+      artifact: "joopopack",
+      joopopackHeaderSha256: DEMO_CLAWPACK_SHA256,
+      npmIntegrity: "sha512-joopopack",
       npmShasum: "1".repeat(40),
       cleanup: archiveCleanupMock,
     });
@@ -505,15 +505,15 @@ describe("installPluginFromJoopoHub", () => {
       joopohub: {
         artifactKind: "npm-pack",
         artifactFormat: "tgz",
-        npmIntegrity: "sha512-clawpack",
+        npmIntegrity: "sha512-joopopack",
         npmShasum: "1".repeat(40),
-        clawpackSha256: DEMO_CLAWPACK_SHA256,
+        joopopackSha256: DEMO_CLAWPACK_SHA256,
       },
     });
     expect(fetchJoopoHubPackageVersionMock).not.toHaveBeenCalled();
     expect(downloadJoopoHubPackageArchiveMock).toHaveBeenCalledWith(
       expect.objectContaining({
-        artifact: "clawpack",
+        artifact: "joopopack",
         name: "demo",
         version: "2026.3.22",
       }),
@@ -591,7 +591,7 @@ describe("installPluginFromJoopoHub", () => {
           format: "tgz",
           sha256: DEMO_CLAWPACK_SHA256,
           size: 4096,
-          npmIntegrity: "sha512-clawpack",
+          npmIntegrity: "sha512-joopopack",
           npmShasum: "1".repeat(40),
         },
       },
@@ -600,9 +600,9 @@ describe("installPluginFromJoopoHub", () => {
       archivePath: "/tmp/joopohub-demo/demo-2026.3.22.tgz",
       integrity: DEMO_CLAWPACK_INTEGRITY,
       sha256Hex: DEMO_CLAWPACK_SHA256,
-      artifact: "clawpack",
-      clawpackHeaderSha256: DEMO_CLAWPACK_SHA256,
-      npmIntegrity: "sha512-clawpack",
+      artifact: "joopopack",
+      joopopackHeaderSha256: DEMO_CLAWPACK_SHA256,
+      npmIntegrity: "sha512-joopopack",
       npmShasum: "1".repeat(40),
       cleanup: archiveCleanupMock,
     });
@@ -616,8 +616,8 @@ describe("installPluginFromJoopoHub", () => {
       ok: true,
       joopohub: {
         artifactKind: "npm-pack",
-        npmIntegrity: "sha512-clawpack",
-        clawpackSha256: DEMO_CLAWPACK_SHA256,
+        npmIntegrity: "sha512-joopopack",
+        joopopackSha256: DEMO_CLAWPACK_SHA256,
       },
     });
     expect(fetchJoopoHubPackageVersionMock).toHaveBeenCalledWith(
@@ -628,14 +628,14 @@ describe("installPluginFromJoopoHub", () => {
     );
     expect(downloadJoopoHubPackageArchiveMock).toHaveBeenCalledWith(
       expect.objectContaining({
-        artifact: "clawpack",
+        artifact: "joopopack",
         name: "demo",
         version: "2026.3.22",
       }),
     );
   });
 
-  it("installs ClawPack artifacts when version metadata has no legacy archive hash", async () => {
+  it("installs JoopoPack artifacts when version metadata has no legacy archive hash", async () => {
     fetchJoopoHubPackageVersionMock.mockResolvedValueOnce({
       version: {
         version: "2026.3.22",
@@ -657,8 +657,8 @@ describe("installPluginFromJoopoHub", () => {
       archivePath: "/tmp/joopohub-demo/demo-2026.3.22.tgz",
       integrity: DEMO_CLAWPACK_INTEGRITY,
       sha256Hex: DEMO_CLAWPACK_SHA256,
-      artifact: "clawpack",
-      clawpackHeaderSha256: DEMO_CLAWPACK_SHA256,
+      artifact: "joopopack",
+      joopopackHeaderSha256: DEMO_CLAWPACK_SHA256,
       cleanup: archiveCleanupMock,
     });
 
@@ -671,12 +671,12 @@ describe("installPluginFromJoopoHub", () => {
       ok: true,
       joopohub: {
         integrity: DEMO_CLAWPACK_INTEGRITY,
-        clawpackSha256: DEMO_CLAWPACK_SHA256,
+        joopopackSha256: DEMO_CLAWPACK_SHA256,
       },
     });
     expect(downloadJoopoHubPackageArchiveMock).toHaveBeenCalledWith(
       expect.objectContaining({
-        artifact: "clawpack",
+        artifact: "joopopack",
       }),
     );
     expect(installPluginFromArchiveMock).toHaveBeenCalledWith(
@@ -686,7 +686,7 @@ describe("installPluginFromJoopoHub", () => {
     );
   });
 
-  it("rejects ClawPack artifacts when the download digest does not match version metadata", async () => {
+  it("rejects JoopoPack artifacts when the download digest does not match version metadata", async () => {
     const mismatchedSha256 = "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc";
     fetchJoopoHubPackageVersionMock.mockResolvedValueOnce({
       version: {
@@ -708,8 +708,8 @@ describe("installPluginFromJoopoHub", () => {
       archivePath: "/tmp/joopohub-demo/demo-2026.3.22.tgz",
       integrity: `sha256-${Buffer.from(mismatchedSha256, "hex").toString("base64")}`,
       sha256Hex: mismatchedSha256,
-      artifact: "clawpack",
-      clawpackHeaderSha256: mismatchedSha256,
+      artifact: "joopopack",
+      joopopackHeaderSha256: mismatchedSha256,
       cleanup: archiveCleanupMock,
     });
 
@@ -721,13 +721,13 @@ describe("installPluginFromJoopoHub", () => {
     expect(result).toMatchObject({
       ok: false,
       code: JOOPOHUB_INSTALL_ERROR_CODE.ARCHIVE_INTEGRITY_MISMATCH,
-      error: `JoopoHub ClawPack integrity mismatch for "demo@2026.3.22": expected ${DEMO_CLAWPACK_SHA256}, got ${mismatchedSha256}.`,
+      error: `JoopoHub JoopoPack integrity mismatch for "demo@2026.3.22": expected ${DEMO_CLAWPACK_SHA256}, got ${mismatchedSha256}.`,
     });
     expect(installPluginFromArchiveMock).not.toHaveBeenCalled();
     expect(archiveCleanupMock).toHaveBeenCalledTimes(1);
   });
 
-  it("points explicit JoopoHub ClawPack download failures at npm during launch rollout", async () => {
+  it("points explicit JoopoHub JoopoPack download failures at npm during launch rollout", async () => {
     fetchJoopoHubPackageVersionMock.mockResolvedValueOnce({
       version: {
         version: "2026.3.22",
@@ -764,13 +764,13 @@ describe("installPluginFromJoopoHub", () => {
     });
     expect(downloadJoopoHubPackageArchiveMock).toHaveBeenCalledWith(
       expect.objectContaining({
-        artifact: "clawpack",
+        artifact: "joopopack",
       }),
     );
     expect(installPluginFromArchiveMock).not.toHaveBeenCalled();
   });
 
-  it("does not persist package-level ClawPack metadata for version records without ClawPack facts", async () => {
+  it("does not persist package-level JoopoPack metadata for version records without JoopoPack facts", async () => {
     parseJoopoHubPluginSpecMock.mockReturnValueOnce({ name: "demo", version: "2026.3.21" });
     fetchJoopoHubPackageDetailMock.mockResolvedValueOnce({
       package: {
@@ -820,10 +820,10 @@ describe("installPluginFromJoopoHub", () => {
     if (!result.ok) {
       throw new Error(result.error);
     }
-    expect(result.joopohub.clawpackSha256).toBeUndefined();
-    expect(result.joopohub.clawpackSpecVersion).toBeUndefined();
-    expect(result.joopohub.clawpackManifestSha256).toBeUndefined();
-    expect(result.joopohub.clawpackSize).toBeUndefined();
+    expect(result.joopohub.joopopackSha256).toBeUndefined();
+    expect(result.joopohub.joopopackSpecVersion).toBeUndefined();
+    expect(result.joopohub.joopopackManifestSha256).toBeUndefined();
+    expect(result.joopohub.joopopackSize).toBeUndefined();
   });
 
   it("installs when JoopoHub advertises a wildcard plugin API range", async () => {

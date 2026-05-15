@@ -461,7 +461,7 @@ exit 0
     );
 
     expect(output).toContain("Publish command: JOOPOHUB_WORKDIR=");
-    expect(output).toContain("Resolved ClawPack:");
+    expect(output).toContain("Resolved JoopoPack:");
     const invocations = readFileSync(markerPath, "utf8");
     expect(invocations).toContain("package pack ./extensions/demo-plugin");
     expect(invocations).toContain("package publish ");

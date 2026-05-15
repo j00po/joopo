@@ -50,7 +50,7 @@ When debugging real providers/models (requires real creds):
   `live_gpt54=true` for a real `openai/gpt-5.4` agent turn or
   `deep_profile=true` for Kova CPU/heap/trace artifacts. Daily scheduled runs
   publish mock-provider, deep-profile, and GPT 5.4 lane artifacts to
-  `joopo/clawgrit-reports` when `CLAWGRIT_REPORTS_TOKEN` is configured. The
+  `joopo/joopogrit-reports` when `JOOPOGRIT_REPORTS_TOKEN` is configured. The
   mock-provider report also includes source-level gateway boot, memory,
   plugin-pressure, repeated fake-model hello-loop, and CLI startup numbers.
 - Docker live model sweep: `pnpm test:docker:live-models`

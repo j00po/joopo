@@ -103,10 +103,10 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         version: "1.2.3",
         integrity: "sha256-joopohub",
         resolvedAt: "2026-05-01T00:00:00.000Z",
-        clawpackSha256: "0".repeat(64),
-        clawpackSpecVersion: 1,
-        clawpackManifestSha256: "1".repeat(64),
-        clawpackSize: 1234,
+        joopopackSha256: "0".repeat(64),
+        joopopackSpecVersion: 1,
+        joopopackManifestSha256: "1".repeat(64),
+        joopopackSize: 1234,
       },
     });
     mocks.installPluginFromNpmSpec.mockResolvedValue({

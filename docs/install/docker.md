@@ -284,18 +284,18 @@ under `/tmp/joopo/`.
 
 ### Shell helpers (optional)
 
-For easier day-to-day Docker management, install `ClawDock`:
+For easier day-to-day Docker management, install `JoopoDock`:
 
 ```bash
 mkdir -p ~/.joopoock && curl -sL https://raw.githubusercontent.com/joopo/joopo/main/scripts/joopoock/joopoock-helpers.sh -o ~/.joopoock/joopoock-helpers.sh
 echo 'source ~/.joopoock/joopoock-helpers.sh' >> ~/.zshrc && source ~/.zshrc
 ```
 
-If you installed ClawDock from the older `scripts/shell-helpers/joopoock-helpers.sh` raw path, rerun the install command above so your local helper file tracks the new location.
+If you installed JoopoDock from the older `scripts/shell-helpers/joopoock-helpers.sh` raw path, rerun the install command above so your local helper file tracks the new location.
 
 Then use `joopoock-start`, `joopoock-stop`, `joopoock-dashboard`, etc. Run
 `joopoock-help` for all commands.
-See [ClawDock](/install/joopoock) for the full helper guide.
+See [JoopoDock](/install/joopoock) for the full helper guide.
 
 <AccordionGroup>
   <Accordion title="Enable agent sandbox for Docker gateway">
@@ -538,6 +538,6 @@ For npm installs without a source checkout, see [Sandboxing § Images and setup]
 
 - [Install Overview](/install) — all installation methods
 - [Podman](/install/podman) — Podman alternative to Docker
-- [ClawDock](/install/joopoock) — Docker Compose community setup
+- [JoopoDock](/install/joopoock) — Docker Compose community setup
 - [Updating](/install/updating) — keeping Joopo up to date
 - [Configuration](/gateway/configuration) — gateway configuration after install

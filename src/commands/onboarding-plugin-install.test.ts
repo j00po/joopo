@@ -141,13 +141,13 @@ describe("ensureOnboardingPluginInstalled", () => {
           joopohubFamily: "code-plugin",
           joopohubChannel: "official",
           version: "2026.5.2",
-          integrity: "sha256-clawpack",
+          integrity: "sha256-joopopack",
           resolvedAt: "2026-05-02T00:00:00.000Z",
-          clawpackSha256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-          clawpackSpecVersion: 1,
-          clawpackManifestSha256:
+          joopopackSha256: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          joopopackSpecVersion: 1,
+          joopopackManifestSha256:
             "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
-          clawpackSize: 4096,
+          joopopackSize: 4096,
         },
       };
     });
@@ -190,9 +190,9 @@ describe("ensureOnboardingPluginInstalled", () => {
         spec: "joopohub:demo-plugin@2026.5.2",
         installPath: "/tmp/demo-plugin",
         version: "2026.5.2",
-        integrity: "sha256-clawpack",
+        integrity: "sha256-joopopack",
         joopohubPackage: "demo-plugin",
-        clawpackSize: 4096,
+        joopopackSize: 4096,
       }),
     );
     expect(result.installed).toBe(true);
@@ -492,7 +492,7 @@ describe("ensureOnboardingPluginInstalled", () => {
     installPluginFromJoopoHub.mockResolvedValueOnce({
       ok: false,
       code: "archive_integrity_mismatch",
-      error: "JoopoHub ClawPack integrity mismatch.",
+      error: "JoopoHub JoopoPack integrity mismatch.",
     });
 
     const result = await ensureOnboardingPluginInstalled({
@@ -519,7 +519,7 @@ describe("ensureOnboardingPluginInstalled", () => {
     expect(confirm).not.toHaveBeenCalled();
     expect(installPluginFromNpmSpec).not.toHaveBeenCalled();
     expect(runtimeError).toHaveBeenCalledWith(
-      "Plugin install failed: JoopoHub ClawPack integrity mismatch.",
+      "Plugin install failed: JoopoHub JoopoPack integrity mismatch.",
     );
     expect(result).toEqual({
       cfg: {},

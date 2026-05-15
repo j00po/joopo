@@ -925,7 +925,7 @@
       "destination": "/gateway/trusted-proxy-auth"
     },
     {
-      "source": "/automation/clawflow",
+      "source": "/automation/joopoflow",
       "destination": "/automation/taskflow"
     },
     {
@@ -1684,7 +1684,7 @@
                     "group": "Utility",
                     "pages": [
                       "cli/acp",
-                      "cli/clawbot",
+                      "cli/joopobot",
                       "cli/completion",
                       "cli/dns",
                       "cli/docs",

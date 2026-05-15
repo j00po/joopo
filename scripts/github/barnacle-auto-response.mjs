@@ -169,7 +169,7 @@ export const managedLabelSpecs = {
   },
   [PROOF_SUFFICIENT_LABEL]: {
     color: "0E8A16",
-    description: "ClawSweeper judged the real behavior proof convincing.",
+    description: "JoopoSweeper judged the real behavior proof convincing.",
   },
   [PROOF_OVERRIDE_LABEL]: {
     color: "C2E0C6",
@@ -309,7 +309,7 @@ const candidateActionRules = [
 ];
 
 const normalizeLogin = (login) => login.toLowerCase();
-const automationPrHeadPrefixes = ["clawsweeper/", "clownfish/"];
+const automationPrHeadPrefixes = ["jooposweeper/", "clownfish/"];
 
 function isAutomationPullRequest(pullRequest) {
   const headRefName = pullRequest.headRefName ?? pullRequest.head?.ref ?? "";

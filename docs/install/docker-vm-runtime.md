@@ -150,4 +150,4 @@ docker compose up -d
 
 - [Docker](/install/docker)
 - [Podman](/install/podman)
-- [ClawDock](/install/joopoock)
+- [JoopoDock](/install/joopoock)

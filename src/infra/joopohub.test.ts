@@ -282,7 +282,7 @@ describe("joopohub helpers", () => {
                 artifactKind: "npm-pack",
                 packageName: "@joopo/diagnostics-otel",
                 version: "2026.3.22",
-                downloadUrl: "https://joopohub.ai/api/v1/clawpacks/abc",
+                downloadUrl: "https://joopohub.ai/api/v1/joopopacks/abc",
                 npmIntegrity: "sha512-demo",
                 npmShasum: "abc",
               },
@@ -297,7 +297,7 @@ describe("joopohub helpers", () => {
         artifactKind: "npm-pack",
         packageName: "@joopo/diagnostics-otel",
         version: "2026.3.22",
-        downloadUrl: "https://joopohub.ai/api/v1/clawpacks/abc",
+        downloadUrl: "https://joopohub.ai/api/v1/joopopacks/abc",
         npmIntegrity: "sha512-demo",
         npmShasum: "abc",
       },
@@ -363,7 +363,7 @@ describe("joopohub helpers", () => {
     }
   });
 
-  it("downloads ClawPack package artifacts from the version route and verifies response headers", async () => {
+  it("downloads JoopoPack package artifacts from the version route and verifies response headers", async () => {
     const bytes = new Uint8Array([7, 8, 9]);
     const sha256Hex = createHash("sha256").update(bytes).digest("hex");
     const sha1Hex = createHash("sha1").update(bytes).digest("hex");
@@ -371,7 +371,7 @@ describe("joopohub helpers", () => {
     const archive = await downloadJoopoHubPackageArchive({
       name: "demo",
       version: "1.2.3",
-      artifact: "clawpack",
+      artifact: "joopopack",
       fetchImpl: async (input) => {
         requestedUrl = input instanceof Request ? input.url : String(input);
         return new Response(bytes, {
@@ -389,9 +389,9 @@ describe("joopohub helpers", () => {
         "/api/v1/packages/demo/versions/1.2.3/artifact/download",
       );
       expect(path.basename(archive.archivePath)).toBe("demo-1.2.3.tgz");
-      expect(archive.artifact).toBe("clawpack");
+      expect(archive.artifact).toBe("joopopack");
       expect(archive.sha256Hex).toBe(sha256Hex);
-      expect(archive.clawpackHeaderSha256).toBe(sha256Hex);
+      expect(archive.joopopackHeaderSha256).toBe(sha256Hex);
       expect(archive.npmIntegrity).toMatch(/^sha512-/);
       expect(archive.npmShasum).toBe(sha1Hex);
       await expect(fs.readFile(archive.archivePath)).resolves.toEqual(Buffer.from(bytes));
@@ -402,12 +402,12 @@ describe("joopohub helpers", () => {
     }
   });
 
-  it("rejects ClawPack package artifacts when the declared digest does not match the bytes", async () => {
+  it("rejects JoopoPack package artifacts when the declared digest does not match the bytes", async () => {
     await expect(
       downloadJoopoHubPackageArchive({
         name: "demo",
         version: "1.2.3",
-        artifact: "clawpack",
+        artifact: "joopopack",
         fetchImpl: async () =>
           new Response(new Uint8Array([7, 8, 9]), {
             status: 200,

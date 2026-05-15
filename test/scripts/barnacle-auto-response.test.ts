@@ -547,8 +547,8 @@ describe("barnacle-auto-response", () => {
 
   it("does not close automation PRs for the active PR limit", async () => {
     for (const automationPullRequest of [
-      { head: { ref: "clawsweeper/joopo-joopo-73880" }, login: "app/joopo-clawsweeper" },
-      { headRefName: "clawsweeper/joopo-joopo-73880", login: "app/joopo-clawsweeper" },
+      { head: { ref: "jooposweeper/joopo-joopo-73880" }, login: "app/joopo-jooposweeper" },
+      { headRefName: "jooposweeper/joopo-joopo-73880", login: "app/joopo-jooposweeper" },
       {
         head: { ref: "clownfish/ghcrawl-156993-autonomous-smoke" },
         login: "app/joopo-clownfish",
@@ -767,7 +767,7 @@ describe("barnacle-auto-response", () => {
     },
   );
 
-  it("preserves ClawSweeper's sufficient proof label on ordinary label events", async () => {
+  it("preserves JoopoSweeper's sufficient proof label on ordinary label events", async () => {
     const { calls, github } = barnacleGithub([file("src/gateway/server.ts")]);
 
     await runBarnacleAutoResponse({
@@ -782,7 +782,7 @@ describe("barnacle-auto-response", () => {
         {
           action: "labeled",
           label: { name: PROOF_SUFFICIENT_LABEL },
-          sender: { login: "joopo-clawsweeper[bot]", type: "Bot" },
+          sender: { login: "joopo-jooposweeper[bot]", type: "Bot" },
         },
       ),
       core: {
